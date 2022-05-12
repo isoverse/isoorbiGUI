@@ -12,7 +12,12 @@ Authors@R:
         given = "Caj", family = "Neubauer", 
         email = "caj.neubauer@colorado.edu", 
         role = c("aut", "cre"), 
-        comment = c(ORCID = "0000-0002-5348-5609"))
+        comment = c(ORCID = "0000-0002-5348-5609")),
+    person(
+        given = "Kristýna", family = "Kantnerová", 
+        email = "kristyna.kantnerova@colorado.edu", 
+        role = c("aut"), 
+        comment = c(ORCID = "0000-0001-6259-3225"))
     )
 URL: https://github.com/isoverse/isoorbi
 BugReports: https://github.com/isoverse/isoorbi/issues
@@ -31,13 +36,16 @@ Imports:
     shinyBS,
     shinydashboard,
     shinycssloaders,
-    DT
+    DT,
+    magrittr
 Suggests:
     testthat,
     rmarkdown,
     knitr,
     devtools
-License: 
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
