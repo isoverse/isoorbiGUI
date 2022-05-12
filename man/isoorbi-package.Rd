@@ -14,7 +14,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Sebastian Kopf \email{sebastian.kopf@colorado.edu} (\href{https://orcid.org/0000-0002-2044-0201}{ORCID})
+\strong{Maintainer}: Caj Neubauer \email{caj.neubauer@colorado.edu} (\href{https://orcid.org/0000-0002-5348-5609}{ORCID})
+
+Authors:
+\itemize{
+  \item Sebastian Kopf \email{sebastian.kopf@colorado.edu} (\href{https://orcid.org/0000-0002-2044-0201}{ORCID})
+  \item Kristýna Kantnerová \email{kristyna.kantnerova@colorado.edu} (\href{https://orcid.org/0000-0001-6259-3225}{ORCID})
+}
 
 }
 \keyword{internal}
