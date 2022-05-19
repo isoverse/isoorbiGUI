@@ -3,7 +3,7 @@
 #' Generates the server part of the shiny app.
 #' @param data_folder path to the data folder, if none provided ask for the user to pick one if in local mode
 #' @param local whether running locally or as a server application (e.g. on shinyapps.io)
-#' @param reset wether to reset settings if running in local mode (server mode always resets)
+#' @param reset whether to reset settings if running in local mode (server mode always resets)
 orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
 
   shinyServer(function(input, output, session) {
