@@ -11,7 +11,7 @@ orbitrap_server(data_folder = NULL, local = FALSE, reset = FALSE)
 
 \item{local}{whether running locally or as a server application (e.g. on shinyapps.io)}
 
-\item{reset}{wether to reset settings if running in local mode (server mode always resets)}
+\item{reset}{whether to reset settings if running in local mode (server mode always resets)}
 }
 \description{
 Generates the server part of the shiny app.
