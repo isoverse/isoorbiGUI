@@ -175,3 +175,55 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
 
 }
 
+
+#' Setup the orbitrap user interface app
+#'
+#' Sets up the necessary files for launching the user interface in the target folder. This allows for easy running of the gui via \code{\link[shiny]{runApp}} or deployment as a server application (e.g. on shinyapps.io).
+#' @param dir the directory where to create the launch scripts (absolute path or relative to your current working directory), default is 'app'
+#' @param overwrite whether to overwrite existing launch files (default is FALSE)
+#' @export
+iso_setup_orbitrap_gui <- function(dir = "app", overwrite = FALSE) {
+
+  if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+
+  paste0("Info: setting up orbitrap GUI launch files in folder '", dir, "'...") %>% message()
+
+  # copy app.R template file
+  message(" - creating 'app.R' launch script... ", appendLF = FALSE)
+  file_exists <- file.exists(file.path(dir, "app.R"))
+  if (!file_exists || overwrite) {
+    cat(
+      c(
+        "# launch orbitrap GUI",
+        "isoorbi::iso_start_orbitrap_gui_server(",
+        "    data_folder = \"data\",",
+        "    launch = FALSE,",
+        "    log = TRUE",
+        ")"
+      ),
+      sep = "\n",
+      file = file.path(dir, "app.R"),
+      append = FALSE
+    )
+  }
+  if (file_exists && overwrite) message("existing file overwritten.")
+  else if (file_exists) message("failed (file already exists, use overwrite = TRUE)")
+  else message("complete")
+
+  # data folder
+  message(" - adding data folder... ", appendLF = FALSE)
+  if(!dir.exists(file.path(dir, "data"))) dir.create(file.path(dir, "data"))
+  message("complete.")
+
+  # omit from github
+  message(" - adding .gitignore... ", appendLF = FALSE)
+  if (!file.exists(file.path(dir, ".gitignore")) || overwrite)
+    cat("# exclude apps from github (by default)\n*\n\n# always exclude data\ndata/\n", file = file.path(dir, ".gitignore"), append = FALSE)
+  message("complete.")
+
+  # infos
+  message(" -> run with shiny::runApp(\"", dir, "\")")
+  message(" -> deploy with rsconnect::deployApp(\"", dir, "\")")
+}
+
+

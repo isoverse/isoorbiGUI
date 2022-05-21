@@ -42,3 +42,4 @@ Gemfile.lock
 inst/extdata/*
 dev/
 tmp/
+app/
