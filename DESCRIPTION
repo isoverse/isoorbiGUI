@@ -32,6 +32,7 @@ Imports:
     tidyr,
     ggplot2,
     shiny,
+    shinyWidgets,
     shinyjs,
     shinyBS,
     shinydashboard,
