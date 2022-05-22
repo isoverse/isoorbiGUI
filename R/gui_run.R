@@ -163,7 +163,16 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
     dashboardBody(
 
       div(class = "row",
-          # tabItems(
+           tabItems(
+
+
+
+             # UI: Dual Inlet ----------------------------------------------------------
+
+             tabItem(tabName = "dual_in",
+
+                     h4("Process data from a Dual Inlet experiment")
+             )
           #   tabItem("data", div(id = "data-panel", column(width = 12, uiOutput("data") %>% withSpinner(type = 5, proxy.height = "450px")))),
           #   tabItem("devices", div(id = "devices-panel", column(width = 12, uiOutput("devices")))),
           #   tabItem("experiments", div(id = "experiments-panel", column(width = 12, uiOutput("experiments")))),
