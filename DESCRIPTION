@@ -37,6 +37,7 @@ Imports:
     shinyBS,
     shinydashboard,
     shinycssloaders,
+    tippy,
     DT,
     magrittr
 Suggests:
