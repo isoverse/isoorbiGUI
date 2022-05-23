@@ -32,6 +32,9 @@ vignettes/*.pdf
 # gem lock file for app development
 Gemfile.lock
 
+# gem bundle
+./bundle/
+
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
@@ -43,3 +46,4 @@ inst/extdata/*
 dev/
 tmp/
 app/
+inst/

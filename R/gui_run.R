@@ -133,8 +133,12 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
       ),
 
       # shinjs and shinydashboard extensions
+      # Caj: Do we need to add dependencies here again, in addition to DESCRIPTION?
       shinyjs::useShinyjs(),
       shinyWidgets::useShinydashboard(),
+      #shinycssloaders::withSpinner(),
+      #tippy::with_tippy(),
+
 
       # css headers
       tags$head(
@@ -243,35 +247,35 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
 
                                  # Hover over: with_tippy(textInput("input", "input with tooltip"), "Input text", placement = "right")
 
-                                 with_tippy(numericInput(
-                                   inputId = "INPUT_Segments",
-                                   label = "Segments",
-                                   1,
-                                   min = 1,
-                                   max = 10,
-                                   step = 1,
-                                   width = NULL
-                                 ), "Processing option: Split blocks into multiple segments", placement = "right"), #Not consistently working...
-
-                                 with_tippy(numericInput(
-                                   inputId = "INPUT_Rare",
-                                   label = "Remove weak isotopologs",
-                                   30,
-                                   min = 1,
-                                   max = 50,
-                                   step = 1,
-                                   width = NULL
-                                 ),"Processing option: Isotopolog must have been observed in at least x % of scans", placement = "right"),
-
-                                 with_tippy(numericInput(
-                                   inputId = "INPUT_TICxIT",
-                                   label = "Remove outlier scans",
-                                   1,
-                                   min = 0.1,
-                                   max = 10,
-                                   step = 0.1,
-                                   width = NULL
-                                 ), "Processing option: Truncate data x%/100-x% based on TICxIT",  placement = "right"),
+                                 # with_tippy(numericInput(
+                                 #   inputId = "INPUT_Segments",
+                                 #   label = "Segments",
+                                 #   1,
+                                 #   min = 1,
+                                 #   max = 10,
+                                 #   step = 1,
+                                 #   width = NULL
+                                 # ), "Processing option: Split blocks into multiple segments", placement = "right"), #Not consistently working...
+                                 #
+                                 # with_tippy(numericInput(
+                                 #   inputId = "INPUT_Rare",
+                                 #   label = "Remove weak isotopologs",
+                                 #   30,
+                                 #   min = 1,
+                                 #   max = 50,
+                                 #   step = 1,
+                                 #   width = NULL
+                                 # ),"Processing option: Isotopolog must have been observed in at least x % of scans", placement = "right"),
+                                 #
+                                 # with_tippy(numericInput(
+                                 #   inputId = "INPUT_TICxIT",
+                                 #   label = "Remove outlier scans",
+                                 #   1,
+                                 #   min = 0.1,
+                                 #   max = 10,
+                                 #   step = 0.1,
+                                 #   width = NULL
+                                 # ), "Processing option: Truncate data x%/100-x% based on TICxIT",  placement = "right"),
 
                                  radioButtons(inputId = "INPUT_RatioMethod", label="Ratio method", choiceNames = c( "sum",  "mean", "median", "geometric"), choiceValues = c( "sum",  "mean", "median", "geometric.mean"), selected= "sum"),
 
@@ -293,7 +297,7 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
                               hr(),
 
 
-                              box(title = "Overview of Results", width = "auto" ,  height ="auto", status = "primary", solidHeader = T, withSpinner(plotlyOutput("plot"))), #height="auto",
+                          #   box(title = "Overview of Results", width = "auto" ,  height ="auto", status = "primary", solidHeader = T, withSpinner(plotlyOutput("plot"))), #height="auto",
 
 
                               hr(),
