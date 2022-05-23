@@ -6,6 +6,9 @@
 #' @import shiny
 #' @import shinydashboard
 #' @import ggplot2
+#' @import shinycssloaders
+#' @import plotly
+#' @import tippy
 NULL
 
 #' @export
