@@ -174,7 +174,7 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
 
         tabItem(tabName = "dual_in",
 
-                h4("Process data from a Dual Inlet experiment"),
+                h4("Process data from a Dual Inlet experiment here"),
 
                 fluidPage(
 
