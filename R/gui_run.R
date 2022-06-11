@@ -39,7 +39,7 @@ iso_start_orbitrap_gui_server <- function(data_folder, launch = TRUE, log = TRUE
   )
 }
 
-# orbitrap gui start function
+# Orbitrap GUI start function
 # @param ... parameters passed on to runApp
 start_orbitrap_gui <- function(data_folder, local, launch, log, reset, ...) {
 
@@ -174,7 +174,7 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
 
         tabItem(tabName = "dual_in",
 
-                h4("Process data from a Dual Inlet experiment here"),
+                h4("Process data from a Dual Inlet experiment"),
 
                 fluidPage(
 

@@ -9,6 +9,15 @@
 #' @import shinycssloaders
 #' @import plotly
 #' @import tippy
+#' @import dplyr
+#' @import scales
+#' @import ggrepel
+#' @import tidyverse
+#' @import openxlsx
+#' @import DT
+#' @import RColorBrewer
+#' @import mailtoR
+#' @import enviPat
 NULL
 
 #' @export
