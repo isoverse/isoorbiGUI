@@ -2,20 +2,21 @@
 "_PACKAGE"
 
 # import functions/packages used so frequently we don't want to always refer to the namespace explicitly
-#' @importFrom magrittr %>%
-#' @import shiny
-#' @import shinydashboard
-#' @import ggplot2
-#' @import shinycssloaders
-#' @import plotly
-#' @import tippy
 #' @import dplyr
 #' @import scales
 #' @import ggrepel
+#' @import shinydashboard
+#' @import shiny
+#' @import shinyWidgets
 #' @import tidyverse
+#' @importFrom magrittr %>%
 #' @import openxlsx
 #' @import DT
+#' @import plotly
+#' @import shinycssloaders
+#' @import ggplot2
 #' @import RColorBrewer
+#' @import tippy
 #' @import mailtoR
 #' @import enviPat
 NULL

@@ -40,7 +40,13 @@ Imports:
     shinycssloaders,
     tippy,
     DT,
-    magrittr
+    magrittr,
+    enviPat,
+    RColorBrewer,
+    ggrepel,
+    mailtoR,
+    scales,
+    tidyverse
 Suggests:
     testthat,
     rmarkdown,

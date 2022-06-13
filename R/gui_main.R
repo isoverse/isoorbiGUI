@@ -1545,7 +1545,8 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
       run_check(INPUT_formula = input$INPUT_IsoX_sumformula)
     })
 
-    data(isotopes) #neeed for isopat function
+    #data(isotopes) not found 12-June-2022
+    data(isotopes, package = "enviPat")#neeed for isopat function
 
     pattern <- reactive({
 
