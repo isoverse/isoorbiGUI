@@ -8,7 +8,7 @@
 #' @import shinydashboard
 #' @import shiny
 #' @import shinyWidgets
-#' @import tidyverse
+#' @import tidyr
 #' @importFrom magrittr %>%
 #' @import openxlsx
 #' @import DT

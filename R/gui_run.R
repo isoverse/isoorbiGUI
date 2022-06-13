@@ -303,12 +303,12 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
                               hr(),
 
 
-                              box(title = "Results Table", width = "auto" ,status = "primary",solidHeader = T, DT::dataTableOutput("summary")),
+                              box(title = "Results Table", width = "auto" ,status = "primary", solidHeader = T, DT::dataTableOutput("summary")),
 
                               hr(),
 
 
-                              box(title = "Filtered .isox File", width = "auto" ,status = "primary",solidHeader = T, DT::dataTableOutput("mytable")),
+                              box(title = "Filtered .isox File", width = "auto" ,status = "primary", solidHeader = T, DT::dataTableOutput("mytable")),
 
 
                     )
