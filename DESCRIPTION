@@ -45,7 +45,8 @@ Imports:
     RColorBrewer,
     ggrepel,
     mailtoR,
-    scales
+    scales,
+    tidyverse
 Suggests:
     testthat,
     rmarkdown,
