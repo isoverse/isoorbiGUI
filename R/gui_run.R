@@ -802,6 +802,49 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
                     )
                   )
                 )
+        ),
+
+
+        # UI: Contact and Infos ---------------------------------------------------
+
+
+        tabItem(tabName = "info_in",
+
+
+                fluidPage(
+
+                  sidebarLayout(
+
+
+
+                    sidebarPanel(
+
+                      h4("Contact and infos"),
+
+                      tags$hr(style="border-color: grey;"),
+                      h4("Caj Neubauer"),
+                      h4("University of Colorado Boulder"),
+
+
+                      mailtoR(email = "123caj@gmail.com",
+                              text = "click here to send me an email",
+                              subject = "IsoXL",
+                              body = "Hi Caj, I have a question or bug report for IsoXL."),
+
+
+                      use_mailtoR()
+
+                    ),
+
+
+                    # UI: Contact and Infos Main Panel ----------------------------------------
+
+                    mainPanel(
+
+
+                    )
+                  )
+                )
         )
 
       )
