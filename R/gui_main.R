@@ -450,25 +450,25 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
 
 
 
-    # data.explore <- reactive({
-    #
-    #   req(input$upload_explore)
-    #
-    #
-    #   ext <- tools::file_ext(input$upload_explore$name)
-    #   switch(ext,
-    #          isox = readr::read_tsv(input$upload_explore$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
-    #                                 col_types = list(
-    #                                   filename = col_factor(),
-    #                                   compound = col_factor(),
-    #                                   isotopolog =col_factor()
-    #                                 ) ),
-    #
-    #
-    #          validate("Invalid file; Please upload a .isox file")
-    #   )
-    #
-    # })
+    data.explore <- reactive({
+
+      req(input$upload_explore)
+
+
+      ext <- tools::file_ext(input$upload_explore$name)
+      switch(ext,
+             isox = readr::read_tsv(input$upload_explore$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
+                                    col_types = list(
+                                      filename = readr::col_factor(),
+                                      compound = readr::col_factor(),
+                                      isotopolog = readr::col_factor()
+                                    ) ),
+
+
+             validate("Invalid file; Please upload a .isox file")
+      )
+
+    })
 
 
     # Data: Shot Noise --------------------------------------------------------------
@@ -626,37 +626,37 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
 
 
 
-    # plot1vars <- callModule(varselect_mod_server, "plot1_vars")
-    # plot2vars <- callModule(varselect_mod_server, "plot2_vars")
+    plot1vars <- callModule(varselect_mod_server, "plot1_vars")
+    plot2vars <- callModule(varselect_mod_server, "plot2_vars")
 
-    # dat <- callModule(
-    #
-    #
-    #
-    #   scatterplot_mod_server,
-    #   "plots",
-    #   dataset = data.explore(), #somehow this gets not updated when new isox file is loaded!!??
-    #   plot1vars = plot1vars,
-    #   plot2vars = plot2vars,
-    #   label = reactive({ input$label })
-    # )
-
-    # callModule(dataviewer_mod_server, "dataviewer", dat)
+    dat <- callModule(
 
 
-    # plot3vars <- callModule(varselect_mod_server, "plot3_vars")
-    # plot4vars <- callModule(varselect_mod_server, "plot4_vars")
 
-    # dat2 <- callModule(
-    #   densityplot_mod_server,
-    #   "plots",
-    #   dataset = data.explore(),
-    #   plot3vars = plot3vars,
-    #   plot4vars = plot4vars,
-    #   label = reactive({ input$label })
-    # )
+      scatterplot_mod_server,
+      "plots",
+      dataset = data.explore(), #somehow this gets not updated when new isox file is loaded!!??
+      plot1vars = plot1vars,
+      plot2vars = plot2vars,
+      label = reactive({ input$label })
+    )
 
-    # callModule(dataviewer_mod_server, "dataviewer", dat2)
+    callModule(dataviewer_mod_server, "dataviewer", dat)
+
+
+    plot3vars <- callModule(varselect_mod_server, "plot3_vars")
+    plot4vars <- callModule(varselect_mod_server, "plot4_vars")
+
+    dat2 <- callModule(
+      densityplot_mod_server,
+      "plots",
+      dataset = data.explore(),
+      plot3vars = plot3vars,
+      plot4vars = plot4vars,
+      label = reactive({ input$label })
+    )
+
+    callModule(dataviewer_mod_server, "dataviewer", dat2)
 
 
 
