@@ -211,118 +211,118 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
     ##### Data: Flow Analysis ---------------------------------------------------
 
 
-    # inputs.flow <- reactive({
-    #
-    #
-    #   req(input$INPUT_Flow_Basepeak) #temp
-    #
-    #   data.frame( parameter = c(
-    #     "IsoXL Version",
-    #     "INPUT_Flow_Basepeak",
-    #     "INPUT_Flow_timerange[1]",
-    #     "INPUT_Flow_timerange[2]" ,
-    #     "INPUT_Flow_Rare",
-    #     "INPUT_Flow_TICxIT",
-    #     "INPUT_Flow_RatioMethod",
-    #     "INPUT_Flow_IONS"),
-    #
-    #
-    #     value = c(isoXL.version,
-    #               input$INPUT_Flow_Basepeak,
-    #               input$INPUT_Flow_timerange[1],
-    #               input$INPUT_Flow_timerange[2],
-    #               input$INPUT_Flow_Rare,
-    #               input$INPUT_Flow_TICxIT,
-    #               input$INPUT_Flow_RatioMethod,
-    #               input$INPUT_Flow_IONS)
-    #
-    #
-    #   )
-    # })
-
-    # data.flow <- reactive({
-    #
-    #
-    #
-    #   req(input$upload_Flow_Injection)
-    #
-    #
-    #   ext <- tools::file_ext(input$upload_Flow_Injection$name)
-    #   switch(ext,
-    #          isox = readr::read_tsv(input$upload_Flow_Injection$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
-    #                                 col_types = list(
-    #                                   filename = col_factor(),
-    #                                   compound = col_factor(),
-    #                                   isotopolog =col_factor()
-    #                                 ) ),
-    #
-    #
-    #          validate("Invalid file; Please upload a .isox file")
-    #   )
-    # })
+    inputs.flow <- reactive({
 
 
-    # data.flow_filtered <- reactive({
-    #
-    #   req(input$INPUT_Flow_Rare)
-    #   req(input$INPUT_Flow_timerange)
-    #   req(input$INPUT_Flow_timerange)
-    #   #req(input$INPUT_Flow_sample)
-    #
-    #   validate(
-    #
-    #
-    #     ####  need(length(levels(data.flow()$filename)) <2, paste("Warning: There is more than one 'filename' in data. May want to use Flow Injection tab? These filenames have been observed",levels(data.flow()$filename ))),
-    #     need(input$INPUT_Flow_timerange[2] <= max(data.flow()$time.min), paste("Warning: Time selection exceeds time range of data. Maximum time in data is ", max(data.flow()$time.min) , " min.") ),
-    #     need(input$INPUT_Flow_timerange[2] > input$INPUT_Flow_timerange[1], paste("Warning: Time selection minimun is greater than maximum") )
-    #
-    #   )
-    #
-    #
-    #
-    #   return(data.flow() %>%
-    #            na.omit() %>%
-    #
-    #            #mutate(Sample.Name = input$INPUT_Flow_sample) %>% #temp: implemented as factor? Not needed, I think
-    #
-    #            remove.ticxit(INPUT_TICxIT=input$INPUT_Flow_TICxIT) %>%
-    #            remove.satellitePeaks() %>%
-    #            remove.rare(INPUT_Rare = input$INPUT_Flow_Rare) %>%
-    #
-    #            filter(time.min>  input$INPUT_Flow_timerange[1], time.min <  input$INPUT_Flow_timerange[2])
-    #   )
-    #
-    #
-    # })
+      req(input$INPUT_Flow_Basepeak) #temp
+
+      data.frame( parameter = c(
+        "IsoXL Version",
+        "INPUT_Flow_Basepeak",
+        "INPUT_Flow_timerange[1]",
+        "INPUT_Flow_timerange[2]" ,
+        "INPUT_Flow_Rare",
+        "INPUT_Flow_TICxIT",
+        "INPUT_Flow_RatioMethod",
+        "INPUT_Flow_IONS"),
+
+
+        value = c(isoXL.version,
+                  input$INPUT_Flow_Basepeak,
+                  input$INPUT_Flow_timerange[1],
+                  input$INPUT_Flow_timerange[2],
+                  input$INPUT_Flow_Rare,
+                  input$INPUT_Flow_TICxIT,
+                  input$INPUT_Flow_RatioMethod,
+                  input$INPUT_Flow_IONS)
+
+
+      )
+    })
+
+    data.flow <- reactive({
+
+
+
+      req(input$upload_Flow_Injection)
+
+
+      ext <- tools::file_ext(input$upload_Flow_Injection$name)
+      switch(ext,
+             isox = readr::read_tsv(input$upload_Flow_Injection$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
+                                    col_types = list(
+                                      filename = readr::col_factor(),
+                                      compound = readr::col_factor(),
+                                      isotopolog =  readr::col_factor()
+                                    ) ),
+
+
+             validate("Invalid file; Please upload a .isox file")
+      )
+    })
+
+
+    data.flow_filtered <- reactive({
+
+      req(input$INPUT_Flow_Rare)
+      req(input$INPUT_Flow_timerange)
+      req(input$INPUT_Flow_timerange)
+      #req(input$INPUT_Flow_sample)
+
+      validate(
+
+
+        ####  need(length(levels(data.flow()$filename)) <2, paste("Warning: There is more than one 'filename' in data. May want to use Flow Injection tab? These filenames have been observed",levels(data.flow()$filename ))),
+        need(input$INPUT_Flow_timerange[2] <= max(data.flow()$time.min), paste("Warning: Time selection exceeds time range of data. Maximum time in data is ", max(data.flow()$time.min) , " min.") ),
+        need(input$INPUT_Flow_timerange[2] > input$INPUT_Flow_timerange[1], paste("Warning: Time selection minimun is greater than maximum") )
+
+      )
+
+
+
+      return(data.flow() %>%
+               na.omit() %>%
+
+               #mutate(Sample.Name = input$INPUT_Flow_sample) %>% #temp: implemented as factor? Not needed, I think
+
+               remove.ticxit(INPUT_TICxIT=input$INPUT_Flow_TICxIT) %>%
+               remove.satellitePeaks() %>%
+               remove.rare(INPUT_Rare = input$INPUT_Flow_Rare) %>%
+
+               filter(time.min>  input$INPUT_Flow_timerange[1], time.min <  input$INPUT_Flow_timerange[2])
+      )
+
+
+    })
 
     # Flow Analysis: Assign base peak --------------------------------------------
 
 
-    # data.flow_basepeak <- reactive({
-    #
-    #   req(input$INPUT_Flow_Basepeak)
-    #
-    #   assign.basepeak.single(df = data.flow_filtered(), INPUT_Basepeak = input$INPUT_Flow_Basepeak)  #function from single analysis should be of has groub_by(filename)
-    #
-    # }) #needs validation; e.g. is base peak present in data?
+    data.flow_basepeak <- reactive({
+
+      req(input$INPUT_Flow_Basepeak)
+
+      assign.basepeak.single(df = data.flow_filtered(), INPUT_Basepeak = input$INPUT_Flow_Basepeak)  #function from single analysis should be of has groub_by(filename)
+
+    }) #needs validation; e.g. is base peak present in data?
 
 
     # Flow Analysis: Calculate output table for results file ---------------
 
 
 
-    # data.flow_output <- reactive({
-    #
-    #   req(input$INPUT_Flow_Basepeak)
-    #
-    #   calc.output.flow(df = data.flow_basepeak(), INPUT_RatioMethod = input$INPUT_Flow_RatioMethod)
-    #
-    # })
+    data.flow_output <- reactive({
+
+      req(input$INPUT_Flow_Basepeak)
+
+      calc.output.flow(df = data.flow_basepeak(), INPUT_RatioMethod = input$INPUT_Flow_RatioMethod)
+
+    })
 
 
     # Flow analysis: Make Excel file ---------------------------------------------
 
-    # data_flow.xls <- reactive({  make.xls(df.stat = data.flow_output(), params=inputs.flow() ) }) ##temp add correct parameter file!!!
+    data_flow.xls <- reactive({  make.xls(df.stat = data.flow_output(), params=inputs.flow() ) }) ##temp add correct parameter file!!!
 
     ####
 
@@ -869,41 +869,41 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
 
     #single analysis
 
-    # assign.basepeak.single <- function(df, INPUT_Basepeak){
-    #
-    #   validate(
-    #     need(INPUT_Basepeak, 'Missing input for Basepeak'), #temp; check this works correctly
-    #     need(INPUT_Basepeak %in% levels(df$isotopolog), 'Specified Basepeak was not found in dataframe'))
-    #
-    #   # Annotation: Identify 'basepeak' for each scan
-    #
-    #   df.sel <- df  %>%
-    #     select(filename,
-    #            #Injection, #not present in single run analysis
-    #            compound,
-    #            scan.no,
-    #            isotopolog,
-    #            ions.incremental) %>%
-    #     #group_by(filename, Injection, scan.no) %>% filter(isotopolog == INPUT_Basepeak) %>%
-    #     group_by(filename, scan.no) %>% filter(isotopolog == INPUT_Basepeak) %>%
-    #     mutate(Basepeak = factor(
-    #       paste(
-    #         isotopolog, "is base peak", sep=" ")),
-    #       Basepeak.Ions = ions.incremental) %>%
-    #     select(filename,
-    #            compound,
-    #            #Injection,
-    #            scan.no,
-    #            Basepeak,
-    #            Basepeak.Ions) %>%
-    #     as.data.frame()
-    #
-    #   df.out <- merge(df.sel, df, all = TRUE)
-    #
-    #   df.out <- df.out %>% filter(isotopolog!=INPUT_Basepeak) %>% droplevels()
-    #
-    #   return(df.out)
-    # }
+    assign.basepeak.single <- function(df, INPUT_Basepeak){
+
+      validate(
+        need(INPUT_Basepeak, 'Missing input for Basepeak'), #temp; check this works correctly
+        need(INPUT_Basepeak %in% levels(df$isotopolog), 'Specified Basepeak was not found in dataframe'))
+
+      # Annotation: Identify 'basepeak' for each scan
+
+      df.sel <- df  %>%
+        select(filename,
+               #Injection, #not present in single run analysis
+               compound,
+               scan.no,
+               isotopolog,
+               ions.incremental) %>%
+        #group_by(filename, Injection, scan.no) %>% filter(isotopolog == INPUT_Basepeak) %>%
+        group_by(filename, scan.no) %>% filter(isotopolog == INPUT_Basepeak) %>%
+        mutate(Basepeak = factor(
+          paste(
+            isotopolog, "is base peak", sep=" ")),
+          Basepeak.Ions = ions.incremental) %>%
+        select(filename,
+               compound,
+               #Injection,
+               scan.no,
+               Basepeak,
+               Basepeak.Ions) %>%
+        as.data.frame()
+
+      df.out <- merge(df.sel, df, all = TRUE)
+
+      df.out <- df.out %>% filter(isotopolog!=INPUT_Basepeak) %>% droplevels()
+
+      return(df.out)
+    }
 
 
 
@@ -1051,50 +1051,50 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
 
     ##Actual number crunching to generate Excel output for single analysis
 
-    # calc.output.flow <- function(df, INPUT_RatioMethod){
-    #
-    #   df.stat <- df  %>%  group_by(filename,
-    #                                #Injection,
-    #                                #Sample.Name,
-    #                                compound,
-    #                                Basepeak,
-    #                                isotopolog) %>%
-    #
-    #     mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
-    #
-    #     mutate(Ratio.SEM = se(ions.incremental/Basepeak.Ions))      #For simplicity use basic standard error for all options
-    #
-    #   df.stat <- df.stat %>% mutate(No.of.scans = length(Ratio),
-    #                                 Mins.to.1mio = (1E6/sum(ions.incremental)) * ( max(time.min) - min(time.min)),
-    #                                 Shot.Noise.permil = 1000 * (sqrt((sum(ions.incremental) + sum(Basepeak.Ions)) / (sum(ions.incremental) * sum(Basepeak.Ions)))),
-    #                                 relSE.permil = 1000*(Ratio.SEM/Ratio)) %>%
-    #
-    #     #Round values for output
-    #     mutate(Ratio = round(Ratio, 8),
-    #            Ratio.SEM = round(Ratio.SEM, 8),
-    #            Shot.Noise.permil = round(Shot.Noise.permil, 3),
-    #            relSE.permil = round(relSE.permil, 3),
-    #            Mins.to.1mio = round(Mins.to.1mio, 2)) %>%
-    #
-    #     select(filename,
-    #            # Injection,
-    #            #Sample.Name,
-    #            Basepeak,
-    #            compound,
-    #            isotopolog,
-    #            Ratio,
-    #            Ratio.SEM,
-    #            relSE.permil,
-    #            Shot.Noise.permil,
-    #            Mins.to.1mio,
-    #            No.of.scans) %>%
-    #     unique() %>% #mutate(Injection= as.integer(Injection)) %>%
-    #     #arrange(filename, Injection, isotopolog)
-    #     arrange(filename, isotopolog)
-    #
-    #   df.stat <- as.data.frame(df.stat)
-    #   return(df.stat)
-    # }
+    calc.output.flow <- function(df, INPUT_RatioMethod){
+
+      df.stat <- df  %>%  group_by(filename,
+                                   #Injection,
+                                   #Sample.Name,
+                                   compound,
+                                   Basepeak,
+                                   isotopolog) %>%
+
+        mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
+
+        mutate(Ratio.SEM = se(ions.incremental/Basepeak.Ions))      #For simplicity use basic standard error for all options
+
+      df.stat <- df.stat %>% mutate(No.of.scans = length(Ratio),
+                                    Mins.to.1mio = (1E6/sum(ions.incremental)) * ( max(time.min) - min(time.min)),
+                                    Shot.Noise.permil = 1000 * (sqrt((sum(ions.incremental) + sum(Basepeak.Ions)) / (sum(ions.incremental) * sum(Basepeak.Ions)))),
+                                    relSE.permil = 1000*(Ratio.SEM/Ratio)) %>%
+
+        #Round values for output
+        mutate(Ratio = round(Ratio, 8),
+               Ratio.SEM = round(Ratio.SEM, 8),
+               Shot.Noise.permil = round(Shot.Noise.permil, 3),
+               relSE.permil = round(relSE.permil, 3),
+               Mins.to.1mio = round(Mins.to.1mio, 2)) %>%
+
+        select(filename,
+               # Injection,
+               #Sample.Name,
+               Basepeak,
+               compound,
+               isotopolog,
+               Ratio,
+               Ratio.SEM,
+               relSE.permil,
+               Shot.Noise.permil,
+               Mins.to.1mio,
+               No.of.scans) %>%
+        unique() %>% #mutate(Injection= as.integer(Injection)) %>%
+        #arrange(filename, Injection, isotopolog)
+        arrange(filename, isotopolog)
+
+      df.stat <- as.data.frame(df.stat)
+      return(df.stat)
+    }
 
 
     # Function: make.xls(); save the summary statistics table as Excel --------
@@ -1213,37 +1213,37 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
     # Plot output: Flow Injection--------------------------------------------------------
 
 
-    # output$plot.flow <- renderPlotly({
-    #
-    #
-    #   ggplotly(
-    #
-    #     ggplot(data = data.flow_output(), aes(x = filename, y = Ratio, color=isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
-    #
-    #       geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
-    #                         ymax=(Ratio+Ratio.SEM)),
-    #                     width=0.7,
-    #                     size=0.3,
-    #                     color="black",
-    #                     position=position_dodge(.9))       +         geom_point(size=3, shape=10) ,
-    #
-    #     dynamicTicks = TRUE #change ticks on zoom
-    #   )%>%
-    #
-    #     config(displaylogo = FALSE,
-    #            modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
-    #
-    #     config( #options on how to save an image
-    #       toImageButtonOptions = list(
-    #         format = "png",
-    #         width = 900,
-    #         height = 600,
-    #         scale = 4,
-    #         filename = paste("flow_injection", input$upload_Flow_Injection$name, sep="_")
-    #       )
-    #     )
-    #
-    # })
+    output$plot.flow <- renderPlotly({
+
+
+      ggplotly(
+
+        ggplot(data = data.flow_output(), aes(x = filename, y = Ratio, color=isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+
+          geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
+                            ymax=(Ratio+Ratio.SEM)),
+                        width=0.7,
+                        size=0.3,
+                        color="black",
+                        position=position_dodge(.9))       +         geom_point(size=3, shape=10) ,
+
+        dynamicTicks = TRUE #change ticks on zoom
+      )%>%
+
+        config(displaylogo = FALSE,
+               modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
+
+        config( #options on how to save an image
+          toImageButtonOptions = list(
+            format = "png",
+            width = 900,
+            height = 600,
+            scale = 4,
+            filename = paste("flow_injection", input$upload_Flow_Injection$name, sep="_")
+          )
+        )
+
+    })
 
 
     # Plot output: Data Exploration -------------------------------------------
@@ -1329,8 +1329,7 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
     # Table output: Dual Inlet, summary statistics ----------------------------
 
 
-    #output$summary <- DT::renderDataTable({
-    output$summary <- renderDataTable({
+    output$summary <- DT::renderDataTable({
 
       datatable( data.output(), rownames= FALSE ,
                  extensions = c('Buttons','ColReorder'),
@@ -1393,23 +1392,23 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
     # Table output: Flow Analysis, summary statistics ----------------------------
 
 
-    # output$summary.flow <- DT::renderDataTable({
-    #
-    #   datatable( data.flow_output(), rownames= FALSE , #temp, table with stat did not render
-    #              extensions = c('Buttons','ColReorder'),
-    #              options = list(
-    #                # autoWidth = TRUE, #scroll bar to see enture table
-    #                scrollX = TRUE, #scrollbar when table is not visible
-    #                columnDefs = list(list(
-    #                  targets = c(6L, 9L), visible = FALSE #using these rows, the table does not display
-    #                )),
-    #                dom = 'Bfrtip',
-    #                buttons = c('colvis','copy',  'excel', 'pdf' ),
-    #                colReorder = TRUE #columns can be reordered
-    #              )
-    #   )
-    #
-    # })
+    output$summary.flow <- DT::renderDataTable({
+
+      datatable( data.flow_output(), rownames= FALSE , #temp, table with stat did not render
+                 extensions = c('Buttons','ColReorder'),
+                 options = list(
+                   # autoWidth = TRUE, #scroll bar to see enture table
+                   scrollX = TRUE, #scrollbar when table is not visible
+                   columnDefs = list(list(
+                     targets = c(6L, 9L), visible = FALSE #using these rows, the table does not display
+                   )),
+                   dom = 'Bfrtip',
+                   buttons = c('colvis','copy',  'excel', 'pdf' ),
+                   colReorder = TRUE #columns can be reordered
+                 )
+      )
+
+    })
 
 
 
@@ -1417,55 +1416,55 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
     # Table output: Flow Analysis show rows of isox file------------------------------------------------
 
 
-    # output$mytable.flow = DT::renderDataTable({
-    #
-    #   datatable( data.flow_filtered() %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
-    #              extensions = c('Buttons','ColReorder', 'Select'),
-    #
-    #              options = list(
-    #                #   autoWidth = TRUE, #scroll bar to see enture table
-    #                scrollX = TRUE, #scroll bar to see enture table
-    #
-    #                #   columnDefs = list(list(
-    #                #
-    #                #        targets = c(2L), visible = FALSE #hide some columns
-    #                # )),
-    #
-    #                dom = 'Bfrtip',
-    #                buttons = c('colvis','copy',  'excel', 'pdf' ),
-    #                colReorder = TRUE#, #columns can be reordered,
-    #                # selection = list(target = "column")#,
-    #                # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
-    #              )
-    #   )
-    #   #How to export only visible columns?
-    #   # buttons = list(
-    #   #   list(extend = "excel", exportOptions = list(columns = ":visible"))
-    #   # )
-    #
-    #   # DT::datatable(
-    #   #   mtcars,
-    #   #   options = list(columnDefs = list(list(
-    #   #     targets = 0:7, visible = FALSE
-    #   #   )), buttons = c('colvis'), dom = 'Bfrtip'),
-    #   #   extensions = 'Buttons'
-    #   # )
-    #
-    #
-    #   #https://datatables.net/reference/option/columns.visible
-    #
-    # })
+    output$mytable.flow = DT::renderDataTable({
+
+      datatable( data.flow_filtered() %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
+                 extensions = c('Buttons','ColReorder', 'Select'),
+
+                 options = list(
+                   #   autoWidth = TRUE, #scroll bar to see enture table
+                   scrollX = TRUE, #scroll bar to see enture table
+
+                   #   columnDefs = list(list(
+                   #
+                   #        targets = c(2L), visible = FALSE #hide some columns
+                   # )),
+
+                   dom = 'Bfrtip',
+                   buttons = c('colvis','copy',  'excel', 'pdf' ),
+                   colReorder = TRUE#, #columns can be reordered,
+                   # selection = list(target = "column")#,
+                   # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
+                 )
+      )
+      #How to export only visible columns?
+      # buttons = list(
+      #   list(extend = "excel", exportOptions = list(columns = ":visible"))
+      # )
+
+      # DT::datatable(
+      #   mtcars,
+      #   options = list(columnDefs = list(list(
+      #     targets = 0:7, visible = FALSE
+      #   )), buttons = c('colvis'), dom = 'Bfrtip'),
+      #   extensions = 'Buttons'
+      # )
+
+
+      #https://datatables.net/reference/option/columns.visible
+
+    })
 
 
     # Download output: Single Analysis Excel file ----------------------------------
 
 
-    # output$download_Flow_xlsx <- downloadHandler(
-    #   filename = function(){  paste(tools::file_path_sans_ext(input$upload_Flow_Injection$name), "_IsoXL.xlsx", sep="")},
-    #   content = function(file) {
-    #     saveWorkbook(data_flow.xls(), file)
-    #   }
-    # )
+    output$download_Flow_xlsx <- downloadHandler(
+      filename = function(){  paste(tools::file_path_sans_ext(input$upload_Flow_Injection$name), "_IsoXL.xlsx", sep="")},
+      content = function(file) {
+        saveWorkbook(data_flow.xls(), file)
+      }
+    )
 
 
     ####

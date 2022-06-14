@@ -188,7 +188,7 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
 
                                  submitButton( "Update output", icon("sync")),
 
-                                 #numericRangeInput("n", "Rows", value = c(1,5), min=1, max=100000),
+                                 #shinyWidgets::numericRangeInput("n", "Rows", value = c(1,5), min=1, max=100000),
 
                                  tags$hr(style="border-color: grey;"),
 
@@ -309,6 +309,116 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
 
 
                               box(title = "Filtered .isox File", width = "auto" ,status = "primary", solidHeader = T, DT::dataTableOutput("mytable")),
+
+
+                    )
+                  )
+                )
+        ),
+
+        tabItem(tabName = "flow_in",
+
+                h4("Process data from flow injection experiments"),
+
+                fluidPage(
+
+                  sidebarLayout(
+
+                    sidebarPanel(width = 3,
+
+
+
+                                 fileInput("upload_Flow_Injection", label="Upload .isox file", accept = c(".isox"), placeholder="No file loaded..."),
+
+                                 hr(),
+
+                                 submitButton( "Update output", icon("sync")),
+
+                                 tags$hr(style="border-color: grey;"),
+
+                                 h6("Define Parameters"),
+
+                                 # textInput(inputId = "INPUT_Flow_sample", label="Sample", value = "sample"),
+
+                                 textInput(inputId = "INPUT_Flow_Basepeak", label="Base peak", value = "M0"), #change back to M0 as default
+
+
+                                 shinyWidgets::numericRangeInput("INPUT_Flow_timerange", "Time [min]", value = c(1,10), min=0, max=100),
+
+
+                                 tags$hr(style="border-color: grey;"),
+
+                                 h6("Processing options:"),
+
+                                 # Hover over: with_tippy(textInput("input", "input with tooltip"), "Input text", placement = "right")
+
+                                 # with_tippy(numericInput(
+                                 #   inputId = "INPUT_Flow_Segments",
+                                 #   label = "Segments",
+                                 #   1,
+                                 #   min = 1,
+                                 #   max = 10,
+                                 #   step = 1,
+                                 #   width = NULL
+                                 # ), "Processing option: Split blocks into multiple segments", placement = "right"), #Not consistently working...
+
+                                 with_tippy(numericInput(
+                                   inputId = "INPUT_Flow_Rare",
+                                   label = "Remove weak isotopologs",
+                                   30,
+                                   min = 1,
+                                   max = 50,
+                                   step = 1,
+                                   width = NULL
+                                 ),"Processing option: Isotopolog must have been observed in at least x % of scans", placement = "right"),
+
+                                 with_tippy(numericInput(
+                                   inputId = "INPUT_Flow_TICxIT",
+                                   label = "Remove outlier scans",
+                                   1,
+                                   min = 0.1,
+                                   max = 10,
+                                   step = 0.1,
+                                   width = NULL
+                                 ), "Processing option: Truncate data x%/100-x% based on TICxIT",  placement = "right"),
+
+                                 radioButtons(inputId = "INPUT_Flow_RatioMethod", label="Ratio method", choiceNames = c( "sum",  "mean", "median", "geometric"), choiceValues = c( "sum",  "mean", "median", "geometric.mean"), selected= "sum"),
+
+                                 #radioButtons(inputId = "INPUT_Flow_IONS", label="Ratio input", choiceNames = c( "ions",  "intensity"), choiceValues = c( "ions.incremental",  "intensity"), selected=  "ions.incremental"),
+                                 radioButtons(inputId = "INPUT_Flow_IONS", label="Ratio input", choiceNames = c( "ions"), choiceValues = c( "ions.incremental"), selected=  "ions.incremental"), #intensity is not yet implemented
+
+
+                    ),
+
+
+                    # UI: Flow Injection Main Panel -------------------------------------------
+
+
+                    mainPanel(width = 9,
+
+
+                              #hr(),
+
+                              downloadButton("download_Flow_xlsx", "Download Results (.xlsx)"),
+
+                              hr(),
+
+
+                              box(title = "Overview of Results", width = "auto" , height="auto", status = "primary", solidHeader = T, withSpinner(plotlyOutput("plot.flow"))), #how to save png at higher resolution?
+
+
+                              hr(),
+
+
+                              box(title = "Results Table", width = "auto" ,status = "primary",solidHeader = T, DT::dataTableOutput("summary.flow")),
+
+                              hr(),
+
+
+                              box(title = "Filtered .isox File", width = "auto" ,status = "primary",solidHeader = T, DT::dataTableOutput("mytable.flow")),
+
+
+
 
 
                     )
