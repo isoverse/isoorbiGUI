@@ -474,150 +474,150 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
     # Data: Shot Noise --------------------------------------------------------------
 
 
-    # data.SN <- reactive({
-    #
-    #
-    #
-    #   req(input$upload_SN)
-    #
-    #
-    #   ext <- tools::file_ext(input$upload_SN$name)
-    #   switch(ext,
-    #          isox = readr::read_tsv(input$upload_SN$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
-    #                                 col_types = list(
-    #                                   filename = col_factor(),
-    #                                   compound = col_factor(),
-    #                                   isotopolog =col_factor()
-    #                                 ) ),
-    #
-    #
-    #          validate("Invalid file; Please upload a .isox file")
-    #   )
-    # })
+    data.SN <- reactive({
+
+
+
+      req(input$upload_SN)
+
+
+      ext <- tools::file_ext(input$upload_SN$name)
+      switch(ext,
+             isox = readr::read_tsv(input$upload_SN$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
+                                    col_types = list(
+                                      filename = readr::col_factor(),
+                                      compound = readr::col_factor(),
+                                      isotopolog = readr::col_factor()
+                                    ) ),
+
+
+             validate("Invalid file; Please upload a .isox file")
+      )
+    })
 
 
     ### select a specific filename
 
-    # data.SN.filename <- reactive({
-    #
-    #   req(input$INPUT_SN_filename)
-    #
-    #
-    #   validate(
-    #
-    #     need( (input$INPUT_SN_filename == "all" | input$INPUT_SN_filename %in% levels(data.SN()$filename ) ), paste("Warning: Filename not in dataset." ,"\n Option: use 'all'.", "\n Individual filenames found are: ", levels(data.SN()$filename ) ) ),
-    #     #    need( (input$INPUT_SN_filename != character(0)), paste("Warning: Filename not in dataset." ,"Filenames found are: ", levels(data.SN()$filename ) ) ) #temp how to deal with empty input
-    #
-    #   )
-    #
-    #   ifelse(input$INPUT_SN_filename=="all", return(data.SN()), return( data.SN() %>% group_by(filename) %>% filter(filename == input$INPUT_SN_filename) ) )
-    #
-    #
-    #
-    # })
+    data.SN.filename <- reactive({
+
+      req(input$INPUT_SN_filename)
+
+
+      validate(
+
+        need( (input$INPUT_SN_filename == "all" | input$INPUT_SN_filename %in% levels(data.SN()$filename ) ), paste("Warning: Filename not in dataset." ,"\n Option: use 'all'.", "\n Individual filenames found are: ", levels(data.SN()$filename ) ) ),
+        #    need( (input$INPUT_SN_filename != character(0)), paste("Warning: Filename not in dataset." ,"Filenames found are: ", levels(data.SN()$filename ) ) ) #temp how to deal with empty input
+
+      )
+
+      ifelse(input$INPUT_SN_filename=="all", return(data.SN()), return( data.SN() %>% group_by(filename) %>% filter(filename == input$INPUT_SN_filename) ) )
+
+
+
+    })
 
     ### select a specific compound
 
-    # data.SN.filename.compound <- reactive({
-    #
-    #   req(input$INPUT_SN_compound)
-    #
-    #   validate(
-    #
-    #     need( (input$INPUT_SN_compound == "all" | input$INPUT_SN_compound %in% levels(data.SN()$compound ) ), paste("Warning: Compound not in dataset." ,"\n Option: use 'all'.", "\n Individual compounds found are: ", levels(data.SN()$compound ) ) )
-    #
-    #   )
-    #
-    #
-    #   ifelse(input$INPUT_SN_compound=="all", return(data.SN.filename()), return( data.SN.filename() %>% group_by(compound) %>% filter(compound == input$INPUT_SN_compound) ) )
-    #
-    #
-    # })
+    data.SN.filename.compound <- reactive({
+
+      req(input$INPUT_SN_compound)
+
+      validate(
+
+        need( (input$INPUT_SN_compound == "all" | input$INPUT_SN_compound %in% levels(data.SN()$compound ) ), paste("Warning: Compound not in dataset." ,"\n Option: use 'all'.", "\n Individual compounds found are: ", levels(data.SN()$compound ) ) )
+
+      )
+
+
+      ifelse(input$INPUT_SN_compound=="all", return(data.SN.filename()), return( data.SN.filename() %>% group_by(compound) %>% filter(compound == input$INPUT_SN_compound) ) )
+
+
+    })
 
 
 
-    # data.SN.filtered <- reactive({
-    #
-    #   req(input$INPUT_SN_timerange)
-    #   req(input$INPUT_SN_Basepeak)
-    #   req(input$INPUT_SN_Isotopolog)
-    #
-    #   validate(
-    #
-    #     # need( (input$INPUT_SN_filename=="all" | input$INPUT_SN_filename %in% levels(data.SN()$filename ) ), paste("Warning: Filename not in dataset." ,"Filenamses found are: ", levels(data.SN()$filename ) ) ),
-    #
-    #     need(input$INPUT_SN_Isotopolog, "Warning: Isotopolog has a number as input."), #temp nor working for number or empty field, whitespace
-    #     need(input$INPUT_SN_Basepeak, "Base peak has no input."), #temp nor working
-    #     need(input$INPUT_SN_timerange[1], "Input is missing for time range (min)."),
-    #     need(input$INPUT_SN_timerange[2], "Input is missing for time range (max)."),
-    #
-    #     need(input$INPUT_SN_Isotopolog %in% levels(data.SN()$isotopolog), paste("Error: Isotopolog not found in data. Found the following isotopologs: ", levels(data.SN()$isotopolog)) ), #temp; error prints in multiple rows
-    #     need(input$INPUT_SN_Basepeak %in% levels(data.SN()$isotopolog), paste("Error: Base peak not found in data. Found the following isotopologs: ", levels(data.SN()$isotopolog))),
-    #     need(input$INPUT_SN_timerange[2] <= max(data.SN()$time.min), paste("Warning: Time selection exceeds time range of data. Maximum time in data is ", max(data.SN()$time.min) , " min.") )
-    #   )
-    #
-    #
-    #
-    #
-    #   df <- data.SN.filename.compound() %>% group_by(filename) %>% filter(time.min>  input$INPUT_SN_timerange[1], time.min <  input$INPUT_SN_timerange[2]) %>%  filter(isotopolog == input$INPUT_SN_Basepeak | isotopolog == input$INPUT_SN_Isotopolog ) %>%
-    #     remove.ticxit(INPUT_TICxIT=input$INPUT_SN_TICxIT) %>%
-    #     remove.satellitePeaks() %>%
-    #     remove.rare(INPUT_Rare = input$INPUT_SN_Rare) %>%
-    #     select(filename, scan.no, time.min, isotopolog, ions.incremental) %>% spread(isotopolog, ions.incremental) %>% na.omit()
-    #
-    #
-    #   names(df)[names(df) == as.character(input$INPUT_SN_Basepeak)] <- "Basepeak.Ions"
-    #   names(df)[names(df) == as.character(input$INPUT_SN_Isotopolog)] <- "Isotopolog.Ions"
-    #
-    #   df.out <- df %>% mutate(Ratio= Isotopolog.Ions/ Basepeak.Ions)
-    #
-    #
-    #   return(df.out)
-    # })
+    data.SN.filtered <- reactive({
 
-    # calc.shotnoise <- function(d.neff){
-    #
-    #   df.out <- data.frame(scans =1:length(d.neff$scan.no),
-    #                        neff = 1:length(d.neff$scan.no),
-    #                        rse= 1:length(d.neff$scan.no),
-    #                        shotnoise = 1:length(d.neff$scan.no),
-    #                        shotnoise.neff = 1:length(d.neff$scan.no))
-    #
-    #   #Geometric mean, geometric SD and SE
-    #   gmean <- function(x) exp(mean(log(x))) #define geometric mean
-    #   gsd <- function(x) exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
-    #   gse <- function(x) (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) /sqrt(length(x))
-    #
-    #   for (l in 1:length(d.neff$scan.no)) {
-    #     df <- d.neff[1:l,]
-    #
-    #     neff <- (sum(df$Basepeak.Ions) * sum(df$Isotopolog.Ions))/ (sum(df$Basepeak.Ions) + sum(df$Isotopolog.Ions))
-    #     df.out$neff[l] <- neff
-    #
-    #     shotnoise.neff <- neff^-0.5
-    #     df.out$shotnoise.neff[l] <- shotnoise.neff
-    #
-    #     shotnoise <- ((1/sum(df$Isotopolog.Ions) + (1/sum(df$Basepeak.Ions))))^0.5
-    #     df.out$shotnoise[l] <- shotnoise
-    #
-    #     rse <- gse(d.neff[1:l,]$Ratio) / gmean(d.neff[1:l,]$Ratio)
-    #     df.out$rse[l] <- rse
-    #
-    #   }
-    #
-    #
-    #   df.out <- df.out %>% na.omit() %>% select(-shotnoise, -shotnoise.neff)
-    #
-    #   df.out <- df.out %>% gather(key, value, -scans, -neff)
-    #
-    #   return(df.out)
-    #
-    # }
+      req(input$INPUT_SN_timerange)
+      req(input$INPUT_SN_Basepeak)
+      req(input$INPUT_SN_Isotopolog)
+
+      validate(
+
+        # need( (input$INPUT_SN_filename=="all" | input$INPUT_SN_filename %in% levels(data.SN()$filename ) ), paste("Warning: Filename not in dataset." ,"Filenamses found are: ", levels(data.SN()$filename ) ) ),
+
+        need(input$INPUT_SN_Isotopolog, "Warning: Isotopolog has a number as input."), #temp nor working for number or empty field, whitespace
+        need(input$INPUT_SN_Basepeak, "Base peak has no input."), #temp nor working
+        need(input$INPUT_SN_timerange[1], "Input is missing for time range (min)."),
+        need(input$INPUT_SN_timerange[2], "Input is missing for time range (max)."),
+
+        need(input$INPUT_SN_Isotopolog %in% levels(data.SN()$isotopolog), paste("Error: Isotopolog not found in data. Found the following isotopologs: ", levels(data.SN()$isotopolog)) ), #temp; error prints in multiple rows
+        need(input$INPUT_SN_Basepeak %in% levels(data.SN()$isotopolog), paste("Error: Base peak not found in data. Found the following isotopologs: ", levels(data.SN()$isotopolog))),
+        need(input$INPUT_SN_timerange[2] <= max(data.SN()$time.min), paste("Warning: Time selection exceeds time range of data. Maximum time in data is ", max(data.SN()$time.min) , " min.") )
+      )
 
 
 
-    # data.SN.2plot <- reactive ({ calc.shotnoise(data.SN.filtered())
-    # })
+
+      df <- data.SN.filename.compound() %>% group_by(filename) %>% filter(time.min>  input$INPUT_SN_timerange[1], time.min <  input$INPUT_SN_timerange[2]) %>%  filter(isotopolog == input$INPUT_SN_Basepeak | isotopolog == input$INPUT_SN_Isotopolog ) %>%
+        remove.ticxit(INPUT_TICxIT=input$INPUT_SN_TICxIT) %>%
+        remove.satellitePeaks() %>%
+        remove.rare(INPUT_Rare = input$INPUT_SN_Rare) %>%
+        select(filename, scan.no, time.min, isotopolog, ions.incremental) %>% tidyr::spread(isotopolog, ions.incremental) %>% na.omit()
+
+
+      names(df)[names(df) == as.character(input$INPUT_SN_Basepeak)] <- "Basepeak.Ions"
+      names(df)[names(df) == as.character(input$INPUT_SN_Isotopolog)] <- "Isotopolog.Ions"
+
+      df.out <- df %>% mutate(Ratio= Isotopolog.Ions/ Basepeak.Ions)
+
+
+      return(df.out)
+    })
+
+    calc.shotnoise <- function(d.neff){
+
+      df.out <- data.frame(scans =1:length(d.neff$scan.no),
+                           neff = 1:length(d.neff$scan.no),
+                           rse= 1:length(d.neff$scan.no),
+                           shotnoise = 1:length(d.neff$scan.no),
+                           shotnoise.neff = 1:length(d.neff$scan.no))
+
+      #Geometric mean, geometric SD and SE
+      gmean <- function(x) exp(mean(log(x))) #define geometric mean
+      gsd <- function(x) exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
+      gse <- function(x) (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) /sqrt(length(x))
+
+      for (l in 1:length(d.neff$scan.no)) {
+        df <- d.neff[1:l,]
+
+        neff <- (sum(df$Basepeak.Ions) * sum(df$Isotopolog.Ions))/ (sum(df$Basepeak.Ions) + sum(df$Isotopolog.Ions))
+        df.out$neff[l] <- neff
+
+        shotnoise.neff <- neff^-0.5
+        df.out$shotnoise.neff[l] <- shotnoise.neff
+
+        shotnoise <- ((1/sum(df$Isotopolog.Ions) + (1/sum(df$Basepeak.Ions))))^0.5
+        df.out$shotnoise[l] <- shotnoise
+
+        rse <- gse(d.neff[1:l,]$Ratio) / gmean(d.neff[1:l,]$Ratio)
+        df.out$rse[l] <- rse
+
+      }
+
+
+      df.out <- df.out %>% na.omit() %>% select(-shotnoise, -shotnoise.neff)
+
+      df.out <- df.out %>% tidyr::gather(key, value, -scans, -neff)
+
+      return(df.out)
+
+    }
+
+
+
+    data.SN.2plot <- reactive ({ calc.shotnoise(data.SN.filtered())
+    })
 
 
 
@@ -665,41 +665,41 @@ orbitrap_server <- function(data_folder = NULL, local = FALSE, reset = FALSE) {
 
     # Plot: Shot noise --------------------------------------------------------
 
-    # output$plot_SN <- renderPlotly({
-    #
-    #
-    #   ggplotly(
-    #
-    #     ggplot(data = data.SN.2plot(), aes(x= neff, y=  value, color=key)) + #scale_color_brewer(palette="Dark2") +
-    #
-    #       geom_point(size=0.8, alpha=0.5) +
-    #       geom_abline(intercept = 0, slope = -0.5, col="blue") +
-    #       labs(y="RSE",
-    #            x="effective number of ions")  +
-    #       theme(legend.position="none")+
-    #
-    #       annotate(geom = 'text', label = 'shot noise \nlimit', color="blue", x=0.05*median(data.SN.2plot()$neff),y=median(data.SN.2plot()$value))+ #temp: better/ more elegant way to position label?
-    #       scale_x_continuous(trans = log10_trans(), breaks = c(10000, 100000, 1000000,10000000, 100000000), labels=c("1E4","1E5", "1E6", "1E7", "1E8")) +
-    #       scale_y_continuous(trans = log10_trans(), breaks = c(0.1, 0.05, 0.01,  0.002, 0.001, 0.0005,0.0002, 0.0001), labels=c("100 permil","50 permil", "10 permil", "2 permil" , "1 permil", "0.5 permil", "0.2 permil", "0.1 permil")),
-    #
-    #
-    #     #dynamicTicks = TRUE #change ticks on zoom
-    #   ) %>%
-    #
-    #     config(displaylogo = FALSE,
-    #            modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
-    #
-    #     config( #options on how to save an image
-    #       toImageButtonOptions = list(
-    #         format = "png",
-    #         width = 900,
-    #         height = 600,
-    #         scale = 4,
-    #         filename = paste("shotnoise", input$INPUT_SN_Isotopolog, input$INPUT_SN_Basepeak, sep="_")
-    #
-    #       )
-    #     )
-    # })
+    output$plot_SN <- renderPlotly({
+
+
+      ggplotly(
+
+        ggplot(data = data.SN.2plot(), aes(x= neff, y=  value, color=key)) + #scale_color_brewer(palette="Dark2") +
+
+          geom_point(size=0.8, alpha=0.5) +
+          geom_abline(intercept = 0, slope = -0.5, col="blue") +
+          labs(y="RSE",
+               x="effective number of ions")  +
+          theme(legend.position="none")+
+
+          annotate(geom = 'text', label = 'shot noise \nlimit', color="blue", x=0.05*median(data.SN.2plot()$neff),y=median(data.SN.2plot()$value))+ #temp: better/ more elegant way to position label?
+          scale_x_continuous(trans = log10_trans(), breaks = c(10000, 100000, 1000000,10000000, 100000000), labels=c("1E4","1E5", "1E6", "1E7", "1E8")) +
+          scale_y_continuous(trans = log10_trans(), breaks = c(0.1, 0.05, 0.01,  0.002, 0.001, 0.0005,0.0002, 0.0001), labels=c("100 permil","50 permil", "10 permil", "2 permil" , "1 permil", "0.5 permil", "0.2 permil", "0.1 permil")),
+
+
+        #dynamicTicks = TRUE #change ticks on zoom
+      ) %>%
+
+        config(displaylogo = FALSE,
+               modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
+
+        config( #options on how to save an image
+          toImageButtonOptions = list(
+            format = "png",
+            width = 900,
+            height = 600,
+            scale = 4,
+            filename = paste("shotnoise", input$INPUT_SN_Isotopolog, input$INPUT_SN_Basepeak, sep="_")
+
+          )
+        )
+    })
 
 
 

@@ -532,7 +532,85 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
                     )
                   )
                 )
+        ),
+
+        # UI: Shot Noise Analysis -------------------------------------------------
+
+        tabItem(tabName = "shot_in",
+
+                h4("Analyze the observed precision of a ratio versus shot noise limits"),
+
+                fluidPage(
+
+
+                  sidebarLayout(
+
+
+                    sidebarPanel(width = 3,
+
+                                 fileInput("upload_SN", label="Upload .isox file", accept = c(".isox"), placeholder="No file loaded..."),
+
+                                 hr(),
+
+                                 submitButton( "Update output", icon("sync")),
+
+                                 tags$hr(style="border-color: grey;"),
+
+
+                                 #tags$hr(style="border-color: grey;"),
+
+
+
+                                 textInput(inputId = "INPUT_SN_Isotopolog", label="Isotopolog", value = "18O"), #change back to M0 as default
+                                 textInput(inputId = "INPUT_SN_Basepeak", label="Base peak", value = "15N"), #change back to M0 as default
+
+
+                                 shinyWidgets::numericRangeInput("INPUT_SN_timerange", "Time [min]", value = c(1,10), min=0, max=100),
+
+                                 textInput("INPUT_SN_filename", label = "Filename", value = "all"), #temp add eg NONE
+
+                                 textInput("INPUT_SN_compound", label = "Compound", value = "all"), #temp add eg NONE
+
+                                 with_tippy(numericInput(
+                                   inputId = "INPUT_SN_Rare",
+                                   label = "Remove weak isotopologs",
+                                   30,
+                                   min = 1,
+                                   max = 50,
+                                   step = 1,
+                                   width = NULL
+                                 ),"Processing option: Isotopolog must have been observed in at least x % of scans", placement = "right"),
+
+                                 with_tippy(numericInput(
+                                   inputId = "INPUT_SN_TICxIT",
+                                   label = "Remove outlier scans",
+                                   1,
+                                   min = 0.1,
+                                   max = 10,
+                                   step = 0.1,
+                                   width = NULL
+                                 ), "Processing option: Truncate data x%/100-x% based on TICxIT",  placement = "right")
+
+
+
+
+
+                    ),
+
+
+                    # UI: Shot Noise Analysis Main Panel --------------------------------------
+
+
+                    mainPanel(
+
+                      box(title = "Shot Noise Plot", width = "auto" , height="auto", status = "primary", solidHeader = T, withSpinner(plotlyOutput("plot_SN"))), #how to save png at higher resolution?
+
+
+                    )
+                  )
+                )
         )
+
       )
 
           #   tabItem("data", div(id = "data-panel", column(width = 12, uiOutput("data") %>% withSpinner(type = 5, proxy.height = "450px")))),
