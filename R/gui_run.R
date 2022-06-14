@@ -691,6 +691,117 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
                   )
                 )
 
+        ),
+
+        # UI: Create IsoX Input ---------------------------------------------------
+        tabItem(tabName = "make_in",
+
+                h4("Create an IsoX input file for your project"),
+
+                fluidPage(
+
+                  sidebarLayout(
+
+                    sidebarPanel(width = 3,
+
+                                 textInput(inputId = "INPUT_IsoX_sumformula", label="Sum formula", value = "NO3"),
+
+                                 numericInput(
+                                   inputId = "INPUT_IsoX_charge",
+                                   label = "Charge",
+                                   -1,
+                                   min = -5,
+                                   max = 5,
+                                   step = 1,
+                                   width = NULL
+                                 ),
+
+                                 #radioButtons(inputId = "INPUT_IsoX_charge", label=NULL, choiceNames = c( "+1", "−1"), choiceValues = c( "1", "-1"), selected= "-1", inline = TRUE),
+
+                                 submitButton( "Update", icon("sync")),
+
+                                 tags$hr(style="border-color: grey;"),
+
+
+                                 #tags$hr(style="border-color: grey;"),
+
+                                 #h6("Define Signal"),
+
+                                 textInput(inputId = "INPUT_IsoX_compound", label="Compound", value = "nitrate"),
+
+                                 numericInput(
+                                   inputId = 'INPUT_IsoX_tolerance',
+                                   label = "Tolerance [mDa]",
+                                   0.3,
+                                   min = 0.1,
+                                   max = 3,
+                                   step = 0.1,
+                                   width = NULL
+                                 ),
+
+
+
+                                 with_tippy(numericInput(
+                                   inputId = "INPUT_IsoX_threshold",
+                                   label = "Threshold [% of M0]",
+                                   0.0001,
+                                   min = 0.00001,
+                                   max = 10,
+                                   step = 0.0001,
+                                   width = NULL),
+                                   "Processing option: Threshold to include an isotopolog (in ppm abundance)", placement = "right"),
+
+
+
+
+
+                                 #tags$hr(style="border-color: grey;"),
+                                 #h6("Override algorithm"), #add button/options?
+
+                                 numericInput(
+                                   inputId = "INPUT_IsoX_massoffset",
+                                   label = "Offset m/z [mDa]",
+                                   0,
+                                   min = -5,
+                                   max = 5,
+                                   step = 0.1,
+                                   width = NULL
+                                 ),
+
+                                 h6("The option below is not implemented yet"),
+                                 shinyWidgets::sliderTextInput("INPUT_IsoX_resolution","Orbitrap Resolution:" ,
+                                                 choices = c("7.5k", "15k", "30k", "60k", "120k", "240k", "480k","1M"), #add further months
+                                                 selected = c("15k")
+                                 ),
+                    ),
+
+
+
+
+                    # UI: Create IsoX Input Main Panel ----------------------------------------
+
+
+                    mainPanel(width = 9,
+
+
+                              hr(),
+
+                              downloadButton("download_IsoX", "Download Input File for IsoX"),
+
+                              hr(),
+
+
+
+
+                              box(title = "Preview of isotoplogs.tsv", width = "auto" ,status = "primary",solidHeader = T, DT::dataTableOutput("isox")),
+
+
+
+
+
+                    )
+                  )
+                )
         )
 
       )

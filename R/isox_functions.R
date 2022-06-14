@@ -3,35 +3,35 @@
 # require(dplyr)
 # require(tidyr)
 # data(isotopes)
-# 
+#
 # INPUT_formula <- c("NO3", "HSO4")
 # INPUT_compound <- c("nitrate", "sulfate")
-# 
+#
 # INPUT_charge <- c(-1,-1)
-# 
+#
 # INPUT_tolerance <- 0.3
 
 
 # check sum formula input -------------------------------------------------
 
 run_check <- function(INPUT_formula){
-  
 
-  
+
+
   for(i in INPUT_formula){
     check <- check_chemform(isotopes,chemforms= INPUT_formula,get_sorted=FALSE,get_list=FALSE)
-    
+
     ifelse(check$warning==FALSE, return(check$new_formula), validate("Error in sum formula"))
 
   }
 
-  
+
 }
 
 # INPUT_formula.check <- run_check(INPUT_formula)
-# 
+#
 # INPUT_formula.check
-# 
+#
 # pattern <- isopattern(
 #   isotopes=isotopes,
 #   chemforms=INPUT_formula.check,
@@ -52,7 +52,7 @@ run_check <- function(INPUT_formula){
 
 make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_tolerance, INPUT_massOffset){
 
-  data(isotopes)
+  data(isotopes, package = "enviPat")
 
   out.list <- list()
 
@@ -69,7 +69,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     df.sel$M0 <- 0
     df.sel[which.min(df.sel$'m/z'),]$M0 <- 1 #add M0 info; temp: error when there is no M0, min....! Look for a better way
 
-    df.temp <- df.sel %>% gather(isotope, count, -'m/z') %>% filter(count>0)
+    df.temp <- df.sel %>% tidyr::gather(isotope, count, -'m/z') %>% filter(count>0)
 
     df.temp$isotopolog <- NA
 
@@ -81,7 +81,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
       df.temp$temp.string[j] <- temp.string
     }
 
-    df.temp2 <- df.temp %>% select(-count)%>% spread(isotope, temp.string)
+    df.temp2 <- df.temp %>% select(-count)%>% tidyr::spread(isotope, temp.string)
 
 
     cols <- colnames(df.temp2)[-1] # columns to paste together
@@ -110,16 +110,16 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
   df.out <- out.list[[1]]
 
   if(length(out.list) >1){
-    
+
     for(i in 2:length(out.list)){
-      
+
       add.compound <- as.data.frame(out.list[[i]])
       df.out <-rbind(df.out, add.compound)
     }
   }
-  
+
   df.out$mass <- df.out$mass + INPUT_massOffset #offset from UI input
-  
+
   df.out$mass <- format(round(df.out$mass, 5),nsmall = 5) #show last digit zero
 
   return(df.out)
