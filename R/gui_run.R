@@ -34,7 +34,7 @@ iso_start_orbitrap_gui_server <- function(data_folder, launch = TRUE, log = TRUE
     log = log,
     reset = TRUE,
     launch.browser = FALSE,
-    host = "0.0.0.0",
+    host = "127.0.0.1", #changed from 0.0.0.0. on 17-June-2022
     port = 3838
   )
 }
