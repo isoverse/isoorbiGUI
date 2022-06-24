@@ -9,8 +9,7 @@ module_settings_server(
   output,
   session,
   save_settings = FALSE,
-  settings_file_path = reactive({
- })
+  settings_file_path = reactive({ })
 )
 }
 \arguments{

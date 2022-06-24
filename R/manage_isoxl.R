@@ -6,6 +6,7 @@
 #' @param reset whether to reset GUI settings for the data folder to their defaults. This option is only available when running a personal GUI as servers do not save any settings. Resetting settings is usually only necessary if your GUI crashed unexpectedly and gets stuck during restart. Please consider reporting the details of the crash at https://github.com/isoverse/isoorbi/issues, especially if you can easily reproduce it.
 #' @param port the localhost port where the app will be accessible, e.g. https: (note that if it is a port that is open in your firewall such as 3838, the GUI will be accessible on your local netwrork https://127.0.0.1:3838)
 #' @export
+#' @family isoxl functions
 iso_start_isoxl_app <- function(log = FALSE, reset = FALSE, port = 5000) {
   # launch viewer
   start_orbitrap_gui(
@@ -21,6 +22,7 @@ iso_start_isoxl_app <- function(log = FALSE, reset = FALSE, port = 5000) {
 #'
 #' @details \code{iso_start_isoxl_app_server} starts a server for the Orbitrap data GUI (used in deployment on e.g. shinyapps.io). Typically this function is not called directly. Use \code{iso_setup_isoxl_app} instead to set up the file structure for server deployment.
 #'
+#' @family isoxl functions
 #' @export
 iso_start_isoxl_app_server <- function() {
   if (missing(data_folder))
@@ -113,7 +115,6 @@ start_orbitrap_gui <- function(local, launch, log, reset, ...) {
   app <- shinyApp(
     ui = orbitrap_ui(),
     server = orbitrap_server(
-      data_folder = data_folder,
       local = local,
       reset = reset
     )
