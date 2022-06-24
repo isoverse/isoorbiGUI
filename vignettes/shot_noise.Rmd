@@ -1,0 +1,26 @@
+---
+title: "Untitled"
+output: html_document
+date: '2022-06-24'
+---
+
+
+```{r}
+library(isoorbi)
+```
+
+
+
+
+```{r}
+file_path <-system.file("extdata", "testfile_DualInlet.isox", package = "isoorbi")
+isox <- iso_read_isox_file(file_path) 
+```
+
+```{r}
+iso_filter_isox_file()
+
+
+iso_plot_shotnoise(isox, isotopolog = "15N", base = "18O", ...)
+```
+
