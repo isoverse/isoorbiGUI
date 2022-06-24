@@ -9,6 +9,7 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
     gui_message("info", "starting isoXL GUI")
 
+
     # settings server
     settings <- callModule(
       module_settings_server, "settings",
