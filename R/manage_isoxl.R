@@ -7,7 +7,7 @@
 #' @param port the localhost port where the app will be accessible, e.g. https: (note that if it is a port that is open in your firewall such as 3838, the GUI will be accessible on your local netwrork https://127.0.0.1:3838)
 #' @export
 #' @family isoxl functions
-iso_start_isoxl_app <- function(log = FALSE, reset = FALSE, port = 5000) {
+iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, port = 5000) {
   # launch viewer
   start_orbitrap_gui(
     local = TRUE,
@@ -67,15 +67,10 @@ iso_setup_isoxl_app_server <- function(dir = "app", overwrite = FALSE) {
   else if (file_exists) message("failed (file already exists, use overwrite = TRUE)")
   else message("complete")
 
-  # data folder
-  message(" - adding data folder... ", appendLF = FALSE)
-  if(!dir.exists(file.path(dir, "data"))) dir.create(file.path(dir, "data"))
-  message("complete.")
-
   # omit from github
   message(" - adding .gitignore... ", appendLF = FALSE)
   if (!file.exists(file.path(dir, ".gitignore")) || overwrite)
-    cat("# exclude apps from github (by default)\n*\n\n# always exclude data\ndata/\n", file = file.path(dir, ".gitignore"), append = FALSE)
+    cat("# exclude apps from github (by default)\n*\n", file = file.path(dir, ".gitignore"), append = FALSE)
   message("complete.")
 
   # infos

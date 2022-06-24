@@ -7,6 +7,8 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
   shinyServer(function(input, output, session) {
 
+    gui_message("info", "starting isoXL GUI")
+
     # settings server
     settings <- callModule(
       module_settings_server, "settings",

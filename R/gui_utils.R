@@ -4,12 +4,19 @@
   if (is.null(a)) b else a
 }
 
+# display gui message
+gui_message <- function(type = c("info", "debug"), ...) {
+  module_message(ns = NULL, type = type, ...)
+}
+
 # display module message
 # @param type if this is an info meessage or debug (debug only shows if in debug mode)
+# @param type if this is an info message or debug (debug only shows if in debug mode)
 module_message <- function(ns, type = c("info", "debug"), ...) {
   if (!setting("log") || (type == "debug" && !setting("debug"))) return()
   prefix <- if(type == "info") "INFO: " else if (type == "debug") "DEBUG: " else stop("don't know message type", type)
-  cat(file=stderr(), prefix, ..., " (NS: ", ns(NULL),")\n", sep = "")
+  ns <- if(!is.null(ns)) paste0(" (NS: ", ns(NULL), ")") else ""
+  cat(file=stderr(), prefix, ..., ns, "\n", sep = "")
 }
 
 # convenience function for adding spaces (not the most elegant way but works)
