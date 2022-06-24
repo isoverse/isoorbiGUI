@@ -1,0 +1,1 @@
+Rscript '/Users/caj/Library/CloudStorage/GoogleDrive-123caj@gmail.com/My Drive/Lab/software/isoorbi/app/app.r'& open http://localhost:3838/;

@@ -1,0 +1,5 @@
+# exclude apps from github (by default)
+#*
+# always exclude data
+#data/
+rsconnect

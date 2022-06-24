@@ -1,7 +1,7 @@
 Package: isoorbi
 Type: Package
 Title: Process Orbitrap Isotope Data
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     c(person(
         given = "Sebastian", family = "Kopf", 
@@ -40,7 +40,13 @@ Imports:
     shinycssloaders,
     tippy,
     DT,
-    magrittr
+    magrittr,
+    enviPat,
+    RColorBrewer,
+    ggrepel,
+    mailtoR,
+    scales,
+    tidyverse
 Suggests:
     testthat,
     rmarkdown,
