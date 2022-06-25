@@ -1,16 +1,28 @@
 # tools for active package development
 
+R_MACOS='R'
+R_WIN='C:\Program Files\R\R-4.2.0\bin\R.exe'
+R=$(R_MACOS)
+
 check:
 	Rscript -e "devtools::check()"
 
 gui_dev:
 	bundle exec guard
 
+module_shot_noise_test:
+	@echo "Starting module..."
+	@sleep 1
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_isoxl_shot_noise()'; do \
+		echo "Restarting GUI..."; \
+		sleep 1; \
+	done
+
 # windows specific
 gui_test:
 	@echo "Starting GUI..."
 	@sleep 1
-	@until 'C:\Program Files\R\R-4.2.0\bin\R.exe' -e 'library(devtools);load_all();turn_debug_on();iso_start_isoxl_app(log=TRUE,reset=FALSE)'; do \
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();iso_start_isoxl_app(log=TRUE,reset=FALSE)'; do \
 		echo "Restarting GUI..."; \
 		sleep 1; \
 	done

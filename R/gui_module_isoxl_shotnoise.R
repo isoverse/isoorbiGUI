@@ -1,8 +1,28 @@
+# test
+# test the shot noise module as a standalone app
+test_module_isoxl_shot_noise <- function(port = 5000) {
+  app <-
+    shinyApp(
+      ui = fluidPage(
+        shinyjs::useShinyjs(),
+        h1("Shot Noise Module Test"),
+        module_isoxl_shotnoise_ui(id = "shot_noise")
+      ),
+      server = function(input, output) {
+        shot_noise <- callModule(module_isoxl_shot_noise_server, id = "shot_noise")
+      }
+    )
+  runApp(app, display.mode = "normal", port = 5000)
+}
+
 # server
 module_isoxl_shot_noise_server <- function(input, output, session) {
 
   # namespace
   ns <- session$ns
+
+  # increase upload file size
+  options(shiny.maxRequestSize=100*1024^2)
 
   # values
   values <- reactiveValues(
@@ -12,10 +32,10 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     plot = NULL
   )
 
-  # upload file
+  # upload file ----
   observeEvent(input$upload, {
-    module_message(ns, "info", "new file uploaded file ", input$upload$name,
-                   " into temporary path ", input$upload$datapath)
+    module_message(ns, "info", "new file uploaded file '", input$upload$name,
+                   "' into temporary path ", input$upload$datapath)
 
     # reset the reactive values that hold the file and data
     values$upload_file <- input$upload$name
@@ -39,14 +59,16 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     paste0(values$upload_file, " uploaded")
   })
 
-  # fill parameters from data
+  # update plot options ----
   observeEvent(values$data, {
     module_message(ns, "info", "updating parameter table")
     if (is.null(values$data) || nrow(values$data) == 0) {
       # no data (maybe incorret input file --> hide)
       shinyjs::hide("parameters-panel")
+      updateSelectInput(inputId = "isotopolog", choices = c())
+      updateSelectInput(inputId = "base_peak", choices = c())
     } else {
-      # yes data --> update paraemets and show
+      # yes data --> update parameters and show
       updateSelectInput(
         inputId = "isotopolog",
         choices = levels(values$data$isotopolog),
@@ -61,19 +83,23 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     }
   }, ignoreNULL = FALSE)
 
-
-  # plot
-  observe({
-    # SK: fixme retrigger on button click
-    input$update
+  # generate plot ----
+  observeEvent(input$render_plot, {
+    req(values$data)
+    req(input$isotopolog)
     module_message(ns, "info", "generating plot")
-    isolate(values$plot <- ggplotly(ggplot(head(ggplot2::mpg)) + aes(x = cty, y = hwy) + geom_point()))
+    values$plot <-
+      values$data %>%
+      dplyr::filter(isotopolog == input$isotopolog) %>%
+      ggplot2::ggplot() +
+      ggplot2::aes(x = scan.no, y = ions.incremental) +
+      ggplot2::geom_line()
   })
 
   output$plot <- renderPlotly({
     req(values$plot)
-    values$plot
-  })
+    ggplotly(values$plot)
+  }, )
 
   # ### select a specific filename
   #
@@ -270,7 +296,7 @@ module_isoxl_shotnoise_ui <- function(id) {
           selectInput(inputId = ns("isotopolog"), label="Isotopolog", c()),
           selectInput(inputId = ns("base_peak"), label="Base peak", c()),
           tags$hr(style="border-color: grey;"),
-          actionButton(inputId = ns("update"), label = "Plot", icon = icon("sync"))
+          actionButton(ns("render_plot"), label = "Plot", icon = icon("sync"))
         ) %>% shinyjs::hidden()
 
 #
