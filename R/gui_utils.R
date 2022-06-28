@@ -1,3 +1,47 @@
+# gui managemment =====
+
+# check dependencies for gui
+check_dependencies <- function(dependencies) {
+  missing_packages <- dependencies[!(dependencies %in% installed.packages()[,"Package"])]
+  if (length(missing_packages) > 0)
+    warning("there are missing dependencies for the GUI: ",
+            paste(missing_packages, collapse = ", "),
+            immediate. = TRUE, call. = FALSE)
+  return(invisible(missing_packages))
+}
+
+# install app
+install_app <- function(name, missing_deps, create_desktop_shortcut) {
+  if (length(missing_deps) > 0) {
+    sprintf("INFO: installing the following missing dependencies for the %s app: %s", name, paste(missing_deps, collapse = ", ")) %>%
+      message()
+    install.packages(missing_deps)
+  }
+  if (create_desktop_shortcut) {
+    # FIXME
+    message("NOTE: desktop shortcuts functinoality not yet implmeneted")
+  }
+  sprintf("INFO: all dependencies are installed. Run isoorbi::iso_start_%s_app() to start the user interface.", name) %>%
+    message()
+}
+
+# missing dependencies info gui
+create_missing_dependencies_info_gui <- function(name, missing_deps) {
+  shinyApp(
+    ui = fluidPage(
+      h1("Missing dependencies", style = "color: red;"),
+      p("The following dependencies for the ", name, " GUI are not yet installed: ", strong(paste(missing_deps, collapse = ", "))),
+      p("Please close the app and run ", code(paste0("isoorbi::iso_install_", stringr::str_to_lower(name), "_app()")), " from an R console before restarting the GUI."),
+      actionButton("close", "Close"),
+    ),
+    server = function(input, output) {
+      observeEvent(input$close, {
+        # SK note: could also close tab window here but that requires some javascript that would require shinyjs
+        stopApp()
+      })
+    })
+}
+
 # general utilites for modules ====
 
 `%then%` <- function(a, b) {

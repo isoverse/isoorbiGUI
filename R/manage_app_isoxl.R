@@ -1,6 +1,6 @@
 #' Run the isoXL user interface
 #'
-#' Provides a graphical user interface to explore Orbitrap data. Note that while the GUI is running, your R session will be blocked. To stop the GUI and return to your R session, either click the \code{Close} button inside the GUI navigation bar or press \code{Esc} in your R session.
+#' Starts a graphical user interface to explore Orbitrap data. Note that while the GUI is running, your R session will be blocked. To stop the GUI and return to your R session, either click the \code{Close} button inside the GUI navigation bar or press \code{Esc} in your R session.
 #'
 #' @param log whether to show log info messages or not. By default, shows logs when running in server mode (\code{iso_start_viewer_server}) and does not show them otherwise.
 #' @param reset whether to reset GUI settings for the data folder to their defaults. This option is only available when running a personal GUI as servers do not save any settings. Resetting settings is usually only necessary if your GUI crashed unexpectedly and gets stuck during restart. Please consider reporting the details of the crash at https://github.com/isoverse/isoorbi/issues, especially if you can easily reproduce it.
@@ -15,6 +15,25 @@ iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, port = 5000) {
     log = log,
     reset = reset,
     port = port
+  )
+}
+
+# get additional dependencies
+get_isoxl_app_dependencies <- function() {
+  # FIXME: needs more info
+  return(c("shinyjs"))
+}
+
+#' Install the orbitrap isoXL GUI
+#'
+#' @param create_desktop_shortcut whether to create a desktop shortcut for the app
+#' @family isoxl functions
+#' @export
+iso_install_isoxl_app <- function(create_desktop_shortcut = TRUE) {
+  install_app(
+    "isoxl",
+    suppressWarnings(check_dependencies(get_isoxl_app_dependencies())),
+    create_desktop_shortcut = create_desktop_shortcut
   )
 }
 
@@ -103,14 +122,21 @@ start_orbitrap_gui <- function(local, launch, log, reset, ...) {
   if (log) turn_log_on()
   else turn_log_off()
 
-  # generate app
-  app <- shinyApp(
-    ui = orbitrap_ui(),
-    server = orbitrap_server(
-      local = local,
-      reset = reset
+  # check dependencies
+  missing_deps <- check_dependencies(get_isoxl_app_dependencies())
+  if (length(missing_deps) > 0) {
+    # missing dependencies, generate placeholder app
+    app <- create_missing_dependencies_info_gui("isoxl", missing_deps)
+  } else {
+    # generate app
+    app <- shinyApp(
+      ui = orbitrap_ui(),
+      server = orbitrap_server(
+        local = local,
+        reset = reset
+      )
     )
-  )
+  }
 
   # launch if local
   if (launch) {

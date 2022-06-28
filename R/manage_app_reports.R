@@ -1,49 +1,38 @@
 #' Run the report generator user interface
 #'
-#' Provides a local graphical user interface to generate standard reports for Orbitrap data. Note that while the GUI is running, your R session will be blocked. To stop the GUI and return to your R session, either click the \code{Close} button inside the GUI navigation bar or press \code{Esc} in your R session.
+#' Starts a graphical user interface to generate standard reports for Orbitrap data. Note that while the GUI is running, your R session will be blocked. To stop the GUI and return to your R session, either click the \code{Close} button inside the GUI navigation bar or press \code{Esc} in your R session.
 #'
-#' @details \code{iso_start_orbitrap_reports_gui} starts a personal GUI that is only accessible on the computer it is running on.
+#' The reports app needs to be installed prior to use as it is an expansion of the core functionality of the \code{isoorbi} package. Run \code{\link{iso_install_reports_app}} to install the app.
 #'
-#' @param log whether to show log info messages or not.
+#' @inheritParams iso_start_isoxl_app
 #' @export
-iso_start_orbitrap_reports_gui <- function(log = FALSE) {
+#' @family reports functions
+iso_start_reports_app <- function(log = FALSE, port = 5000) {
   # launch viewer
   start_orbitrap_reports_gui(
     local = TRUE,
     launch = TRUE,
     log = log,
-    port = 3838
+    port = port
   )
 }
 
 # get additional dependencies
-get_orbitrap_reports_gui_dependencies <- function() {
+get_reports_app_dependencies <- function() {
   return(c("shinyjs", "shinyFiles", "fs"))
 }
 
-# check additional dependencies for reports gui
-check_orbitrap_reports_gui_dependencies <- function() {
-  additional_dependencies <- get_orbitrap_reports_gui_dependencies()
-  missing_packages <- additional_dependencies[!(additional_dependencies %in% installed.packages()[,"Package"])]
-  if (length(missing_packages) > 0)
-    warning("there are missing dependencies for the Orbitrap Reports GUI: ",
-            paste(missing_packages, collapse = ", "),
-            immediate. = TRUE, call. = FALSE)
-  return(invisible(missing_packages))
-}
-
-#' Install dependencies for reports GUI
+#' Install the orbitrap reports GUI
 #'
-#' @param
+#' @inheritParams iso_install_isoxl_app
+#' @family reports functions
 #' @export
-iso_install_orbitrap_reports_gui <- function() {
-  missing_deps <- suppressWarnings(check_orbitrap_reports_gui_dependencies())
-  if (length(missing_deps) > 0) {
-    message("Installing the following missing dependencies: ", paste(missing_deps, collapse = ", "))
-    install.packages(missing_deps)
-  } else {
-    message("All dependencies are installed. Run iso_start_orbitrap_reports_gui() to start the user interface.")
-  }
+iso_install_reports_app <- function(create_desktop_shortcut = TRUE) {
+  install_app(
+    "reports",
+    suppressWarnings(check_dependencies(get_reports_app_dependencies())),
+    create_desktop_shortcut = create_desktop_shortcut
+  )
 }
 
 # orbitrap report generator gui start function
@@ -65,24 +54,10 @@ start_orbitrap_reports_gui <- function(local, launch, log, ...) {
   else turn_log_off()
 
   # check dependencies
-  missing_deps <- check_orbitrap_reports_gui_dependencies()
+  missing_deps <- check_dependencies(get_reports_app_dependencies())
   if (length(missing_deps) > 0) {
     # missing dependencies, generate placeholder app
-    app <-
-      shinyApp(
-        ui = fluidPage(
-          h1("Missing dependencies", style = "color: red;"),
-          p("The following dependencies for this GUI are not yet installed: ", strong(paste(missing_deps, collapse = ", "))),
-          p("Please close the app and run ", code("iso_install_orbitrap_reports_gui()"), " from an R console before restarting the GUI."),
-          actionButton("close", "Close"),
-        ),
-      server = function(input, output) {
-        observeEvent(input$close, {
-          # SK note: could also close tab window here but that requires some javascript that would require shinyjs
-          stopApp()
-        })
-      }
-    )
+    app <- create_missing_dependencies_info_gui("reports", missing_deps)
   } else {
     # generate app
     app <- shinyApp(
