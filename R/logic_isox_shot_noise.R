@@ -1,26 +1,22 @@
 #Caj: functions for shotnoise plot
 
-#Basic filter, could be generalized for all modules
-iso_filter_isox_file <- function(dataset, input) {
-  df.out <- dataset %>%
-    # isotopolog filter
-    dplyr::filter(isotopolog == input$isotopolog) %>%
-    # filename filter
-    {
-      if (!"all" %in% input$filename)
-        dplyr::filter(., filename %in% input$filename)
-      else
-        .
-    } %>%
-    # compounds filter
-    {
-      if (!"all" %in% input$compound)
-        dplyr::filter(., compound %in% input$compound)
-      else
-        .
-    } %>%
-    # timerange filter
-    dplyr::filter(time.min >= input$timerange[1], time.min <= input$timerange[2])
+
+
+assign_basepeak_shotnoise <- function(dataset, input){
+
+  df.temp <- dataset %>%
+    select(filename, scan.no, time.min, compound, isotopolog, ions.incremental) %>%
+    filter(isotopolog %in% c(input$base_peak, input$isotopolog)) %>%
+    pivot_wider(names_from = isotopolog, values_from = ions.incremental) %>% na.omit()
+
+  # df.temp$Basepeak.Ions <- df.temp[names(df.temp) %in% c(input$base_peak)]
+  # df.temp$Isotopolog.Ions <- df.temp[names(df.temp) %in% c(input$isotopolog)]
+  # df.temp$Ratio <- 0 #df.temp$Isotopolog.Ions #df.temp$Basepeak.Ions
+  #
+   df.out <- df.temp
+
+  #   mutate(denominator = as.character(denominator))
+
   return(df.out)
 }
 
@@ -63,16 +59,8 @@ calc_shotnoise <- function(dataset){
 plot_shot_noise <- function(dataset, input) {
 
   dataset%>%
-    #calc_shotnoise() %>%
     ggplot2::ggplot() +
-    ggplot2::aes(x = scan.no, y = ions.incremental) +
+    ggplot2::aes(x = time.min, y = scan.no) +
     ggplot2::geom_line()
-
-
 }
-
-
-
-
-
 

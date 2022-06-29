@@ -114,7 +114,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to ")
     )
 
-    values$plot <- values$data %>% iso_filter_isox_file(input=input) %>% plot_shot_noise(input=input)
+    values$plot <- values$data %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% plot_shot_noise(input=input)
 
   })
 
@@ -150,53 +150,6 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
         )
     })
   })
-
-  #
-  # calc.shotnoise <- function(d.neff){
-  #
-  #   df.out <- data.frame(scans =1:length(d.neff$scan.no),
-  #                        neff = 1:length(d.neff$scan.no),
-  #                        rse= 1:length(d.neff$scan.no),
-  #                        shotnoise = 1:length(d.neff$scan.no),
-  #                        shotnoise.neff = 1:length(d.neff$scan.no))
-  #
-  #   #Geometric mean, geometric SD and SE
-  #   gmean <- function(x) exp(mean(log(x))) #define geometric mean
-  #   gsd <- function(x) exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
-  #   gse <- function(x) (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) /sqrt(length(x))
-  #
-  #   for (l in 1:length(d.neff$scan.no)) {
-  #     df <- d.neff[1:l,]
-  #
-  #     neff <- (sum(df$Basepeak.Ions) * sum(df$Isotopolog.Ions))/ (sum(df$Basepeak.Ions) + sum(df$Isotopolog.Ions))
-  #     df.out$neff[l] <- neff
-  #
-  #     shotnoise.neff <- neff^-0.5
-  #     df.out$shotnoise.neff[l] <- shotnoise.neff
-  #
-  #     shotnoise <- ((1/sum(df$Isotopolog.Ions) + (1/sum(df$Basepeak.Ions))))^0.5
-  #     df.out$shotnoise[l] <- shotnoise
-  #
-  #     rse <- gse(d.neff[1:l,]$Ratio) / gmean(d.neff[1:l,]$Ratio)
-  #     df.out$rse[l] <- rse
-  #
-  #   }
-  #
-  #
-  #   df.out <- df.out %>% na.omit() %>% select(-shotnoise, -shotnoise.neff)
-  #
-  #   df.out <- df.out %>% tidyr::gather(key, value, -scans, -neff)
-  #
-  #   return(df.out)
-  #
-  # }
-  #
-  #
-  #
-  # data.SN.2plot <- reactive ({ calc.shotnoise(data.SN.filtered())
-  # })
-  #
-  #
 
 }
 
