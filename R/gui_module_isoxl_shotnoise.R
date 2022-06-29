@@ -114,27 +114,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to ")
     )
     values$plot <- values$data %>% plot_shot_noise(input=input)
-      # # this should ideally happen in a logic function
-      # values$data %>%
-      # # isotopolog filter
-      # dplyr::filter(isotopolog == input$isotopolog) %>%
-      # # filename filter
-      # {
-      #   if (!"all" %in% input$filename)
-      #     dplyr::filter(., filename %in% input$filename)
-      #   else .
-      # } %>%
-      # # compounds filter
-      # {
-      #   if (!"all" %in% input$compound)
-      #     dplyr::filter(., compound %in% input$compound)
-      #   else .
-      # } %>%
-      # # timerange filter
-      # dplyr::filter(time.min >= input$timerange[1], time.min <= input$timerange[2]) %>%
-      # ggplot2::ggplot() +
-      # ggplot2::aes(x = scan.no, y = ions.incremental) +
-      # ggplot2::geom_line()
+
   })
 
   # render plot ----
