@@ -10,17 +10,7 @@ calc_shotnoise <- function(dataset){
     shotnoise.neff = 1:length(dataset$scan.no)
   )
 
-  #Geometric mean, geometric SD and SE
-  #Caj: these functions should eventually be placed in a separate location
 
-  gmean <- function(x)
-    exp(mean(log(x))) #define geometric mean
-  gsd <-
-    function(x)
-      exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
-  gse <-
-    function(x)
-      (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))
 
   for (l in 1:length(dataset$scan.no)) {
     df <- dataset[1:l,]
