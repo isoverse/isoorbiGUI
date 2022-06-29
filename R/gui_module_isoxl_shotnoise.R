@@ -113,7 +113,8 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to ")
     )
-    values$plot <- values$data %>% plot_shot_noise(input=input)
+
+    values$plot <- values$data %>% iso_filter_isox_file(input=input) %>% plot_shot_noise(input=input)
 
   })
 

@@ -1,5 +1,32 @@
-#Caj: insert here previous calc_SN function
+#Caj: functions for shotnoise plot
 
+#Basic filter, could be generalized for all modules
+iso_filter_isox_file <- function(dataset, input) {
+  df.out <- dataset %>%
+    # isotopolog filter
+    dplyr::filter(isotopolog == input$isotopolog) %>%
+    # filename filter
+    {
+      if (!"all" %in% input$filename)
+        dplyr::filter(., filename %in% input$filename)
+      else
+        .
+    } %>%
+    # compounds filter
+    {
+      if (!"all" %in% input$compound)
+        dplyr::filter(., compound %in% input$compound)
+      else
+        .
+    } %>%
+    # timerange filter
+    dplyr::filter(time.min >= input$timerange[1], time.min <= input$timerange[2])
+  return(df.out)
+}
+
+
+
+#SN calculation (specific for plot!)
 calc_shotnoise <- function(dataset){
 
   df.out <- data.frame(
@@ -31,30 +58,14 @@ calc_shotnoise <- function(dataset){
   }
 }
 
+
+
 plot_shot_noise <- function(dataset, input) {
 
-  dataset %>%
-    # isotopolog filter
-    dplyr::filter(isotopolog == input$isotopolog) %>%
-    # filename filter
-    {
-      if (!"all" %in% input$filename)
-        dplyr::filter(., filename %in% input$filename)
-      else
-        .
-    } %>%
-    # compounds filter
-    {
-      if (!"all" %in% input$compound)
-        dplyr::filter(., compound %in% input$compound)
-      else
-        .
-    } %>%
-    # timerange filter
-    dplyr::filter(time.min >= input$timerange[1], time.min <= input$timerange[2]) %>%
-    calc_shotnoise() %>%
+  dataset%>%
+    #calc_shotnoise() %>%
     ggplot2::ggplot() +
-    ggplot2::aes(x = neff, y = rse) +
+    ggplot2::aes(x = scan.no, y = ions.incremental) +
     ggplot2::geom_line()
 
 
