@@ -143,7 +143,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
             filename = paste(
               "shotnoise",
               input$isotopolog,
-              input$basepeak,
+              input$base_peak,
               sep = "_"
             )
           )
