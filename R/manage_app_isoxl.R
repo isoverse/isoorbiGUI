@@ -1,4 +1,4 @@
-#' Run the isoXL user interface
+#' Run the IsoXL user interface
 #'
 #' Starts a graphical user interface to explore Orbitrap data. Note that while the GUI is running, your R session will be blocked. To stop the GUI and return to your R session, either click the \code{Close} button inside the GUI navigation bar or press \code{Esc} in your R session.
 #'
@@ -24,7 +24,7 @@ get_isoxl_app_dependencies <- function() {
   return(c("shinyjs", "shinyWidgets"))
 }
 
-#' Install the orbitrap isoXL GUI
+#' Install the orbitrap IsoXL GUI
 #'
 #' @param create_desktop_shortcut whether to create a desktop shortcut for the app
 #' @family isoxl functions
@@ -37,7 +37,7 @@ iso_install_isoxl_app <- function(create_desktop_shortcut = TRUE) {
   )
 }
 
-#' Run the isoXL user interface on a server
+#' Run the IsoXL user interface on a server
 #'
 #' @details \code{iso_start_isoxl_app_server} starts a server for the Orbitrap data GUI (used in deployment on e.g. shinyapps.io). Typically this function is not called directly. Use \code{iso_setup_isoxl_app} instead to set up the file structure for server deployment.
 #'
@@ -55,7 +55,7 @@ iso_start_isoxl_app_server <- function() {
 
 #' @rdname iso_start_isoxl_app_server
 #'
-#' @details \code{iso_setup_isoxl_app_server} sets up the isoXL user interface app in the target folder for deployment on a server (e.g. shinyapps.io).
+#' @details \code{iso_setup_isoxl_app_server} sets up the IsoXL user interface app in the target folder for deployment on a server (e.g. shinyapps.io).
 #'
 #' @param dir the directory where to create the launch scripts (absolute path or relative to your current working directory), default is 'app'
 #' @param overwrite whether to overwrite existing launch files (default is FALSE)
