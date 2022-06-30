@@ -1,10 +1,10 @@
 #' core logic functions of isoorbi
 
-#Basic filter, needs to be generalized for all modules
+#Basic filter, should be generalized for all modules
 iso_filter_isox_file <- function(dataset, input) {
   df.out <- dataset %>%
     # isotopolog filter
-    dplyr::filter(isotopolog == input$isotopolog) %>%
+    dplyr::filter(isotopolog %in% c(input$isotopolog,input$base_peak)) %>% #maybe this line should be moved out of the core function!
     # filename filter
     {
       if (!"all" %in% input$filename)
@@ -19,7 +19,7 @@ iso_filter_isox_file <- function(dataset, input) {
       else
         .
     } %>%
-    # time range filter
+    # timerange filter
     dplyr::filter(time.min >= input$timerange[1], time.min <= input$timerange[2])
   return(df.out)
 }
