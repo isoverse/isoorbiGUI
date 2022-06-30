@@ -1,4 +1,17 @@
-#' core logic functions of isoorbi
+#' common core logic functions
+
+
+#Keep only columns that are useful for isotopocule ratio calculation
+iso_simplify_isox_file <- function(dataset) {
+  df.out <- dataset %>% select(filename,
+                               scan.no,
+                               time.min,
+                               compound,
+                               isotopolog,
+                               ions.incremental)
+}
+
+
 
 #Basic filter, should be generalized for all modules
 iso_filter_isox_file <- function(dataset, input) {

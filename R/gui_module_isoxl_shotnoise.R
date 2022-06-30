@@ -114,7 +114,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to ")
     )
 
-    values$plot <- values$data %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
+    values$plot <- values$data %>% iso_simplify_isox_file() %>% iso_filter_isox_file(input=input) %>%assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
 
   })
 

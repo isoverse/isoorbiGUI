@@ -1,16 +1,7 @@
-#Caj: functions for shotnoise plot
-
-
-
+#' functions specific to shot noise module
 
 assign_basepeak_shotnoise <- function(dataset, input) {
   df.out <- dataset %>%
-    select(filename,
-           scan.no,
-           time.min,
-           compound,
-           isotopolog,
-           ions.incremental) %>%
     filter(isotopolog %in% c(input$base_peak, input$isotopolog)) %>% #cross check with core logic filter function
     droplevels() %>%
     pivot_wider(names_from = isotopolog, values_from = ions.incremental) %>% na.omit() %>%
@@ -24,7 +15,7 @@ assign_basepeak_shotnoise <- function(dataset, input) {
 
 
 
-#SN calculation (specific for plot!)
+# shot noise calculation (yields a vector!)
 calc_shotnoise <- function(dataset){
 
   df.out <- data.frame(
@@ -35,8 +26,6 @@ calc_shotnoise <- function(dataset){
     shotnoise.neff = 1:length(dataset$scan.no)
   )
 
- # message("info", str(df.out))
- #
   for (l in 1:length(dataset$scan.no)) {
     df <- dataset[1:l,]
 
@@ -108,4 +97,3 @@ plot_shot_noise <- function(dataset, input) {
     )
 
 }
-
