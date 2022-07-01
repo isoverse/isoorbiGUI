@@ -63,7 +63,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
   observeEvent(values$data, {
     module_message(ns, "info", "updating parameter table")
     if (is.null(values$data) || nrow(values$data) == 0) {
-      # no data (maybe incorret input file --> hide)
+      # no data (maybe incorrect input file --> hide)
       shinyjs::hide("parameters-panel")
       updateSelectInput(inputId = "isotopolog", choices = c())
       updateSelectInput(inputId = "base_peak", choices = c())
@@ -71,6 +71,13 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       updateSelectInput(inputId = "compound", choices = c())
       shinyWidgets::updateNumericRangeInput(
         session, inputId = "timerange", value = c())
+      updateSliderInput(session, "rare", "Number of observations:",
+                  min = 0, max = 100, value = 30
+      )
+
+
+
+
     } else {
       # yes data --> update parameters and show
       updateSelectInput(
@@ -97,6 +104,9 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
         session, inputId = "timerange",
         value = 0:ceiling(max(values$data$time.min))
       )
+      sliderInput("obs", "Number of observations:",
+                  min = 0, max = 1000, value = 500
+      )
       shinyjs::show("parameters-panel")
     }
   }, ignoreNULL = FALSE)
@@ -111,7 +121,9 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       "\n - basepeak: ", input$base_peak %then% "",
       "\n - files: ", paste(input$filename %then% "", collapse = ", "),
       "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
-      "\n - timerange: ", paste(input$timerange %then% "", collapse = " to ")
+      "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
+      "\n - rare: ", paste(input$rare %then% "", collapse = " to "),
+      "\n - extreme: ", paste(input$extreme %then% "", collapse = " to ")#edit
     )
 
     values$plot <- values$data %>% iso_simplify_isox_file() %>% iso_filter_isox_file(input=input) %>%assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
@@ -183,31 +195,25 @@ module_isoxl_shotnoise_ui <- function(id) {
           selectInput(inputId = ns("compound"), label="Compounds", c(), multiple = TRUE),
           shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
           tags$hr(style="border-color: grey;"),
+
+          #currently not used in data processing!
+          with_tippy(
+            sliderInput(ns("rare"), "Remove rare isotopologs:",min = 0, max = 100, value = 30, step=5),
+            "Processing option: Isotopolog must have been observed in at least x % of scans", placement = "right"),
+
+         #currently not used in data processing!
+          with_tippy(numericInput(
+           ns("extreme"),
+           label = "Remove extreme scans",
+           1,
+           min = 0.1,
+           max = 10,
+           step = 0.1,
+           width = NULL
+         ), "Processing option: Truncate data based on TICxIT",  placement = "right"),
+
           actionButton(ns("render_plot"), label = "Plot", icon = icon("sync"))
         ) %>% shinyjs::hidden()
-
-
-#                    with_tippy(numericInput(
-#                      inputId = "INPUT_SN_Rare",
-#                      label = "Remove weak isotopologs",
-#                      30,
-#                      min = 1,
-#                      max = 50,
-#                      step = 1,
-#                      width = NULL
-#                    ),"Processing option: Isotopolog must have been observed in at least x % of scans", placement = "right"),
-#
-#                    with_tippy(numericInput(
-#                      inputId = "INPUT_SN_TICxIT",
-#                      label = "Remove outlier scans",
-#                      1,
-#                      min = 0.1,
-#                      max = 10,
-#                      step = 0.1,
-#                      width = NULL
-#                    ), "Processing option: Truncate data x%/100-x% based on TICxIT",  placement = "right")
-#
-#
 
       ),
 
@@ -223,3 +229,24 @@ module_isoxl_shotnoise_ui <- function(id) {
   )
 
 }
+
+
+# with_tippy(numericInput(
+#   inputId = "INPUT_SN_Rare",
+#   label = "Remove weak isotopologs",
+#   30,
+#   min = 1,
+#   max = 50,
+#   step = 1,
+#   width = NULL
+# ),"Processing option: Isotopolog must have been observed in at least x % of scans", placement = "right"),
+#
+# with_tippy(numericInput(
+#   inputId = "INPUT_SN_TICxIT",
+#   label = "Remove outlier scans",
+#   1,
+#   min = 0.1,
+#   max = 10,
+#   step = 0.1,
+#   width = NULL
+# ), "Processing option: Truncate data x%/100-x% based on TICxIT",  placement = "right")
