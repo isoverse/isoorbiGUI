@@ -102,35 +102,46 @@ iso_filter_isox_file <- function(dataset, input) {
 
 # Functions to calculate stats --------------------------------------------
 
+#' isox data manipulation
+
+#Caj: these functions for ratio calculation should eventually be placed in a separate location
 
 #Define 'se' as a new function to calculate standard error
 se <- function(x) { sd(x) / sqrt(length(x)) }
 
+gmean <- function(x)
+  exp(mean(log(x))) #define geometric mean
+gsd <-
+  function(x)
+    exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
+gse <-
+  function(x)
+    (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))
+
+slope <-
+  function(x, y) {
+    model <-
+      lm(x ~ y + 0, weights = x) #Note order of x and y to get correct slope!
+    sl <- model$coefficients[[1]]
+    sl
+  }
+
+weighted.vector.sum <- function(x, y) {
+  df <- cbind(x, y)
+
+  avg.ions <- (sum(df[, 1]) + sum(df[, 2])) / length(df[, 1])
+
+  scan.ions <- (df[, 1] + df[, 2])
+
+  weighted.x <- avg.ions / scan.ions  * as.numeric(df[, 1])
+  weighted.y <- avg.ions / scan.ions  * as.numeric(df[, 2])
+  ratio <- sum(weighted.x) / sum(weighted.y)
+  ratio
+}
+
 #NOTE: The formulate used to average ratios matters! Do not simply use arithmetic mean.
 
 calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "geometric.mean", "slope", "weighted.vector.sum") ) {
-
-  #Define function for geometric mean
-  gmean <- function(x) {exp(mean(log(x)))}
-  #gsd <- function(x) {exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x))) } #geometric SD
-  #gse <- function(x) {(exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) /sqrt(length(x))} #geometric SE
-
-  slope <- function(x, y) {model <- lm(x ~ y+0, weights = x) #Note order of x and y to get correct slope!
-  sl <- model$coefficients[[1]]
-  sl}
-
-  weighted.vector.sum <- function(x, y){
-
-    df <- cbind(x,y)
-
-    avg.ions <- ( sum(df[ ,1]) + sum(df[ ,2]) ) / length(df[ ,1])
-
-    scan.ions <- (df[ ,1] + df[ ,2])
-
-    weighted.x <- avg.ions/ scan.ions  * as.numeric(df[ ,1])
-    weighted.y <- avg.ions/ scan.ions  * as.numeric(df[ ,2])
-    ratio <- sum(weighted.x) / sum(weighted.y)
-    ratio}
 
   if(ratio.method == "mean") { o <- mean(peak1/peak2); o } else {
     if(ratio.method == "slope") {o <- slope(peak1, peak2); o } else{

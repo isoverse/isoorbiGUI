@@ -112,14 +112,14 @@ observeEvent(values$data, {
 
     updateNumericInput(
       inputId = "rare",
-      min = 0,
+      min = 0, #how to avoid negative input by keyboard?
       max = 100,
       value = 30
     )
 
     updateNumericInput(
       inputId = "extreme",
-      min = 0,
+      min = 0, #how to avoid negative input by keyboard?
       max = 10,
       value = 1,
       step = 0.1
@@ -226,28 +226,11 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         #currently not used in data processing!
         with_tippy(
-          numericInput(ns("rare"), "Remove weak signals", value = c()),
+          numericInput(ns("rare"), "Remove weak signals", value = c(), width=NULL),
           "Processing option: Isotopocule must have been detected > x % of scans", placement = "right"),
         with_tippy(
-          numericInput(ns("extreme"), "Remove extreme scans", value = c()),
+          numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
           "Processing option: Truncate data based on TICxIT", placement = "right"),
-
-
-
-        #currently not used in data processing!
-        # with_tippy(
-        #   numericInput(
-        #     ns("extreme"),
-        #     label = "Remove outlier scans",
-        #     1,
-        #     min = 0.1,
-        #     max = 10,
-        #     step = 0.1,
-        #     width = NULL
-        #   ),
-        #   "Processing option: Truncate data based on TICxIT",
-        #   placement = "right"
-        # ),
 
         actionButton(ns("render_plot"), label = "Plot", icon = icon("sync"))
       ) %>% shinyjs::hidden()
