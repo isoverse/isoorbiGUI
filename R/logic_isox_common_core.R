@@ -1,7 +1,6 @@
-#' common core logic functions
+# common core logic functions
+#' Keep only columns that are useful for isotopocule ratio calculation
 #' @export
-
-#Keep only columns that are useful for isotopocule ratio calculation
 iso_simplify_isox_file <- function(dataset) {
   df.out <- dataset %>% select(filename,
                                scan.no,
@@ -11,27 +10,25 @@ iso_simplify_isox_file <- function(dataset) {
                                ions.incremental)
 }
 
-# Function: remove.rare(df, input$rare) -----------------------------------
-
-
-
-remove.rare <- function(df, input){ #temp check functions correctly in different tabs
+#' Remove isotopologs that are not consistently detected across scans
+#' @export
+remove.rare <- function(data, input){ #temp check functions correctly in different tabs
 
   # validate(
   #   need(input$rare, 'Missing input input$rare'),
   #   need(input$rare <=100, 'Check input input$rare is smaller than 100%')
   # )
 
-  remove.df <- df %>%
+  remove.df <- data %>%
     group_by(filename) %>%
-    mutate(n.scans = max(scan.no) - min(scan.no)) %>%
+    mutate(n.scans = max(scan.no) - min(scan.no)) %>% #implement a more general solution here
     group_by(filename, compound, isotopolog) %>%
     mutate(i.scans = length(scan.no)) %>%
-    filter(i.scans < input$rare/100 * n.scans) %>% # input
+    filter(i.scans < input$rare/100 * n.scans) %>% # => update selection in GUI?, add message?
     select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
 
 
-  df <- anti_join(df, remove.df)
+  df <- anti_join(data, remove.df)
 
   return(df)
 
@@ -39,9 +36,8 @@ remove.rare <- function(df, input){ #temp check functions correctly in different
 
 
 
-# Function: remove.satellitePeaks(df) -------------------------------------
-
-
+#' Remove minor signals (e.g., satellite peaks) that were reported by IsoX
+#' @export
 remove.satellitePeaks <- function(df){
 
   df <- df %>%
@@ -52,8 +48,8 @@ remove.satellitePeaks <- function(df){
 
 }
 
-# Function: remove.ticxit(df, input$extreme) -------------------------------
-
+#' Remove extreme scans based on TIC x Injection time
+#' @export
 remove.ticxit <- function(df, input){
 
   validate(
@@ -70,15 +66,13 @@ remove.ticxit <- function(df, input){
 }
 
 
-
-
-
-#Basic filter, should be generalized for all modules
+#' A basic filter (should be generalized for most use cases)
+#' @export
 iso_filter_isox_file <- function(dataset, input) {
   df.out <- dataset %>%
     # isotopolog filter
     dplyr::filter(isotopolog %in% c(input$isotopolog,input$base_peak)) %>% #maybe this line should be moved out of the core function!
-    # filename filter
+    # file name filter
     {
       if (!"all" %in% input$filename)
         dplyr::filter(., filename %in% input$filename)
@@ -104,13 +98,15 @@ iso_filter_isox_file <- function(dataset, input) {
 
 #' isox data manipulation
 
-#Caj: these functions for ratio calculation should eventually be placed in a separate location
-
-#Define 'se' as a new function to calculate standard error
+#' Define 'se' as a new function to calculate standard error
+#' @export
 se <- function(x) { sd(x) / sqrt(length(x)) }
 
+#' Define 'gmean' to calculate geometic mean
+#' @export
 gmean <- function(x)
   exp(mean(log(x))) #define geometric mean
+
 gsd <-
   function(x)
     exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
@@ -139,8 +135,9 @@ weighted.vector.sum <- function(x, y) {
   ratio
 }
 
-#NOTE: The formulate used to average ratios matters! Do not simply use arithmetic mean.
-
+#' Ratio calculation
+#' NOTE: The formula used to average ratios matters! Do not simply use arithmetic mean.
+#' @export
 calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "geometric.mean", "slope", "weighted.vector.sum") ) {
 
   if(ratio.method == "mean") { o <- mean(peak1/peak2); o } else {
@@ -156,9 +153,9 @@ calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "
 
 
 
-# Function: make.xls(); save the summary statistics table as Excel --------
 
-
+#' Save the summary statistics table as Excel
+#' @export
 make.xls <- function(df.stat, params){ wb <- createWorkbook()
 tabs <- levels(df.stat$isotopolog)
 
@@ -174,9 +171,7 @@ return(wb)
 
 }
 
-
-
-
+#add a tab to record parameters
 make.xls.onetab <- function(df.stat, params){ wb <- createWorkbook()
 tabs <- levels(df.stat$filename)
 
