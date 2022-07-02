@@ -518,7 +518,7 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
                 h4("Contact and infos"),
 
                 module_isoxl_info_ui(id = "info_in")
-        ),
+        )
 
         # UI: Contact and Info ---------------------------------------------------
 
