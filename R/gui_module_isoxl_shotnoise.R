@@ -79,23 +79,8 @@ observeEvent(values$data, {
     updateSelectInput(inputId = "filename", choices = c())
     updateSelectInput(inputId = "compound", choices = c())
     shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
-    # updateSliderInput(
-    #   session,
-    #   "rare",
-    #   "Number of observations:",
-    #   min = 0,
-    #   max = 100,
-    #   value = 30
-    # )
-    # updatenumericInput(
-    #   ns("extreme"),
-    #   label = "Remove outlier scans",
-    #   1,
-    #   min = 0.1,
-    #   max = 10,
-    #   step = 0.1,
-    #   width = NULL
-    # )
+    updateNumericInput(inputId = "rare", value = c())
+    updateNumericInput(inputId = "extreme", value = c())
 
 
 
@@ -124,23 +109,22 @@ observeEvent(values$data, {
     shinyWidgets::updateNumericRangeInput(session,
                                           inputId = "timerange",
                                           value = 0:ceiling(max(values$data$time.min)))
-    # sliderInput(
-    #   "rare",
-    #   "Number of observations:",
-    #   min = 0,
-    #   max = 100,
-    #   value = 30
-    # )
 
-    # numericInput(
-    #   ns("extreme"),
-    #   label = "Remove outlier scans",
-    #   1,
-    #   min = 0.1,
-    #   max = 10,
-    #   step = 0.1,
-    #   width = NULL
-    # )
+    updateNumericInput(
+      inputId = "rare",
+      min = 0,
+      max = 100,
+      value = 30
+    )
+
+    updateNumericInput(
+      inputId = "extreme",
+      min = 0,
+      max = 10,
+      value = 1,
+      step = 0.1
+    )
+
     shinyjs::show("parameters-panel")
   }
 }, ignoreNULL = FALSE)
@@ -156,12 +140,12 @@ observeEvent(values$data, {
       "\n - files: ", paste(input$filename %then% "", collapse = ", "),
       "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
-      "\n - rare: ", paste(input$rare %then% "", collapse = " to ")#,
-   #   "\n - extreme: ", paste(input$extreme %then% "", collapse = " to ")#edit
+      "\n - rare: ", input$rare %then% "",
+      "\n - extreme: ", input$extreme %then% ""#)#edit
     )
 
-    values$plot <- values$data %>% iso_simplify_isox_file() %>% iso_filter_isox_file(input=input) %>%assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
-
+    values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
+    #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
   })
 
 # render plot ----
@@ -242,17 +226,13 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         #currently not used in data processing!
         with_tippy(
-          sliderInput(
-            ns("rare"),
-            "Remove rare isotopologs:",
-            min = 0,
-            max = 100,
-            value = 30,
-            step = 5
-          ),
-          "Processing option: Isotopolog must have been observed in at least x % of scans",
-          placement = "right"
-        ),
+          numericInput(ns("rare"), "Remove weak signals", value = c()),
+          "Processing option: Isotopocule must have been detected > x % of scans", placement = "right"),
+        with_tippy(
+          numericInput(ns("extreme"), "Remove extreme scans", value = c()),
+          "Processing option: Truncate data based on TICxIT", placement = "right"),
+
+
 
         #currently not used in data processing!
         # with_tippy(

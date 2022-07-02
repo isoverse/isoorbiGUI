@@ -1,5 +1,5 @@
 #' common core logic functions
-
+#' @export
 
 #Keep only columns that are useful for isotopocule ratio calculation
 iso_simplify_isox_file <- function(dataset) {
@@ -11,23 +11,23 @@ iso_simplify_isox_file <- function(dataset) {
                                ions.incremental)
 }
 
-# Function: remove.rare(df, INPUT_Rare) -----------------------------------
+# Function: remove.rare(df, input$rare) -----------------------------------
 
 
 
-remove.rare <- function(df, INPUT_Rare){ #temp check functions correctly in different tabs
+remove.rare <- function(df, input){ #temp check functions correctly in different tabs
 
-  validate(
-    need(INPUT_Rare, 'Missing input INPUT_Rare'),
-    need(INPUT_Rare <=100, 'Check input INPUT_Rare is smaller than 100%')
-  )
+  # validate(
+  #   need(input$rare, 'Missing input input$rare'),
+  #   need(input$rare <=100, 'Check input input$rare is smaller than 100%')
+  # )
 
   remove.df <- df %>%
     group_by(filename) %>%
     mutate(n.scans = max(scan.no) - min(scan.no)) %>%
     group_by(filename, compound, isotopolog) %>%
     mutate(i.scans = length(scan.no)) %>%
-    filter(i.scans < INPUT_Rare/100 * n.scans) %>% # input
+    filter(i.scans < input$rare/100 * n.scans) %>% # input
     select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
 
 
@@ -52,18 +52,18 @@ remove.satellitePeaks <- function(df){
 
 }
 
-# Function: remove.ticxit(df, INPUT_TICxIT) -------------------------------
+# Function: remove.ticxit(df, input$extreme) -------------------------------
 
-remove.ticxit <- function(df, INPUT_TICxIT){
+remove.ticxit <- function(df, input){
 
   validate(
-    need(INPUT_TICxIT, 'Missing input INPUT_TICxIT'),
-    need(INPUT_TICxIT <=10, 'Check input INPUT_TICxIT is smaller than 10%')
+    need(input$extreme, 'Missing input input$extreme'),
+    need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
   )
 
 
   df <- df %>% group_by(filename) %>% mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files
-    filter( TICxIT > quantile(TICxIT, INPUT_TICxIT/100) & TICxIT < quantile(TICxIT, 1- INPUT_TICxIT/100)) %>%
+    filter( TICxIT > quantile(TICxIT, input$extreme/100) & TICxIT < quantile(TICxIT, 1- input$extreme/100)) %>%
     select(-TICxIT)
 
   return(df)
@@ -94,6 +94,8 @@ iso_filter_isox_file <- function(dataset, input) {
     } %>%
     # timerange filter
     dplyr::filter(time.min >= input$timerange[1], time.min <= input$timerange[2])
+
+
   return(df.out)
 }
 
