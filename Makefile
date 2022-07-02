@@ -26,6 +26,14 @@ module_dual_inlet_test:
 		sleep 1; \
 	done
 
+module_make_inputFile_test:
+	@echo "Starting module..."
+	@sleep 1
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_isoxl_make_inputFile()'; do \
+		echo "Restarting GUI..."; \
+		sleep 1; \
+	done
+
 module_info_test:
 	@echo "Starting module..."
 	@sleep 1

@@ -112,9 +112,9 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
       return(data.dual_inlet() %>%
                na.omit() %>%
-               remove.ticxit( INPUT_TICxIT=input$INPUT_TICxIT ) %>% #temp: validate correct functioning
+               remove.ticxit( input = input$INPUT_TICxIT ) %>% #temp: validate correct functioning
                remove.satellitePeaks() %>%
-               remove.rare(INPUT_Rare = input$INPUT_Rare) )
+               remove.rare(input = input$INPUT_Rare) )
 
 
     })
@@ -251,9 +251,9 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
                #mutate(Sample.Name = input$INPUT_Flow_sample) %>% #temp: implemented as factor? Not needed, I think
 
-               remove.ticxit(INPUT_TICxIT=input$INPUT_Flow_TICxIT) %>%
+               remove.ticxit(input=input$INPUT_Flow_TICxIT) %>%
                remove.satellitePeaks() %>%
-               remove.rare(INPUT_Rare = input$INPUT_Flow_Rare) %>%
+               remove.rare(input = input$INPUT_Flow_Rare) %>%
 
                filter(time.min>  input$INPUT_Flow_timerange[1], time.min <  input$INPUT_Flow_timerange[2])
       )
@@ -372,9 +372,9 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
                mutate(Sample.Name = input$INPUT_Single_sample) %>% #temp: implemented as factor?
 
-               remove.ticxit(INPUT_TICxIT=input$INPUT_Single_TICxIT) %>%
+               remove.ticxit(input = input$INPUT_Single_TICxIT) %>%
                remove.satellitePeaks() %>%
-               remove.rare(INPUT_Rare = input$INPUT_Single_Rare) %>%
+               remove.rare(input = input$INPUT_Single_Rare) %>%
 
                filter(time.min>  input$INPUT_Single_timerange[1], time.min <  input$INPUT_Single_timerange[2])
       )
