@@ -1,9 +1,30 @@
+# test ----
+# test the dual inlet module as a standalone app
+
+test_module_isoxl_dual_inlet <- function(port = 5000) {
+  app <-
+    shinyApp(
+      ui = fluidPage(
+        shinyjs::useShinyjs(),
+        h1("Dual Inlet Module Test"),
+        module_isoxl_shotnoise_ui(id = "dual_inlet")
+      ),
+      server = function(input, output) {
+        shot_noise <-
+          callModule(module_isoxl_dual_inlet_server, id = "dual_inlet")
+      }
+    )
+  runApp(app, display.mode = "normal", port = 5000)
+}
+
 # server
 module_isoxl_dual_inlet_server <- function(input, output, session) {
 
   # namespace
   ns <- session$ns
 
+  # increase upload file size
+  options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 
 
 }
