@@ -20,6 +20,8 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     # shotnoise server
     shot_noise <- callModule(module_isoxl_shot_noise_server, id = "shot_noise")
 
+    #contact and info server
+    info_in <- callModule(module_isoxl_info_server, id = "info")
 
     # FIXME: create data folder module that also coordinates what happens with the settings
     if (reset) settings$reset()

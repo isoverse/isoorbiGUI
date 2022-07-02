@@ -7,11 +7,11 @@ test_module_isoxl_info <- function(port = 5000) {
       ui = fluidPage(
         shinyjs::useShinyjs(),
         h1("Info Module Test"),
-        module_isoxl_info_ui(id = "info_in")
+        module_isoxl_info_ui(id = "info")
       ),
       server = function(input, output) {
         info_in <-
-          callModule(module_isoxl_info_server, id = "info_in")
+          callModule(module_isoxl_info_server, id = "info")
       }
     )
   runApp(app, display.mode = "normal", port = 5000)
