@@ -217,12 +217,17 @@ module_isoxl_shotnoise_ui <- function(id) {
           c(),
           multiple = TRUE
         ),
-        tippy(selectInput(
-          inputId = ns("compound"),
-          label = "Compounds",
-          c(),
-          multiple = TRUE
-        ), "test text"),
+
+        # tippy(
+        #   "test text",
+        #   placement = "right"),
+
+          selectInput(
+            inputId = ns("compound"),
+            label = "Compounds",
+            c(),
+            multiple = TRUE),
+
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
         tags$hr(style = "border-color: grey;"),
 
