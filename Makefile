@@ -10,13 +10,20 @@ check:
 gui_dev:
 	bundle exec guard
 
-module_shot_noise_test:
-	@echo "Starting module..."
+# windows specific
+gui_test:
+	@echo "Starting GUI..."
 	@sleep 1
-	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_isoxl_shot_noise()'; do \
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();iso_start_isoxl_app(log=TRUE,reset=FALSE)'; do \
 		echo "Restarting GUI..."; \
 		sleep 1; \
 	done
+
+auto_test:
+	R -q -e "rm(list = ls()); testthat::auto_test_package()"
+
+
+# Test individual modules separately
 
 module_dual_inlet_test:
 	@echo "Starting module..."
@@ -34,11 +41,26 @@ module_single_test:
 		sleep 1; \
 	done
 
-
 module_flow_test:
 	@echo "Starting module..."
 	@sleep 1
 	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_isoxl_flow()'; do \
+		echo "Restarting GUI..."; \
+		sleep 1; \
+	done
+
+module_shot_noise_test:
+	@echo "Starting module..."
+	@sleep 1
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_isoxl_shot_noise()'; do \
+		echo "Restarting GUI..."; \
+		sleep 1; \
+	done
+
+module_explore_test:
+	@echo "Starting module..."
+	@sleep 1
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_isoxl_explore()'; do \
 		echo "Restarting GUI..."; \
 		sleep 1; \
 	done
@@ -59,14 +81,3 @@ module_info_test:
 		sleep 1; \
 	done
 
-# windows specific
-gui_test:
-	@echo "Starting GUI..."
-	@sleep 1
-	@until $(R) -e 'library(devtools);load_all();turn_debug_on();iso_start_isoxl_app(log=TRUE,reset=FALSE)'; do \
-		echo "Restarting GUI..."; \
-		sleep 1; \
-	done
-
-auto_test:
-	R -q -e "rm(list = ls()); testthat::auto_test_package()"
