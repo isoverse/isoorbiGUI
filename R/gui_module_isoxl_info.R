@@ -10,7 +10,7 @@ test_module_isoxl_info <- function(port = 5000) {
         module_isoxl_info_ui(id = "info")
       ),
       server = function(input, output) {
-        info_in <-
+        info <-
           callModule(module_isoxl_info_server, id = "info")
       }
     )

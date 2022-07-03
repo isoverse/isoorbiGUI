@@ -10,7 +10,7 @@ test_module_isoxl_dual_inlet <- function(port = 5000) {
         module_isoxl_dual_inlet_ui(id = "dual_inlet")
       ),
       server = function(input, output) {
-        shot_noise <-
+        dual_inlet <-
           callModule(module_isoxl_dual_inlet_server, id = "dual_inlet")
       }
     )
@@ -25,11 +25,6 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
-
-
-  # IsoX Version ------------------------------------------------------------
-
-  isoXL.version <- "Version 0.1 (Feb-2022)"
 
   # Data: Dual Inlet --------------------------------------------------------------
 
@@ -166,6 +161,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
   data.xls <- reactive({  make.xls(data.output(), params=inputs.dual_inlet()) })
 
+
   # Plot output: Dual Inlet --------------------------------------------------------
 
 
@@ -202,6 +198,99 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     #plot_ly(data.output(), x = ~Injection, y = ~Ratio, type = 'scatter', mode = 'markers', color=factor(data.output$isotopolog()))
   })
 
+
+
+
+
+  # Table output: Dual Inlet, show rows of isox file------------------------------------------------
+
+
+  #test case
+  # output$mytable = DT::renderDataTable({
+  #
+  # DT::datatable(
+  #   mtcars,
+  #   data.dual_inlet_filtered(),
+  #   options = list(columnDefs = list(list(
+  #     targets = 0:7, visible = FALSE
+  #   )), buttons = c('colvis'), dom = 'Bfrtip'),
+  #   extensions = 'Buttons'
+  # )
+  # })
+
+  output$mytable = DT::renderDataTable({
+    DT::datatable( data.dual_inlet_filtered() %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
+                   extensions = c('Buttons','ColReorder', 'Select'),
+
+                   options = list(
+                     #   autoWidth = TRUE, #scroll bar to see enture table
+                     scrollX = TRUE, #scroll bar to see enture table
+
+                     #   columnDefs = list(list(
+                     #
+                     #        targets = c(2L), visible = FALSE #hide some columns
+                     # )),
+
+                     dom = 'Bfrtip',
+
+                     # buttons = list(
+                     #   list(extend = c("colvis","excel"),
+                     #        exportOptions = list(columns = ":visible"))
+                     # ),
+                     buttons = list(list(extend = 'colvis'),
+                                    list(extend = 'copy', exportOptions = list(columns = ':visible')),
+                                    list(extend = 'excel', exportOptions = list(columns = ':visible')),
+                                    list(extend = 'pdf', exportOptions = list(columns = ':visible'))
+                     ), #temp donwload only visible columns
+
+                     #   buttons = c('colvis','copy',  'excel', 'pdf'),
+                     # exportOptions = list(columns = ":visible"),
+                     colReorder = TRUE#, #columns can be reordered,
+                     # selection = list(target = "column")#,
+                     # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
+                     #
+                   )
+    )
+    #How to export only visible columns?
+    # buttons = list(
+    #   list(extend = "excel", exportOptions = list(columns = ":visible"))
+    # )
+
+
+
+    #https://datatables.net/reference/option/columns.visible
+
+  })
+
+
+
+  # Table output: Dual Inlet, summary statistics ----------------------------
+
+
+  output$summary <- DT::renderDataTable({
+
+    datatable( data.output(), rownames= FALSE ,
+               extensions = c('Buttons','ColReorder'),
+               options = list(
+                 # autoWidth = TRUE, #scroll bar to see enture table
+                 scrollX = TRUE, #scrollbar when table is not visible
+                 columnDefs = list(list(
+                   targets = c(7L, 10L), visible = FALSE
+                 )),
+                 dom = 'Bfrtip',
+                 buttons = list(list(extend = 'colvis'),
+                                list(extend = 'copy', exportOptions = list(columns = ':visible')),
+                                list(extend = 'excel', exportOptions = list(columns = ':visible')),
+                                list(extend = 'pdf', exportOptions = list(columns = ':visible'))
+                 ), #temp donwload only visible columns; validate more thoroughly and implement in all tables; define common sytles in a function?
+                 colReorder = TRUE #columns can be reordered
+               )
+    )
+
+  })
+
+
+
   # Download output: Dual Inlet Excel file ----------------------------------
 
 
@@ -212,6 +301,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     }
   )
+
+
 
 }
 
