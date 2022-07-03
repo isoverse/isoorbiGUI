@@ -6,8 +6,7 @@
 \alias{isoorbi-package}
 \title{isoorbi: Process Orbitrap Isotope Data}
 \description{
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
 }
 \seealso{
 Useful links:

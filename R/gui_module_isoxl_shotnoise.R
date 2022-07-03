@@ -203,6 +203,8 @@ module_isoxl_shotnoise_ui <- function(id) {
       ),
       textOutput(ns("upload_info")),
 
+
+
       # parameters ----
       div(
         id = ns("parameters-panel"),
@@ -215,20 +217,23 @@ module_isoxl_shotnoise_ui <- function(id) {
           c(),
           multiple = TRUE
         ),
-        selectInput(
+        tippy(selectInput(
           inputId = ns("compound"),
           label = "Compounds",
           c(),
           multiple = TRUE
-        ),
+        ), "test text"),
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
         tags$hr(style = "border-color: grey;"),
 
         #currently not used in data processing!
-        with_tippy(
+
+
+        #Use shinyBS::bsTooltip instead of tippy?
+        tippy(
           numericInput(ns("rare"), "Remove weak signals", value = c(), width=NULL),
           "Processing option: Isotopocule must have been detected > x % of scans", placement = "right"),
-        with_tippy(
+        tippy(
           numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
           "Processing option: Truncate data based on TICxIT", placement = "right"),
 

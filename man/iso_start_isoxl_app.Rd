@@ -2,7 +2,7 @@
 % Please edit documentation in R/manage_app_isoxl.R
 \name{iso_start_isoxl_app}
 \alias{iso_start_isoxl_app}
-\title{Run the isoXL user interface}
+\title{Run the IsoXL user interface}
 \usage{
 iso_start_isoxl_app(log = TRUE, reset = FALSE, port = 5000)
 }

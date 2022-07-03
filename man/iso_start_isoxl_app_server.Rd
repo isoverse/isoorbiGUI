@@ -4,7 +4,7 @@
 \alias{iso_start_isoxl_app_server}
 \alias{iso_setup_isoxl_app_server}
 \alias{iso_deploy_isoxl_app_server}
-\title{Run the isoXL user interface on a server}
+\title{Run the IsoXL user interface on a server}
 \usage{
 iso_start_isoxl_app_server()
 
@@ -18,12 +18,12 @@ iso_deploy_isoxl_app_server(dir = "app")
 \item{overwrite}{whether to overwrite existing launch files (default is FALSE)}
 }
 \description{
-Run the isoXL user interface on a server
+Run the IsoXL user interface on a server
 }
 \details{
 \code{iso_start_isoxl_app_server} starts a server for the Orbitrap data GUI (used in deployment on e.g. shinyapps.io). Typically this function is not called directly. Use \code{iso_setup_isoxl_app} instead to set up the file structure for server deployment.
 
-\code{iso_setup_isoxl_app_server} sets up the isoXL user interface app in the target folder for deployment on a server (e.g. shinyapps.io).
+\code{iso_setup_isoxl_app_server} sets up the IsoXL user interface app in the target folder for deployment on a server (e.g. shinyapps.io).
 
 \code{iso_deploy_isoxl_app_server} deploys the isoxl app to shinyapps.
 }

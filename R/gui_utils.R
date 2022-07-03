@@ -1,4 +1,4 @@
-# gui managemment =====
+# gui management =====
 
 # check dependencies for gui
 check_dependencies <- function(dependencies) {
@@ -42,7 +42,7 @@ create_missing_dependencies_info_gui <- function(name, missing_deps) {
     })
 }
 
-# general utilites for modules ====
+# general utilities for modules ====
 
 `%then%` <- function(a, b) {
   if (is.null(a)) b else a

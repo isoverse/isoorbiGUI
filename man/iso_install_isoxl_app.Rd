@@ -2,7 +2,7 @@
 % Please edit documentation in R/manage_app_isoxl.R
 \name{iso_install_isoxl_app}
 \alias{iso_install_isoxl_app}
-\title{Install the orbitrap isoXL GUI}
+\title{Install the orbitrap IsoXL GUI}
 \usage{
 iso_install_isoxl_app(create_desktop_shortcut = TRUE)
 }
@@ -10,7 +10,7 @@ iso_install_isoxl_app(create_desktop_shortcut = TRUE)
 \item{create_desktop_shortcut}{whether to create a desktop shortcut for the app}
 }
 \description{
-Install the orbitrap isoXL GUI
+Install the orbitrap IsoXL GUI
 }
 \seealso{
 Other isoxl functions: 

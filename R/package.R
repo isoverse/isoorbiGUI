@@ -19,6 +19,7 @@
 #' @import tippy
 #' @import mailtoR
 #' @import enviPat
+#' @import shinyBS
 NULL
 
 #' @export
