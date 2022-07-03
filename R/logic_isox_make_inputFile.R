@@ -3,24 +3,24 @@
 
 # check sum formula input -------------------------------------------------
 
-# run_check <- function(INPUT_formula) {
-#   for (i in INPUT_formula) {
-#     check <-
-#       check_chemform(
-#         isotopes,
-#         chemforms = INPUT_formula,
-#         get_sorted = FALSE,
-#         get_list = FALSE
-#       )
-#
-#     ifelse(check$warning == FALSE,
-#            return(check$new_formula),
-#            validate("Error in sum formula"))
-#
-#   }
-#
-#
-# }
+run_check <- function(INPUT_formula) {
+  for (i in INPUT_formula) {
+    check <-
+      check_chemform(
+        isotopes,
+        chemforms = INPUT_formula,
+        get_sorted = FALSE,
+        get_list = FALSE
+      )
+
+    ifelse(check$warning == FALSE,
+           return(check$new_formula),
+           validate("Error in sum formula"))
+
+  }
+
+
+}
 
 
 

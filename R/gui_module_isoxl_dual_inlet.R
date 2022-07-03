@@ -7,7 +7,7 @@ test_module_isoxl_dual_inlet <- function(port = 5000) {
       ui = fluidPage(
         shinyjs::useShinyjs(),
         h1("Dual Inlet Module Test"),
-        module_isoxl_shotnoise_ui(id = "dual_inlet")
+        module_isoxl_dual_inlet_ui(id = "dual_inlet")
       ),
       server = function(input, output) {
         shot_noise <-
@@ -26,6 +26,192 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 
+
+  # IsoX Version ------------------------------------------------------------
+
+  isoXL.version <- "Version 0.1 (Feb-2022)"
+
+  # Data: Dual Inlet --------------------------------------------------------------
+
+  inputs.dual_inlet <- reactive({
+
+    req(input$upload_Dual_Inlet) #temp; needs to be coded more elegantly; prone to bugs (e.g. Excel output file cannot be generated)
+    req(input$INPUT_Sample)
+    req(input$INPUT_Ref)
+    req(input$INPUT_Basepeak)
+
+    data.frame( parameter = c(
+      "IsoXL Version",
+      "upload_Dual_Inlet",
+      "INPUT_Sample",
+      "INPUT_Ref",
+      "INPUT_Basepeak",
+      "INPUT_Blocks",
+      "INPUT_Block.time" ,
+      "INPUT_Idle.time",
+      "INPUT_Startup.time",
+      "INPUT_Segments",
+      "INPUT_Rare",
+      "INPUT_TICxIT",
+      "INPUT_RatioMethod",
+      "INPUT_IONS"),
+
+
+      value = c(isoXL.version,
+                input$upload_Dual_Inlet$name,
+                input$INPUT_Sample,
+                input$INPUT_Ref,
+                input$INPUT_Basepeak,
+                input$INPUT_Blocks,
+                input$INPUT_Block.time,
+                input$INPUT_Idle.time,
+                input$INPUT_Startup.time,
+                input$INPUT_Segments,
+                input$INPUT_Rare,
+                input$INPUT_TICxIT,
+                input$INPUT_RatioMethod,
+                input$INPUT_IONS)
+
+
+    )
+  })
+
+
+
+  data.dual_inlet <- reactive({
+
+
+    req(input$upload_Dual_Inlet)
+
+
+    ext <- tools::file_ext(input$upload_Dual_Inlet$name)
+    switch(ext,
+           isox = readr::read_tsv(input$upload_Dual_Inlet$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
+                                  col_types = list(
+                                    filename = readr::col_factor(), #col_factor() conflicts with scales package
+                                    compound = readr::col_factor(),
+                                    isotopolog = readr::col_factor()
+                                  ) ),
+
+
+           validate("Invalid file; Please upload a .isox file") #check that this line works
+    )
+  })
+
+
+  data.dual_inlet_filtered <- reactive({
+
+    req(input$INPUT_Rare)
+
+    return(data.dual_inlet() %>%
+             na.omit() %>%
+             remove.ticxit( input = input$INPUT_TICxIT ) %>% #temp: validate correct functioning
+             remove.satellitePeaks() %>%
+             remove.rare(input = input$INPUT_Rare) )
+
+
+  })
+
+
+
+
+
+  #  Dual Inlet annotation table --------------------------------------------
+
+  dual.inlet.annotation     <- reactive({
+    req(input$INPUT_Ref)
+    req(input$INPUT_Sample)
+    req(input$INPUT_Blocks)
+    req(input$INPUT_Segments)
+    req(input$INPUT_Idle.time)
+    req(input$INPUT_Startup.time)
+    req(input$INPUT_Block.time)
+
+    define.dual.inlet(INPUT_Ref= input$INPUT_Ref,
+                      INPUT_Sample= input$INPUT_Sample,
+                      INPUT_Blocks= input$INPUT_Blocks,
+                      INPUT_Segments= input$INPUT_Segments,
+                      INPUT_Idle.time = input$INPUT_Idle.time,
+                      INPUT_Startup.time= input$INPUT_Startup.time,
+                      INPUT_Block.time= input$INPUT_Block.time)
+
+  })
+
+
+
+  # Dual Inlet: Merge data with annotation ----------------------------------
+
+
+  data.annotated <- reactive({
+    merge.di.annotations(data.dual_inlet_filtered(), dual.inlet.annotation())
+  })
+
+
+
+  # Dual Inlet: Assign base peak --------------------------------------------
+
+
+  data.basepeak <- reactive({assign.basepeak(data.annotated(), input$INPUT_Basepeak)  }) #needs validation; e.g. is basepeak present in data?
+
+
+  # Dual Inlet: Calculate output table for results file ---------------
+
+
+
+  data.output <- reactive({calc.output(df = data.basepeak(), INPUT_RatioMethod = input$INPUT_RatioMethod) })
+
+
+
+  # Dual Inlet: Make Excel file ---------------------------------------------
+
+  data.xls <- reactive({  make.xls(data.output(), params=inputs.dual_inlet()) })
+
+  # Plot output: Dual Inlet --------------------------------------------------------
+
+
+  output$plot <- renderPlotly({
+
+
+    ggplotly(
+
+      ggplot(data = data.output(), aes(x = Injection, y = Ratio, color=isotopolog)) + scale_color_brewer(palette="Dark2") +
+
+        geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
+                          ymax=(Ratio+Ratio.SEM)),
+                      width=0.7,
+                      size=0.3,
+                      color="black",
+                      position=position_dodge(.9))       +        geom_point(size=3, shape=10) + facet_wrap(~ filename, ncol=1), # temp: could be interesting option: + facet_grid(isotopolog~.),
+
+      dynamicTicks = TRUE #change ticks on zoom
+    ) %>%
+
+      config(displaylogo = FALSE,
+             modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
+
+      config( #options on how to save an image
+        toImageButtonOptions = list(
+          format = "png",
+          width = 900,
+          height = 600,
+          scale = 4,
+          filename = paste("dual_inlet", input$upload_Dual_Inlet$name, sep="_")
+        )
+      )
+
+    #plot_ly(data.output(), x = ~Injection, y = ~Ratio, type = 'scatter', mode = 'markers', color=factor(data.output$isotopolog()))
+  })
+
+  # Download output: Dual Inlet Excel file ----------------------------------
+
+
+  output$download_Dual_Inlet_xlsx <- downloadHandler(
+    filename = function(){  paste(tools::file_path_sans_ext(input$upload_Dual_Inlet$name), "_IsoXL.xlsx", sep="")},
+    content = function(file) {
+      saveWorkbook(data.xls(), file)
+
+    }
+  )
 
 }
 
