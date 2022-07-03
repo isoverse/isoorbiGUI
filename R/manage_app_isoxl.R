@@ -21,7 +21,7 @@ iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, port = 5000) {
 # get additional dependencies
 get_isoxl_app_dependencies <- function() {
   # FIXME: needs more info
-  return(c("shinyjs", "shinyWidgets", "envipat"))
+  return(c("shinyjs", "shinyWidgets")) #envipat?
 }
 
 #' Install the orbitrap IsoXL GUI

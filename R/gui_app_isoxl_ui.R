@@ -136,7 +136,7 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
 
         # UI: Create an IsoX Input File ----------------------------------------------
         tabItem(
-          tabName = "make",
+          tabName = "make_inputFile",
 
           h4("Create an IsoX input file for your project"),
 
