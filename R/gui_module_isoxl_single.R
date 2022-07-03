@@ -35,5 +35,12 @@ module_isoxl_single_ui <- function(id) {
   # namespace
   ns <- NS(id)
 
-  fluidPage(sidebarLayout())
+  fluidPage(
+
+    sidebarLayout(
+
+      sidebarPanel(width = 3),
+      hr()
+    )
+  )
 }
