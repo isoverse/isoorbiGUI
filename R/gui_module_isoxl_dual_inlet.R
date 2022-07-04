@@ -321,7 +321,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
                    hr(),
 
-                   submitButton( "Update output", icon("sync")),
+                   #submitButton("Update output", icon("sync")),
+                   actionButton("update", "Update", icon("sync")),
 
                    #shinyWidgets::numericRangeInput("n", "Rows", value = c(1,5), min=1, max=100000),
 

@@ -285,7 +285,8 @@ module_isoxl_flow_ui <- function(id) {
 
       hr(),
 
-      submitButton("Update output", icon("sync")),
+      #submitButton("Update output", icon("sync")),
+      actionButton("update", "Update", icon("sync")),
 
       tags$hr(style = "border-color: grey;"),
 

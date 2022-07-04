@@ -153,7 +153,10 @@ module_isoxl_make_inputFile_ui <- function(id) {
 
       #radioButtons(inputId = "INPUT_IsoX_charge", label=NULL, choiceNames = c( "+1", "−1"), choiceValues = c( "1", "-1"), selected= "-1", inline = TRUE),
 
-      submitButton("Update", icon("sync")),
+      #submitButton("Update", icon("sync")),
+      actionButton("update", "Update", icon("sync")),
+
+
 
       tags$hr(style = "border-color: grey;"),
 

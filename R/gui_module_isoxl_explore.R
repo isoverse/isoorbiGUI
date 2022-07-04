@@ -165,9 +165,8 @@ module_isoxl_explore_ui <- function(id) {
 
                    hr(),
 
-                   submitButton("Update output", icon("sync")),
-
-                   #actionButton("action_explore", "Explore isox data"),
+                   #submitButton("Update output", icon("sync")),
+                   actionButton("update", "Update", icon("sync")),
 
                    tags$hr(style="border-color: grey;"),
 
