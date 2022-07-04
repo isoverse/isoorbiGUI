@@ -179,64 +179,25 @@ module_isoxl_single_server <- function(input, output, session) {
 
       )
 
-    data.single_filtered <-  inputs.single #temp
+    data.single_filtered <-   values$data %>%
+                                          na.omit() %>%
 
-    #return(inputs.single)
-  #  })
+                                          mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
+
+                                           remove.ticxit(input = input) %>%
+                                           remove.satellitePeaks() %>%
+                                           remove.rare(input = input) %>%
+                                          #
+                                           filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
 
 
 
-  # observeEvent(input$start, {
-  #
-  #   data.single_filtered <-  inputs.single
-  #
-  #   #data.single_filtered <-
-  #     # reactive({
-  #     #
-  #     # req(input$rare)
-  #     # req(input$timerange)
-  #     # req(input$timerange)
-  #     # req(input$sample)
-  #     #
-  #     # validate(
-  #     #
-  #     #
-  #     #   need(length(levels(data.single()$filename)) <2, paste("Warning: There is more than one 'filename' in data. May want to use Flow Injection tab? These filenames have been observed",levels(data.single()$filename ))),
-  #     #   need(input$timerange[2] <= max(data.single()$time.min), paste("Warning: Time selection exceeds time range of data. Maximum time in data is ", max(data.single()$time.min) , " min.") ),
-  #     #   need(input$timerange[2] > input$timerange[1], paste("Warning: Time selection minimun is greater than maximum") )
-  #     #
-  #     # )
-  #
-  #
-  #
-  #     #return(
-  #
-  #
-  #      # values$data %>%
-  #      #         na.omit() %>%
-  #      #
-  #      #         mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
-  #      #
-  #      #         remove.ticxit(input = input$extreme) %>%
-  #      #         remove.satellitePeaks() %>%
-  #      #         remove.rare(input = input$rare) %>%
-  #      #
-  #      #         filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
-  #      #
-  #
-  #   #)
-  #
-  #
-  #   # })
-  # })
+# Table output: Single Analysis show rows of isox file------------------------------------------------
 
-  #   # Table output: Single Analysis show rows of isox file------------------------------------------------
-  #
- # observeEvent(input$start, {
 
     output$mytable.single = DT::renderDataTable({
 
-      datatable( data.single_filtered %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
+      datatable(    data.single_filtered %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
                  extensions = c('Buttons','ColReorder', 'Select'),
 
                  options = list(
@@ -255,24 +216,155 @@ module_isoxl_single_server <- function(input, output, session) {
                    # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
                  )
       )
-      #How to export only visible columns?
-      # buttons = list(
-      #   list(extend = "excel", exportOptions = list(columns = ":visible"))
-      # )
 
-      # DT::datatable(
-      #   mtcars,
-      #   options = list(columnDefs = list(list(
-      #     targets = 0:7, visible = FALSE
-      #   )), buttons = c('colvis'), dom = 'Bfrtip'),
-      #   extensions = 'Buttons'
-      # )
-
-
-      #https://datatables.net/reference/option/columns.visible
 
     })
-#})
+
+# Single Analysis: Assign base peak --------------------------------------------
+
+
+      data.single_basepeak <- assign.basepeak.single(df = data.single_filtered, INPUT_Basepeak = input$base_peak)
+
+      #needs validation; e.g. is base peak present in data?
+
+
+      # Single Analysis: Calculate output table for results file ---------------
+
+
+
+      data.single_output <- calc.output.single(df = data.single_basepeak, INPUT_RatioMethod = input$ratio.method)
+
+
+      # Table output: Single Analysis, summary statistics ----------------------------
+
+
+      output$summary.single <- DT::renderDataTable({
+
+        datatable( data.single_output, rownames= FALSE ,
+                   extensions = c('Buttons','ColReorder'),
+                   options = list(
+                     # autoWidth = TRUE, #scroll bar to see enture table
+                     scrollX = TRUE, #scrollbar when table is not visible
+                     columnDefs = list(list(
+                       targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                     )),
+                     dom = 'Bfrtip',
+                     buttons = c('colvis','copy',  'excel', 'pdf' ),
+                     colReorder = TRUE #columns can be reordered
+                   )
+        )
+
+      })
+
+    #   # Plot output: Single Analysis--------------------------------------------------------
+    #
+    #
+
+    # isolate to avoid triggers on other input parameter selections
+    # isolate({
+    #   plotly::ggplotly(values$plot) %>%
+    #     plotly::config(
+    #       displaylogo = FALSE,
+    #       modeBarButtonsToRemove = c(
+    #         "zoomIn2d",
+    #         "zoomOut2d",
+    #         "lasso2d",
+    #         "select2d",
+    #         "hoverClosestCartesian",
+    #         "hoverCompareCartesian"
+    #       ),
+    #       #options on how to save an image
+    #       toImageButtonOptions = list(
+    #         format = "png",
+    #         width = 900,
+    #         height = 600,
+    #         scale = 4,
+    #         filename = paste("shotnoise",
+    #                          input$isotopolog,
+    #                          input$base_peak,
+    #                          sep = "_")
+    #       )
+    #     )
+    # })
+
+
+      output$plot.single <- renderPlotly({
+
+        # isolate to avoid triggers on other input parameter selections
+        isolate({
+
+
+        plotly::ggplotly(
+
+          ggplot(data = data.single_output, aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+
+            # geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
+            #                   ymax=(Ratio+Ratio.SEM)),
+            #               width=0.7,
+            #               size=0.3,
+            #               color="black",
+            #               position=position_dodge(.9))       +
+            geom_point(size=3, shape=10) +
+            geom_abline(slope=1) +
+            ylab(paste("relative SEM ", "[\u2030]")) + xlab(paste("shot noise limit", "[\u2030]")),
+
+          dynamicTicks = TRUE #change ticks on zoom
+        ) %>%
+
+            plotly::config(
+              displaylogo = FALSE,
+              modeBarButtonsToRemove = c(
+                "zoomIn2d",
+                "zoomOut2d",
+                "lasso2d",
+                "select2d",
+                "hoverClosestCartesian",
+                "hoverCompareCartesian"
+              ),
+              #options on how to save an image
+              toImageButtonOptions = list(
+                format = "png",
+                width = 900,
+                height = 600,
+                scale = 4,
+                filename = paste("single_analysis",
+                                 tools::file_path_sans_ext(ns(input$upload$name)),
+                                 sep = "_")
+              )
+            )
+
+
+          # config(displaylogo = FALSE,
+          #        modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
+          #
+          # config( #options on how to save an image
+          #   toImageButtonOptions = list(
+          #     format = "png",
+          #     width = 900,
+          #     height = 600,
+          #     scale = 4,
+          #     filename = paste("single_analysis", tools::file_path_sans_ext(ns(input$upload$name)), sep="_")
+          #   )
+          # )
+
+
+      })
+   })
+
+
+      # Single analysis: Make Excel file ---------------------------------------------
+
+      data_single.xls <- make.xls.onetab(df.stat = data.single_output, params = inputs.single)
+
+    #   # Download output: Single Analysis Excel file ----------------------------------
+    #
+    #
+      output$download_Single_xlsx <- downloadHandler(
+        filename = function(){  paste(tools::file_path_sans_ext(ns(input$upload$datapath)), "_IsoXL.xlsx", sep="")},
+        content = function(file) {
+          saveWorkbook(data_single.xls, file)
+        }
+      )
 
 
   # generate plot ----
@@ -372,7 +464,7 @@ module_isoxl_single_server <- function(input, output, session) {
     #
     #     req(input$base_peak)
     #
-    #     calc.output.single(df = data.single_basepeak(), INPUT_RatioMethod = input$ratio.methos)
+    #     calc.output.single(df = data.single_basepeak(), INPUT_RatioMethod = input$ratio.method)
     #
     #   })
     #
@@ -618,7 +710,7 @@ module_isoxl_single_ui <- function(id) {
         width = "auto" ,
         status = "primary",
         solidHeader = T,
-        DT::dataTableOutput("summary.single")
+        DT::dataTableOutput(ns("summary.single"))
       ),
 
       hr(),
