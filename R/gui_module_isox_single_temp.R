@@ -74,41 +74,49 @@ module_isoxl_single_server <- function(input, output, session) {
     if (is.null(values$data) || nrow(values$data) == 0) {
       # no data (maybe incorrect input file --> hide)
       shinyjs::hide("parameters-panel")
-      updateSelectInput(inputId = "isotopolog", choices = c())
-      updateSelectInput(inputId = "base_peak", choices = c())
       updateSelectInput(inputId = "filename", choices = c())
       updateSelectInput(inputId = "compound", choices = c())
+      updateTextInput(inputId = "sample", value =c())
+      updateSelectInput(inputId = "base_peak", choices = c())
       shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
       updateNumericInput(inputId = "rare", value = c())
       updateNumericInput(inputId = "extreme", value = c())
+      updateRadioButtons(inputId = "ratio.method", choices =c())
 
 
 
     } else {
       # yes data --> update parameters and show
       updateSelectInput(
-        inputId = "isotopolog",
-        choices = levels(values$data$isotopolog),
-        selected = values$data$isotopolog[2]
+        inputId = "filename",
+        choices = c(levels(values$data$filename)),
+        selected = values$data$filename[1]
       )
+      updateSelectInput(
+        inputId = "compound",
+        choices = c(levels(values$data$compound)),
+        selected = values$data$compound[1]
+      )
+
+      updateTextInput(
+        inputId = "sample",
+      #  choices = c(levels(values$data$compound)),
+        value = values$data$sample[1]
+      )
+
       updateSelectInput(
         inputId = "base_peak",
         choices = levels(values$data$isotopolog),
         selected = values$data$isotopolog[1]
       )
-      updateSelectInput(
-        inputId = "filename",
-        choices = c("all", levels(values$data$filename)),
-        selected = "all"
-      )
-      updateSelectInput(
-        inputId = "compound",
-        choices = c("all", levels(values$data$compound)),
-        selected = "all"
-      )
+
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min)))
+                                            value = 0:ceiling(max(values$data$time.min))
+      # Fix: How to avoid negative numbers?
+      # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
+      )
+
 
       updateNumericInput(
         inputId = "rare",
@@ -125,6 +133,13 @@ module_isoxl_single_server <- function(input, output, session) {
         step = 0.1
       )
 
+      updateRadioButtons(
+        inputId = "ratio.method",
+        choiceNames = c("sum",  "mean", "median", "geometric"),
+        choiceValues = c("sum",  "mean", "median", "geometric.mean"),
+        selected = "sum"
+      )
+
       shinyjs::show("parameters-panel")
     }
   }, ignoreNULL = FALSE)
@@ -135,13 +150,14 @@ module_isoxl_single_server <- function(input, output, session) {
     module_message(
       ns, "info",
       "generating plot with selected parameters:",
-      "\n - isotopolog: ", input$isotopolog %then% "",
-      "\n - basepeak: ", input$base_peak %then% "",
       "\n - files: ", paste(input$filename %then% "", collapse = ", "),
       "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
+      "\n - sample: ", paste(input$sample %then% ""),
+      "\n - basepeak: ", input$base_peak %then% "",
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
       "\n - rare: ", input$rare %then% "",
-      "\n - extreme: ", input$extreme %then% ""#)#edit
+      "\n - extreme: ", input$extreme %then% "", #)#edit
+      "\n - ratio.method: ", input$ratio.method %then% "" #)#edit
     )
 
     values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
@@ -208,14 +224,15 @@ module_isoxl_single_ui <- function(id) {
       # parameters ----
       div(
         id = ns("parameters-panel"),
+
+        h6("Define Single Analysis"),
+
         tags$hr(style = "border-color: grey;"),
-        selectInput(inputId = ns("isotopolog"), label = "Isotopolog", c()),
-        selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
         selectInput(
           inputId = ns("filename"),
-          label = "Files",
+          label = "File",
           c(),
-          multiple = TRUE
+          multiple = FALSE
         ),
 
         # tippy(
@@ -226,10 +243,23 @@ module_isoxl_single_ui <- function(id) {
           inputId = ns("compound"),
           label = "Compounds",
           c(),
-          multiple = TRUE),
+          multiple = FALSE),
+
+
+        textInput(
+          inputId = ns("sample"),
+          label = "Sample",
+          value = "sample"
+        ),
+
+        selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
+
 
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
         tags$hr(style = "border-color: grey;"),
+
+
+        h6("Processing options:"),
 
         #currently not used in data processing!
 
@@ -241,6 +271,15 @@ module_isoxl_single_ui <- function(id) {
         tippy(
           numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
           "Processing option: Truncate data based on TICxIT", placement = "right"),
+
+        radioButtons(
+          inputId = ns("ratio.method"),
+          label = "Ratio method",
+          choiceNames = c("sum",  "mean", "median", "geometric"),
+          choiceValues = c("sum",  "mean", "median", "geometric.mean"),
+          selected = "sum"
+        ),
+
 
         actionButton(ns("render_plot"), label = "Plot", icon = icon("sync"))
       ) %>% shinyjs::hidden()
