@@ -153,6 +153,23 @@ module_isoxl_single_server <- function(input, output, session) {
 
   observeEvent(input$start, {
 
+
+    # Message with processing parameters
+
+    module_message(
+      ns, "info",
+      "Processing data with selected parameters:",
+      "\n - files: ", paste(input$filename %then% "", collapse = ", "),
+      "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
+      "\n - sample: ", paste(input$sample %then% ""),
+      "\n - basepeak: ", input$base_peak %then% "",
+      "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
+      "\n - rare: ", input$rare %then% "",
+      "\n - extreme: ", input$extreme %then% "", #)#edit
+      "\n - ratio.method: ", input$ratio.method %then% "" #)#edit
+    )
+
+
     # Data: Single Analysis ---------------------------------------------------
 
     inputs.single <- data.frame( parameter = c(
@@ -175,7 +192,6 @@ module_isoxl_single_server <- function(input, output, session) {
                   input$rare,
                   input$extreme,
                   input$ratio.method)
-
 
       )
 
@@ -333,21 +349,6 @@ module_isoxl_single_server <- function(input, output, session) {
               )
             )
 
-
-          # config(displaylogo = FALSE,
-          #        modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
-          #
-          # config( #options on how to save an image
-          #   toImageButtonOptions = list(
-          #     format = "png",
-          #     width = 900,
-          #     height = 600,
-          #     scale = 4,
-          #     filename = paste("single_analysis", tools::file_path_sans_ext(ns(input$upload$name)), sep="_")
-          #   )
-          # )
-
-
       })
    })
 
@@ -356,235 +357,30 @@ module_isoxl_single_server <- function(input, output, session) {
 
       data_single.xls <- make.xls.onetab(df.stat = data.single_output, params = inputs.single)
 
-    #   # Download output: Single Analysis Excel file ----------------------------------
-    #
-    #
-      output$download_Single_xlsx <- downloadHandler(
-        filename = function(){  paste(tools::file_path_sans_ext(ns(input$upload$datapath)), "_IsoXL.xlsx", sep="")},
-        content = function(file) {
-          saveWorkbook(data_single.xls, file)
-        }
-      )
 
-
-  # generate plot ----
-#  observeEvent(input$start, {
-    req(values$data)
     module_message(
       ns, "info",
-      "generating plot with selected parameters:",
-      "\n - files: ", paste(input$filename %then% "", collapse = ", "),
-      "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
-      "\n - sample: ", paste(input$sample %then% ""),
-      "\n - basepeak: ", input$base_peak %then% "",
-      "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
-      "\n - rare: ", input$rare %then% "",
-      "\n - extreme: ", input$extreme %then% "", #)#edit
-      "\n - ratio.method: ", input$ratio.method %then% "" #)#edit
+      "Processing data with selected parameters:",
+      str(data_single.xls)
     )
 
-    #values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
-    #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
-
-
-    #
-    #
-    #   data.single <- reactive({
-    #
-    #
-    #
-    #     req(input$upload_Single_Analysis)
-    #
-    #
-    #     ext <- tools::file_ext(input$upload_Single_Analysis$name)
-    #     switch(ext,
-    #            isox = readr::read_tsv(input$upload_Single_Analysis$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
-    #                                   col_types = list(
-    #                                     filename = readr::col_factor(),
-    #                                     compound = readr::col_factor(),
-    #                                     isotopolog = readr::col_factor()
-    #                                   ) ),
-    #
-    #
-    #            validate("Invalid file; Please upload a .isox file")
-    #     )
-    #   })
-    #
-    #
-    #   data.single_filtered <- reactive({
-    #
-    #     req(input$rare)
-    #     req(input$timerange)
-    #     req(input$timerange)
-    #     req(input$sample)
-    #
-    #     validate(
-    #
-    #
-    #       need(length(levels(data.single()$filename)) <2, paste("Warning: There is more than one 'filename' in data. May want to use Flow Injection tab? These filenames have been observed",levels(data.single()$filename ))),
-    #       need(input$timerange[2] <= max(data.single()$time.min), paste("Warning: Time selection exceeds time range of data. Maximum time in data is ", max(data.single()$time.min) , " min.") ),
-    #       need(input$timerange[2] > input$timerange[1], paste("Warning: Time selection minimun is greater than maximum") )
-    #
-    #     )
-    #
-    #
-    #
-    #     return(data.single() %>%
-    #              na.omit() %>%
-    #
-    #              mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
-    #
-    #              remove.ticxit(input = input$extreme) %>%
-    #              remove.satellitePeaks() %>%
-    #              remove.rare(input = input$rare) %>%
-    #
-    #              filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
-    #     )
-    #
-    #
-    #   })
-    #
-    #   # Single Analysis: Assign base peak --------------------------------------------
-    #
-    #
-    #   data.single_basepeak <- reactive({
-    #
-    #     req(input$base_peak)
-    #
-    #     assign.basepeak.single(df = data.single_filtered(), INPUT_Basepeak = input$base_peak)
-    #
-    #   }) #needs validation; e.g. is base peak present in data?
-    #
-    #
-    #   # Single Analysis: Calculate output table for results file ---------------
-    #
-    #
-    #
-    #   data.single_output <- reactive({
-    #
-    #     req(input$base_peak)
-    #
-    #     calc.output.single(df = data.single_basepeak(), INPUT_RatioMethod = input$ratio.method)
-    #
-    #   })
-    #
-    #
-    #   # Single analysis: Make Excel file ---------------------------------------------
-    #
-    #   data_single.xls <- reactive({  make.xls.onetab(df.stat = data.single_output(), params = inputs.single()) })
-    #
-    #
-    #   # Plot output: Single Analysis--------------------------------------------------------
-    #
-    #
-    #   output$plot.single <- renderPlotly({
-    #
-    #
-    #     ggplotly(
-    #
-    #       ggplot(data = data.single_output(), aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
-    #
-    #         # geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
-    #         #                   ymax=(Ratio+Ratio.SEM)),
-    #         #               width=0.7,
-    #         #               size=0.3,
-    #         #               color="black",
-    #         #               position=position_dodge(.9))       +
-    #         geom_point(size=3, shape=10) +
-    #         geom_abline(slope=1) +
-    #         ylab(paste("relative SEM ", "[\u2030]")) + xlab(paste("shot noise limit", "[\u2030]")),
-    #
-    #       dynamicTicks = TRUE #change ticks on zoom
-    #     )%>%
-    #
-    #       config(displaylogo = FALSE,
-    #              modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d", "lasso2d", "select2d", "hoverClosestCartesian","hoverCompareCartesian")) %>% # buttons https://plotly-r.com/control-modebar.html#control-modebar
-    #
-    #       config( #options on how to save an image
-    #         toImageButtonOptions = list(
-    #           format = "png",
-    #           width = 900,
-    #           height = 600,
-    #           scale = 4,
-    #           filename = paste("single_analysis", input$upload_Single_Analysis$name, sep="_")
-    #         )
-    #       )
-    #
-    #
-    #   })
-    #
-    #
-    #
-    #   # Table output: Single Analysis, summary statistics ----------------------------
-    #
-    #
-    #   output$summary.single <- DT::renderDataTable({
-    #
-    #     datatable( data.single_output(), rownames= FALSE ,
-    #                extensions = c('Buttons','ColReorder'),
-    #                options = list(
-    #                  # autoWidth = TRUE, #scroll bar to see enture table
-    #                  scrollX = TRUE, #scrollbar when table is not visible
-    #                  columnDefs = list(list(
-    #                    targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
-    #                  )),
-    #                  dom = 'Bfrtip',
-    #                  buttons = c('colvis','copy',  'excel', 'pdf' ),
-    #                  colReorder = TRUE #columns can be reordered
-    #                )
-    #     )
-    #
-    #   })
-    #
-    #
-    #
-
-    #
-    #   # Download output: Single Analysis Excel file ----------------------------------
-    #
-    #
-    #   output$download_Single_xlsx <- downloadHandler(
-    #     filename = function(){  paste(tools::file_path_sans_ext(input$upload_Single_Analysis$name), "_IsoXL.xlsx", sep="")},
-    #     content = function(file) {
-    #       saveWorkbook(data_single.xls(), file)
-    #     }
-    #   )
-    #
 
 
     })
 
-  # render plot ----
-  # output$plot <- renderPlotly({
-  #
-  #   req(values$plot)
-  #   # isolate to avoid triggers on other input parameter selections
-  #   isolate({
-  #     plotly::ggplotly(values$plot) %>%
-  #       plotly::config(
-  #         displaylogo = FALSE,
-  #         modeBarButtonsToRemove = c(
-  #           "zoomIn2d",
-  #           "zoomOut2d",
-  #           "lasso2d",
-  #           "select2d",
-  #           "hoverClosestCartesian",
-  #           "hoverCompareCartesian"
-  #         ),
-  #         #options on how to save an image
-  #         toImageButtonOptions = list(
-  #           format = "png",
-  #           width = 900,
-  #           height = 600,
-  #           scale = 4,
-  #           filename = paste("single",
-  #                            input$isotopolog,
-  #                            input$base_peak,
-  #                            sep = "_")
-  #         )
-  #       )
-  #   })
-  # })
+
+
+  # Download output: Single Analysis Excel file ----------------------------------
+
+observeEvent(input$download_Single_xlsx, {
+  output$download_Single_xlsx <- downloadHandler(
+    filename = function(){  paste(tools::file_path_sans_ext(ns(input$upload$datapath)), "_IsoXL.xlsx", sep="")},
+    content = function(file) {
+      saveWorkbook(data_single.xls, file)
+    }
+  )
+
+})
 
 }
 
