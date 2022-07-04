@@ -102,3 +102,10 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- as.data.frame(df.stat)
   return(df.stat)
 }
+
+# Plot: Single analysis --------------------------------------------------------
+
+
+# plot_single <- function(dataset, input){
+#
+# }

@@ -1,7 +1,7 @@
 # test ----
 # test the single analysis module (direct infusion) as a standalone app
 
-test_module_isoxl_temp_single <- function(port = 5000) {
+test_module_isoxl_single <- function(port = 5000) {
   app <-
     shinyApp(
       ui = fluidPage(
@@ -31,7 +31,7 @@ module_isoxl_single_server <- function(input, output, session) {
     upload_file = NULL,
     upload_error = NULL,
     data = NULL,
-    plot = NULL
+    plot.single = NULL
   )
 
   # upload file ----
@@ -74,6 +74,8 @@ module_isoxl_single_server <- function(input, output, session) {
     if (is.null(values$data) || nrow(values$data) == 0) {
       # no data (maybe incorrect input file --> hide)
       shinyjs::hide("parameters-panel")
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
       updateSelectInput(inputId = "filename", choices = c())
       updateSelectInput(inputId = "compound", choices = c())
       updateTextInput(inputId = "sample", value = c())
@@ -152,6 +154,8 @@ module_isoxl_single_server <- function(input, output, session) {
   # Table of processing parameters
 
   observeEvent(input$start, {
+
+    shinyjs::show("main-plot")
 
 
     # Message with processing parameters
@@ -304,6 +308,7 @@ module_isoxl_single_server <- function(input, output, session) {
     # })
 
 
+
       output$plot.single <- renderPlotly({
 
         # isolate to avoid triggers on other input parameter selections
@@ -312,7 +317,9 @@ module_isoxl_single_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot(data = data.single_output, aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+          ggplot2::ggplot(data = data.single_output, ggplot2::aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopolog)) +
+
+            ggplot2::scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
 
             # geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
             #                   ymax=(Ratio+Ratio.SEM)),
@@ -320,9 +327,9 @@ module_isoxl_single_server <- function(input, output, session) {
             #               size=0.3,
             #               color="black",
             #               position=position_dodge(.9))       +
-            geom_point(size=3, shape=10) +
-            geom_abline(slope=1) +
-            ylab(paste("relative SEM ", "[\u2030]")) + xlab(paste("shot noise limit", "[\u2030]")),
+            ggplot2::geom_point(size=3, shape=10) +
+            ggplot2::geom_abline(slope=1) +
+            ggplot2::ylab(paste("relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("shot noise limit", "[\u2030]")),
 
           dynamicTicks = TRUE #change ticks on zoom
         ) %>%
@@ -369,8 +376,7 @@ module_isoxl_single_server <- function(input, output, session) {
     )
 
 
-
-
+    shinyjs::show("main-rest")
 
     })
 
@@ -475,11 +481,9 @@ module_isoxl_single_ui <- function(id) {
 
 
       #hr(),
-
-      downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
-
-      hr(),
-
+      # parameters ----
+      div(
+        id = ns("main-plot"),
 
       box(
         title = "Overview of Results",
@@ -488,9 +492,14 @@ module_isoxl_single_ui <- function(id) {
         status = "primary",
         solidHeader = T,
         withSpinner(plotlyOutput(ns("plot.single")))
+      )
       ),
       #how to save png at higher resolution?
 
+      hr(),
+      div(
+        id = ns("main-rest"),
+      downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
 
       hr(),
 
@@ -512,8 +521,9 @@ module_isoxl_single_ui <- function(id) {
         status = "primary",
         solidHeader = T,
         DT::dataTableOutput(ns("mytable.single"))
-      ),
+      )
 
+)
 
     )
 
