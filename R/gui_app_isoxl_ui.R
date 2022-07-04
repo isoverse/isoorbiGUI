@@ -49,6 +49,7 @@ orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue"
       # Caj: Do we need to add dependencies here again, in addition to DESCRIPTION?
       shinyjs::useShinyjs(),
       shinyWidgets::useShinydashboard(),
+      shinyBS::addTooltip(),
       #shinycssloaders::withSpinner(),
       #tippy::with_tippy(),
 

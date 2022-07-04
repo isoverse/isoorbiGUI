@@ -41,6 +41,14 @@ module_single_test:
 		sleep 1; \
 	done
 
+module_single_temp_test:
+	@echo "Starting module..."
+	@sleep 1
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_isoxl_temp_single()'; do \
+		echo "Restarting GUI..."; \
+		sleep 1; \
+	done
+
 module_flow_test:
 	@echo "Starting module..."
 	@sleep 1
