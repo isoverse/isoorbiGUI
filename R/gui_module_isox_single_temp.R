@@ -358,29 +358,23 @@ module_isoxl_single_server <- function(input, output, session) {
       data_single.xls <- make.xls.onetab(df.stat = data.single_output, params = inputs.single)
 
 
-    module_message(
-      ns, "info",
-      "Processing data with selected parameters:",
-      str(data_single.xls)
+    # Download output: Single Analysis Excel file ----------------------------------
+
+
+    output$download_xlsx <- downloadHandler(
+      filename = function(){  paste(tools::file_path_sans_ext(input$upload$name), "_IsoXL.xlsx", sep="")},
+      content = function(file) {
+        saveWorkbook(data_single.xls, file)
+      }
     )
+
+
 
 
 
     })
 
 
-
-  # Download output: Single Analysis Excel file ----------------------------------
-
-observeEvent(input$download_Single_xlsx, {
-  output$download_Single_xlsx <- downloadHandler(
-    filename = function(){  paste(tools::file_path_sans_ext(ns(input$upload$datapath)), "_IsoXL.xlsx", sep="")},
-    content = function(file) {
-      saveWorkbook(data_single.xls, file)
-    }
-  )
-
-})
 
 }
 
@@ -482,7 +476,7 @@ module_isoxl_single_ui <- function(id) {
 
       #hr(),
 
-      downloadButton("download_Single_xlsx", "Download Results (.xlsx)"),
+      downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
 
       hr(),
 
