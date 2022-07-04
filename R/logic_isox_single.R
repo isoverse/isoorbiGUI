@@ -16,7 +16,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
     )
   )
 
-  # Annotation: Identify 'basepeak' for each scan
+  # Annotation: Identify 'base peak' for each scan
 
   df.sel <- df  %>%
     select(filename,
