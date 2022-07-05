@@ -194,6 +194,8 @@ module_isoxl_make_inputFile_ui <- function(id) {
         )
       ),
 
+      hr(),
+
       actionButton(ns("start"), label = "Make IsoX input file", icon = icon("sync"))
 
     ),
