@@ -467,7 +467,7 @@ module_isoxl_single_ui <- function(id) {
           selected = "sum"
         ),
 
-
+        hr(),
         actionButton(ns("start"), label = "Start", icon = icon("sync"))
       ) %>% shinyjs::hidden()
 

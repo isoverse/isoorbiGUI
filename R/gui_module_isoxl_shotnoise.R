@@ -74,6 +74,7 @@ observeEvent(values$data, {
   if (is.null(values$data) || nrow(values$data) == 0) {
     # no data (maybe incorrect input file --> hide)
     shinyjs::hide("parameters-panel")
+    shinyjs::hide("main-plot")
     updateSelectInput(inputId = "isotopolog", choices = c())
     updateSelectInput(inputId = "base_peak", choices = c())
     updateSelectInput(inputId = "filename", choices = c())
@@ -132,6 +133,9 @@ observeEvent(values$data, {
   # generate plot ----
   observeEvent(input$render_plot, {
     req(values$data)
+
+    shinyjs::show("main-plot")
+
     module_message(
       ns, "info",
       "generating plot with selected parameters:",
@@ -242,6 +246,8 @@ module_isoxl_shotnoise_ui <- function(id) {
           numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
           "Processing option: Truncate data based on TICxIT", placement = "right"),
 
+        hr(),
+
         actionButton(ns("render_plot"), label = "Plot", icon = icon("sync"))
       ) %>% shinyjs::hidden()
 
@@ -250,15 +256,22 @@ module_isoxl_shotnoise_ui <- function(id) {
 
     # plot -----
     mainPanel(
-      box(
-        title = "Shot Noise Plot",
-        width = "auto" ,
-        height = "auto",
-        status = "primary",
-        solidHeader = T,
-        withSpinner(plotlyOutput(ns("plot")))
+      # parameters ----
+      div(
+        id = ns("main-plot"),
+
+        box(
+          title = "Shot Noise Plot",
+          width = "auto" ,
+          height = "auto",
+          status = "primary",
+          solidHeader = T,
+          withSpinner(plotlyOutput(ns("plot")))
+        )
+        #how to save png at higher resolution?
       ),
-      #how to save png at higher resolution?
+
+
 
 
     )
