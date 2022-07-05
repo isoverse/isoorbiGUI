@@ -274,9 +274,9 @@ module_isoxl_flow_server <- function(input, output, session) {
                  options = list(
                    # autoWidth = TRUE, #scroll bar to see enture table
                    scrollX = TRUE, #scrollbar when table is not visible
-                   columnDefs = list(list(
-                     targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
-                   )),
+                   # columnDefs = list(list(
+                   #   targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                   # )),
                    dom = 'Bfrtip',
                    buttons = c('colvis','copy',  'excel', 'pdf' ),
                    colReorder = TRUE #columns can be reordered
@@ -285,65 +285,28 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     })
 
-    #   # Plot output: Flow Analysis--------------------------------------------------------
-    #
-    #
+# Plot output: Flow Analysis--------------------------------------------------------
 
-    # isolate to avoid triggers on other input parameter selections
-    # isolate({
-    #   plotly::ggplotly(values$plot) %>%
-    #     plotly::config(
-    #       displaylogo = FALSE,
-    #       modeBarButtonsToRemove = c(
-    #         "zoomIn2d",
-    #         "zoomOut2d",
-    #         "lasso2d",
-    #         "select2d",
-    #         "hoverClosestCartesian",
-    #         "hoverCompareCartesian"
-    #       ),
-    #       #options on how to save an image
-    #       toImageButtonOptions = list(
-    #         format = "png",
-    #         width = 900,
-    #         height = 600,
-    #         scale = 4,
-    #         filename = paste("shotnoise",
-    #                          input$isotopolog,
-    #                          input$base_peak,
-    #                          sep = "_")
-    #       )
-    #     )
-    # })
+      output$plot.flow <- renderPlotly({
 
-
-
-    output$plot.flow <- renderPlotly({
-
-      # isolate to avoid triggers on other input parameter selections
-      isolate({
-
+        # isolate to avoid triggers on other input parameter selections
+        isolate({
 
         plotly::ggplotly(
 
-          ggplot2::ggplot(data = data.flow_output, ggplot2::aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopolog)) +
+          ggplot(data = data.flow_output, aes(x = filename, y = Ratio, color = isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
 
-            ggplot2::scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
-
-            # geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
-            #                   ymax=(Ratio+Ratio.SEM)),
-            #               width=0.7,
-            #               size=0.3,
-            #               color="black",
-            #               position=position_dodge(.9))       +
-            ggplot2::geom_point(size=3, shape=10) +
-            ggplot2::geom_abline(slope=1) +
-            ggplot2::ylab(paste("relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("shot noise limit", "[\u2030]")),
+            geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
+                              ymax=(Ratio+Ratio.SEM)),
+                          width=0.7,
+                          size=0.3,
+                          color="black",
+                          position=position_dodge(.9))       +
+            geom_point(size=3, shape=10) ,
 
           dynamicTicks = TRUE #change ticks on zoom
-        ) %>%
+        ) %>% plotly::config(
 
-          plotly::config(
             displaylogo = FALSE,
             modeBarButtonsToRemove = c(
               "zoomIn2d",
@@ -353,43 +316,45 @@ module_isoxl_flow_server <- function(input, output, session) {
               "hoverClosestCartesian",
               "hoverCompareCartesian"
             ),
+
             #options on how to save an image
             toImageButtonOptions = list(
               format = "png",
               width = 900,
               height = 600,
               scale = 4,
-              filename = paste("flow_analysis",
-                               tools::file_path_sans_ext(ns(input$upload$name)),
-                               sep = "_")
-            )
+              filename = paste("flow_injection",
+                              input$name,
+                              sep="_")
+                              )
           )
+        })
 
       })
-    })
+
+# Flow analysis: Make Excel file ---------------------------------------------
+
+data_flow.xls <- make.xls.onetab(df.stat = data.flow_output, params = inputs.flow)
 
 
-    # Flow analysis: Make Excel file ---------------------------------------------
-
-    data_flow.xls <- make.xls.onetab(df.stat = data.flow_output, params = inputs.flow)
+# Download output: Flow Analysis Excel file ----------------------------------
 
 
-    # Download output: Flow Analysis Excel file ----------------------------------
-
-
-    output$download_xlsx <- downloadHandler(
-      filename = function(){  paste(tools::file_path_sans_ext(input$upload$name), "_IsoXL.xlsx", sep="")},
-      content = function(file) {
-        saveWorkbook(data_flow.xls, file)
-      }
-    )
+output$download_xlsx <- downloadHandler(
+  filename = function() {
+    paste(tools::file_path_sans_ext(input$upload$name),
+          "_IsoXL.xlsx",
+          sep = "")
+  },
+  content = function(file) {
+    saveWorkbook(data_flow.xls, file)
+  }
+)
 
 
     shinyjs::show("main-rest")
 
   })
-
-
 
 }
 
@@ -397,6 +362,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 # user interface ----
 
 module_isoxl_flow_ui <- function(id) {
+
 
   # namespace
   ns <- NS(id)
@@ -415,7 +381,6 @@ module_isoxl_flow_ui <- function(id) {
       textOutput(ns("upload_info")),
 
 
-
       # parameters ----
       div(
         id = ns("parameters-panel"),
@@ -432,42 +397,34 @@ module_isoxl_flow_ui <- function(id) {
           multiple = TRUE
         ),
 
-        # tippy(
-        #   "test text",
-        #   placement = "right"),
-
-        # selectInput(
-        #   inputId = ns("compound"),
-        #   label = "Compounds",
-        #   c(),
-        #   multiple = FALSE),
-        #
-        #
-        # textInput(
-        #   inputId = ns("sample"),
-        #   label = "Sample",
-        #   value = "sample"
-        # ),
-
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
-
 
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
         tags$hr(style = "border-color: grey;"),
 
-
         h6("Processing options:"),
-
-        #currently not used in data processing!
-
 
         #Use shinyBS::bsTooltip instead of tippy?
         tippy(
-          numericInput(ns("rare"), "Remove weak signals", value = c(), width=NULL),
-          "Processing option: Isotopocule must have been detected > x % of scans", placement = "right"),
+          numericInput(
+            ns("rare"),
+            "Remove weak signals",
+            value = c(),
+            width = NULL
+          ),
+          "Processing option: Isotopocule must have been detected > x % of scans",
+          placement = "right"
+        ),
         tippy(
-          numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
-          "Processing option: Truncate data based on TICxIT", placement = "right"),
+          numericInput(
+            ns("extreme"),
+            "Remove extreme scans",
+            value = c(),
+            width = NULL
+          ),
+          "Processing option: Truncate data based on TICxIT",
+          placement = "right"
+        ),
 
         radioButtons(
           inputId = ns("ratio.method"),
@@ -485,71 +442,53 @@ module_isoxl_flow_ui <- function(id) {
 
     # UI: Flow Analysis Main Panel ------------------------------------------
 
-    mainPanel(
-
-      width = 9,
+  mainPanel(
 
 
-      #hr(),
-      # parameters ----
-      div(
-        id = ns("main-plot"),
+    width = 9,
 
-        box(
-          title = "Overview of Results",
-          width = "auto" ,
-          height = "auto",
-          status = "primary",
-          solidHeader = T,
-          withSpinner(plotlyOutput(ns("plot.flow")))
-        )
-      ),
-      #how to save png at higher resolution?
+    # parameters ----
+    div(
+      id = ns("main-plot"),
+
+      box(
+        title = "Overview of Results",
+        width = "auto" ,
+        height = "auto",
+        status = "primary",
+        solidHeader = T,
+        withSpinner(plotlyOutput(ns("plot.flow")))
+      )
+    ), #how to save png at higher resolution?
+
+    hr(),
+    div(
+      id = ns("main-rest"),
+      downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
 
       hr(),
-      div(
-        id = ns("main-rest"),
-        downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
-
-        hr(),
 
 
-        box(
-          title = "Results Table",
-          width = "auto" ,
-          status = "primary",
-          solidHeader = T,
-          DT::dataTableOutput(ns("summary.flow"))
-        ),
+      box(
+        title = "Results Table",
+        width = "auto" ,
+        status = "primary",
+        solidHeader = T,
+        DT::dataTableOutput(ns("summary.flow"))
+      ),
 
-        hr(),
+      hr(),
 
 
-        box(
-          title = "Filtered .isox File",
-          width = "auto" ,
-          status = "primary",
-          solidHeader = T,
-          DT::dataTableOutput(ns("mytable.flow"))
-        )
-
+      box(
+        title = "Filtered .isox File",
+        width = "auto" ,
+        status = "primary",
+        solidHeader = T,
+        DT::dataTableOutput(ns("mytable.flow"))
       )
-
     )
+  )
 
-    # # plot -----
-    # mainPanel(
-    #   box(
-    #     title = "Flow Analysis Plot",
-    #     width = "auto" ,
-    #     height = "auto",
-    #     status = "primary",
-    #     solidHeader = T,
-    #     withSpinner(plotlyOutput(ns("plot")))
-    #   ),
-    #   #how to save png at higher resolution?
-    #
-    #
-    # )
   ))
 }
