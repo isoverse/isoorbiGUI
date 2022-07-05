@@ -27,44 +27,46 @@ module_isoxl_info_server <- function(input, output, session) {
 # user interface ----
 
 module_isoxl_info_ui <- function(id) {
+
   # namespace
   ns <- NS(id)
 
-          fluidPage(
-
-            sidebarLayout(
-
+  fluidPage(sidebarLayout(
+    sidebarPanel(
 
 
-              sidebarPanel(
+      h4("Contact and Infos"),
 
-                h4("Contact and infos"),
+      tags$hr(style = "border-color: grey;"),
 
-                tags$hr(style="border-color: grey;"),
-                h4("Caj Neubauer, Sebastian Kopf & Kristýna Kanternova"),
-                h4("University of Colorado Boulder"),
+      h4("Caj Neubauer, Sebastian Kopf & Kristýna Kantnerová"),
+      h4("University of Colorado Boulder"),
+
+      tags$h1(""),
+
+      #FIX: remove dependency of mailtoR
+      #enable custom email alias, e.g. "123caj+IsoXL@gmail.com"
+
+      mailtoR(
+        email = "123caj@gmail.com",
+        text = "click here to send us an email",
+        subject = "IsoXL",
+        body = "Hi there, I have a question about IsoXL."
+      ),
+
+      use_mailtoR(),
+
+      hr(),
+
+      "File a bug report or feature request ",
+      tags$a(href = "https://github.com/isoverse/isoorbi/issues",
+             "on our GitHub page")
+
+    ),
 
 
-                mailtoR(email = "123caj@gmail.com",
-                        text = "click here to send us an email",
-                        subject = "IsoXL",
-                        body = "Hi there, I have a question or bug report for IsoXL."),
-
-
-                use_mailtoR()
-
-              ),
-
-
-              # UI: Contact and Infos Main Panel ----------------------------------------
-
-              mainPanel(
-
-
-              )
-            )
-          )
-
-
+    # UI: Empty Main Panel ----------------------------------------
+    mainPanel()
+  ))
 }
 
