@@ -27,6 +27,17 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
   shinyjs::hide("input-options")
   shinyjs::hide("main-plot")
 
+  #Option to change the compound name (default is sum formula)
+  observe({
+    x = input$INPUT_IsoX_sumformula
+
+      updateTextInput(session, "INPUT_IsoX_compound",
+                      label = "Compound name",
+                      value = x
+      )
+
+  })
+
 
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
@@ -77,7 +88,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
     #     #
 
     out.isox <- make.isox.input(pattern.list = pattern, #temp!
-                                          INPUT_compound = input$INPUT_IsoX_sumformula,
+                                          INPUT_compound = input$INPUT_IsoX_compound,
                                           INPUT_charge = input$INPUT_IsoX_charge,
                                           INPUT_tolerance= input$INPUT_IsoX_tolerance,
                                           INPUT_massOffset = input$INPUT_IsoX_massoffset/1000) #mDa!
@@ -157,6 +168,13 @@ module_isoxl_make_inputFile_ui <- function(id) {
         tags$hr(style = "border-color: grey;"),
 
         h4("Options for fine tuning:"),
+
+        textInput(
+          inputId = ns("INPUT_IsoX_compound"),
+          label = "Compound name",
+          value = "compound.name"
+        ),
+
 
         numericInput(
           inputId = ns("INPUT_IsoX_tolerance"),
