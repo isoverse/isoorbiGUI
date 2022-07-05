@@ -76,8 +76,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       shinyjs::hide("parameters-panel")
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
-      updateSelectInput(inputId = "filename", choices = c())
-      updateSelectInput(inputId = "compound", choices = c())
+    #  updateSelectInput(inputId = "filename", choices = c())
+    #  updateSelectInput(inputId = "compound", choices = c())
       updateTextInput(inputId = "sample", value = c())
       updateSelectInput(inputId = "base_peak", choices = c())
       shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
@@ -89,21 +89,25 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     } else {
       # yes data --> update parameters and show
-      updateSelectInput(
-        inputId = "filename",
-        choices = c(levels(values$data$filename)),
-        selected = values$data$filename[1]
-      )
-      updateSelectInput(
-        inputId = "compound",
-        choices = c(levels(values$data$compound)),
-        selected = values$data$compound[1]
-      )
+      # updateSelectInput(
+      #   inputId = "filename",
+      #   choices = c(levels(values$data$filename)),
+      #   selected = values$data$filename[1]
+      # )
+      # updateSelectInput(
+      #   inputId = "compound",
+      #   choices = c(levels(values$data$compound)),
+      #   selected = values$data$compound[1]
+      # )
 
       updateTextInput(
         inputId = "sample",
-      #  choices = c(levels(values$data$compound)),
-        value = values$data$sample[1]
+        value = paste("sample",  values$data$compound[1], sep="_")
+      )
+
+      updateTextInput(
+        inputId = "reference",
+        value = paste("reference", values$data$compound[1], sep="_")
       )
 
       updateSelectInput(
