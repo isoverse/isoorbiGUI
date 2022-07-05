@@ -1,25 +1,25 @@
 # test ----
-# test the single analysis module (direct infusion) as a standalone app
+# test the dual inlet module as a standalone app
 
-test_module_isoxl_single <- function(port = 5000) {
+test_module_isoxl_dual_inlet <- function(port = 5000) {
   app <-
     shinyApp(
       ui = fluidPage(
         shinyjs::useShinyjs(),
-        h1("Single Analysis Module Test"),
-        module_isoxl_single_ui(id = "single")
+        h1("Dual Inlet Module Test"),
+        module_isoxl_dual_inlet_ui(id = "dual_inlet")
       ),
       server = function(input, output) {
-        shot_noise <-
-          callModule(module_isoxl_single_server, id = "single")
+        dual_inlet <-
+          callModule(module_isoxl_dual_inlet_server, id = "dual_inlet")
       }
     )
   runApp(app, display.mode = "normal", port = 5000)
 }
 
-# server ----
+# server
+module_isoxl_dual_inlet_server <- function(input, output, session) {
 
-module_isoxl_single_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
 
@@ -31,7 +31,7 @@ module_isoxl_single_server <- function(input, output, session) {
     upload_file = NULL,
     upload_error = NULL,
     data = NULL,
-    plot.single = NULL
+    plot.dual = NULL
   )
 
   # upload file ----
@@ -174,9 +174,9 @@ module_isoxl_single_server <- function(input, output, session) {
     )
 
 
-    # Data: Single Analysis ---------------------------------------------------
+    # Data: Dual Inlet Analysis ---------------------------------------------------
 
-    inputs.single <- data.frame( parameter = c(
+    inputs.dual <- data.frame( parameter = c(
 
         "IsoXL Version",
         "INPUT_Single_sample",
@@ -385,9 +385,8 @@ module_isoxl_single_server <- function(input, output, session) {
 }
 
 
-# user interface ----
-
-module_isoxl_single_ui <- function(id) {
+# user interface
+module_isoxl_dual_inlet_ui <- function(id) {
 
   # namespace
   ns <- NS(id)
@@ -413,42 +412,102 @@ module_isoxl_single_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h6("Define Single Analysis"),
-
-        selectInput(
-          inputId = ns("filename"),
-          label = "File",
-          c(),
-          multiple = FALSE
-        ),
-
-        # tippy(
-        #   "test text",
-        #   placement = "right"),
-
-        selectInput(
-          inputId = ns("compound"),
-          label = "Compounds",
-          c(),
-          multiple = FALSE),
-
+        h6("Define Dual Inlet"),
 
         textInput(
           inputId = ns("sample"),
           label = "Sample",
-          value = "sample"
+          value = c()
+        ),
+
+        textInput(
+          inputId = ns("reference"),
+          label = "Reference",
+          value = c()
         ),
 
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
+        # selectInput(
+        #   inputId = ns("filename"),
+        #   label = "File",
+        #   c(),
+        #   multiple = FALSE
+        # ),
+
+        # tippy(
+        #   "test text",
+        #   placement = "right"),
+
+        # selectInput(
+        #   inputId = ns("compound"),
+        #   label = "Compounds",
+        #   c(),
+        #   multiple = FALSE),
+        tags$hr(style = "border-color: grey;"),
+
+
+        h6("Parameters:"),
+
+         numericInput(
+           inputId = ns("blocks"),
+           label = "Blocks",
+           7,
+           min = 1,
+           max = 100,
+           step = 1,
+           width = NULL
+         ),
+
+         numericInput(
+           inputId = ns("block.time"),
+           label = "Block time [min]",
+           10,
+           min = 1,
+           max = 20,
+           step = 1,
+           width = NULL
+         ),
+
+         numericInput(
+           inputId = ns("idle.time"),
+           label = "Switch time [min]",
+           0.5,
+           min = 0,
+           max = 2,
+           step = 0.1,
+           width = NULL
+         ),
+
+         numericInput(
+           inputId = ns("startup.time"),
+           label = "Startup time [min]",
+           0,
+           min = 0,
+           max = 10,
+           step = 0.1,
+           width = NULL
+         ),
+
+        #shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
         tags$hr(style = "border-color: grey;"),
 
 
         h6("Processing options:"),
 
-        #currently not used in data processing!
+
+       # Hover over: with_tippy(textInput("input", "input with tooltip"), "Input text", placement = "right")
+
+       with_tippy(numericInput(
+         inputId = ns("segments"),
+         label = "Segments",
+         1,
+         min = 1,
+         max = 10,
+         step = 1,
+         width = NULL
+       ), "Processing option: Split blocks into multiple segments", placement = "right"), #Not consistently working...
 
 
         #Use shinyBS::bsTooltip instead of tippy?
@@ -473,7 +532,7 @@ module_isoxl_single_ui <- function(id) {
 
     ),
 
-    # UI: Single Analysis Main Panel ------------------------------------------
+    # UI: Dual Inlet Analysis Main Panel ------------------------------------------
 
     mainPanel(
 
