@@ -7,7 +7,9 @@ iso_simplify_isox_file <- function(dataset) {
                                time.min,
                                compound,
                                isotopolog,
-                               ions.incremental)
+                               ions.incremental,
+                               tic, #ok to keep always?
+                               it.ms) #ok to keep always?
 }
 
 #' Remove isotopologs that are not consistently detected across scans

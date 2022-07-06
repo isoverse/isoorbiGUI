@@ -325,7 +325,7 @@ module_isoxl_flow_server <- function(input, output, session) {
               height = 600,
               scale = 4,
               filename = paste("flow_injection",
-                              input$name,
+                               tools::file_path_sans_ext(input$upload$name),
                               sep="_")
                               )
           )
@@ -385,7 +385,6 @@ module_isoxl_flow_ui <- function(id) {
 
         h6("Define Parameters"),
 
-        #FIX: file selection not yet implemented 05-July-2022
         selectInput(
           inputId = ns("filename.sel"),
           label = "File",
