@@ -420,7 +420,7 @@ observeEvent(input$start, {
                 height = 600,
                 scale = 4,
                 filename = paste("dual_inlet",
-                                 tools::file_path_sans_ext(ns(input$upload$name)),
+                                 tools::file_path_sans_ext(ns(input$upload$name)), #FIX
                                  sep = "_")
               )
             )
@@ -431,7 +431,7 @@ observeEvent(input$start, {
 
       # Single analysis: Make Excel file ---------------------------------------------
 
-      data_dual.xls <- make.xls.onetab(df.stat = data.output, params = inputs.dual)
+      data_dual.xls <- make.xls(df.stat = data.output, params = inputs.dual)
 
 
     # Download output: Single Analysis Excel file ----------------------------------
@@ -613,13 +613,14 @@ module_isoxl_dual_inlet_ui <- function(id) {
         id = ns("main-plot"),
 
 
-      box(title = "Overview of Results",
-          width = "auto",
-          height ="auto",
+        box(
+          title = "Overview of Results",
+          width = "auto" ,
+          height = "auto",
           status = "primary",
           solidHeader = T,
-          withSpinner(plotlyOutput("plot"))), #height="auto",
-
+          withSpinner(plotlyOutput(ns("plot")))
+        )
       ),
       #how to save png at higher resolution?
 
@@ -654,19 +655,6 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
     )
 
-    # # plot -----
-    # mainPanel(
-    #   box(
-    #     title = "Single Analysis Plot",
-    #     width = "auto" ,
-    #     height = "auto",
-    #     status = "primary",
-    #     solidHeader = T,
-    #     withSpinner(plotlyOutput(ns("plot")))
-    #   ),
-    #   #how to save png at higher resolution?
-    #
-    #
-    # )
+
   ))
 }

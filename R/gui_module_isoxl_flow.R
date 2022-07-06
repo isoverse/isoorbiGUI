@@ -32,7 +32,7 @@ module_isoxl_flow_server <- function(input, output, session) {
     upload_file = NULL,
     upload_error = NULL,
     data = NULL,
-    plot.flow = NULL #revise
+    plot = NULL #revise
   )
 
   # upload file ----
@@ -181,7 +181,8 @@ module_isoxl_flow_server <- function(input, output, session) {
 
         value = c(
           isoXL.version,
-          paste(input$filename.sel, sep="", collapse=""),
+          #paste(input$filename.sel, sep="", collapse=""), #FIX
+          input$filename.sel[1],
           input$base_peak,
           input$timerange[1],
           input$timerange[2],
@@ -287,7 +288,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 # Plot output: Flow Analysis--------------------------------------------------------
 
-      output$plot.flow <- renderPlotly({
+      output$plot <- renderPlotly({
 
         # isolate to avoid triggers on other input parameter selections
         isolate({
@@ -334,23 +335,18 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 # Flow analysis: Make Excel file ---------------------------------------------
 
-data_flow.xls <- make.xls.onetab(df.stat = data.flow_output, params = inputs.flow)
+data_flow.xls <- make.xls(df.stat = data.flow_output, params = inputs.flow) #FIX
 
 
 # Download output: Flow Analysis Excel file ----------------------------------
 
 
 output$download_xlsx <- downloadHandler(
-  filename = function() {
-    paste(tools::file_path_sans_ext(input$upload$name),
-          "_IsoXL.xlsx",
-          sep = "")
-  },
+  filename = function(){paste(tools::file_path_sans_ext(input$upload$name), "_IsoXL.xlsx", sep="")},
   content = function(file) {
     saveWorkbook(data_flow.xls, file)
   }
 )
-
 
     shinyjs::show("main-rest")
 
@@ -457,7 +453,7 @@ module_isoxl_flow_ui <- function(id) {
         height = "auto",
         status = "primary",
         solidHeader = T,
-        withSpinner(plotlyOutput(ns("plot.flow")))
+        withSpinner(plotlyOutput(ns("plot")))
       )
     ), #how to save png at higher resolution?
 
