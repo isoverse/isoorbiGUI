@@ -31,7 +31,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     upload_file = NULL,
     upload_error = NULL,
     data = NULL,
-    plot.dual = NULL
+    plot = NULL
   )
 
   # upload file ----
@@ -76,11 +76,15 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       shinyjs::hide("parameters-panel")
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
-    #  updateSelectInput(inputId = "filename", choices = c())
-    #  updateSelectInput(inputId = "compound", choices = c())
       updateTextInput(inputId = "sample", value = c())
+      updateTextInput(inputId = "reference", value = c())
       updateSelectInput(inputId = "base_peak", choices = c())
-      shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
+      updateNumericInput(inputId = "segments", value = c())
+      updateNumericInput(inputId = "blocks", value = c()) #FIX: is this what we want? Eg. update when loading a new file?
+      updateNumericInput(inputId = "block.time", value = c())
+
+      updateNumericInput(inputId = "startup.time", value = c())
+      updateNumericInput(inputId = "idle.time", value = c())
       updateNumericInput(inputId = "rare", value = c())
       updateNumericInput(inputId = "extreme", value = c())
       updateRadioButtons(inputId = "ratio.method", choices =c())
@@ -116,12 +120,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         selected = values$data$isotopolog[1]
       )
 
-      shinyWidgets::updateNumericRangeInput(session,
-                                            inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min))
-      # Fix: How to avoid negative numbers?
-      # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
-      )
+# add segments, blocks, block.time, startup.time etc?
 
 
       updateNumericInput(
@@ -151,13 +150,13 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   }, ignoreNULL = FALSE)
 
 
-  isoXL.version <- "Version 0.2 (July-2022)" #should be later only in main gui
+isoXL.version <- "Version 0.2 (July-2022)" #should be later only in main gui
 
 
 
   # Table of processing parameters
 
-  observeEvent(input$start, {
+observeEvent(input$start, {
 
     shinyjs::show("main-plot")
 
@@ -167,11 +166,14 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     module_message(
       ns, "info",
       "Processing data with selected parameters:",
-      "\n - files: ", paste(input$filename %then% "", collapse = ", "),
-      "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
       "\n - sample: ", paste(input$sample %then% ""),
+      "\n - reference: ", paste(input$reference %then% ""),
       "\n - basepeak: ", input$base_peak %then% "",
-      "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
+      "\n - segments: ", input$segments %then% "",
+      "\n - blocks: ", input$blocks %then% "",
+      "\n - block.time: ", input$block.time %then% "",
+      "\n - startup.time: ", input$startup.time %then% "",
+      "\n - idle.time: ", input$idle.time %then% "",
       "\n - rare: ", input$rare %then% "",
       "\n - extreme: ", input$extreme %then% "", #)#edit
       "\n - ratio.method: ", input$ratio.method %then% "" #)#edit
@@ -183,45 +185,104 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     inputs.dual <- data.frame( parameter = c(
 
         "IsoXL Version",
-        "INPUT_Single_sample",
-        "INPUT_Single_Basepeak",
-        "INPUT_Single_timerange[1]",
-        "INPUT_Single_timerange[2]" ,
-        "INPUT_Single_Rare",
-        "INPUT_Single_TICxIT",
-        "INPUT_Single_RatioMethod"),
+        "INPUT_Ref",
+        "INPUT_Sample",
+        "INPUT_Blocks",
+        "INPUT_Basepeak",
+
+        "INPUT_Idle.time",
+        "INPUT_Startup.time",
+        "INPUT_Block.time",
+        "INPUT_Segments",
+        "INPUT_Rare",
+
+        "INPUT_TICxIT",
+        "INPUT_RatioMethod"),
 
 
         value = c(isoXL.version,
+                  input$reference,
                   input$sample,
+                  input$blocks,
                   input$base_peak,
-                  input$timerange[1],
-                  input$timerange[2],
+
+
+                  input$idle.time,
+                  input$startup.time,
+                  input$block.time,
+                  input$segments,
                   input$rare,
+
                   input$extreme,
                   input$ratio.method)
 
       )
 
-    data.single_filtered <-   values$data %>%
-                                          na.omit() %>%
+    #req(input$INPUT_Rare)
+    data.dual_inlet_filtered <- values$data %>%
+          na.omit() %>%
+          remove.ticxit(input = input) %>% #temp: validate correct functioning
+          remove.satellitePeaks() %>%
+          remove.rare(input = input)
 
-                                          mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
 
-                                           remove.ticxit(input = input) %>%
-                                           remove.satellitePeaks() %>%
-                                           remove.rare(input = input) %>%
-                                          #
-                                           filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
+      #  Dual Inlet annotation table --------------------------------------------
+
+    # req(input$INPUT_Ref)
+    # req(input$INPUT_Sample)
+    # req(input$INPUT_Blocks)
+    # req(input$INPUT_Segments)
+    # req(input$INPUT_Idle.time)
+    # req(input$INPUT_Startup.time)
+    # req(input$INPUT_Block.time)
+
+      # dual.inlet.annotation     <- define.dual.inlet(
+      #                     INPUT_Ref= input$reference,
+      #                     INPUT_Sample= input$sample,
+      #                     INPUT_Blocks= input$blocks,
+      #                     INPUT_Segments= input$segments,
+      #                     INPUT_Idle.time = input$idle.time,
+      #                     INPUT_Startup.time= input$startup.time,
+      #                     INPUT_Block.time= input$block.time)
+
+    dual.inlet.annotation     <- define.dual.inlet(input)
+
+
+    # Dual Inlet: Merge data with annotation ----------------------------------
+
+
+    data.annotated <- merge.di.annotations(data.dual_inlet_filtered, dual.inlet.annotation)
+
+
+
+
+    # Dual Inlet: Assign base peak --------------------------------------------
+
+
+    data.basepeak <- assign.basepeak(data.annotated, input$base_peak)  #needs validation; e.g. is basepeak present in data?
+
+
+    # Dual Inlet: Calculate output table for results file ---------------
+
+
+
+    data.output <- calc.output(df = data.basepeak, INPUT_RatioMethod = input$ratio.method)
+
+
+
+    # Dual Inlet: Make Excel file ---------------------------------------------
+
+    data.xls <- make.xls(data.output, params=inputs.dual)
+
 
 
 
 # Table output: Single Analysis show rows of isox file------------------------------------------------
 
 
-    output$mytable.single = DT::renderDataTable({
+    output$mytable = DT::renderDataTable({
 
-      datatable(    data.single_filtered %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
+      datatable(    data.dual_inlet_filtered %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
                  extensions = c('Buttons','ColReorder', 'Select'),
 
                  options = list(
@@ -244,34 +305,21 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     })
 
-# Single Analysis: Assign base peak --------------------------------------------
-
-
-      data.single_basepeak <- assign.basepeak.single(df = data.single_filtered, INPUT_Basepeak = input$base_peak)
-
-      #needs validation; e.g. is base peak present in data?
-
-
-      # Single Analysis: Calculate output table for results file ---------------
-
-
-
-      data.single_output <- calc.output.single(df = data.single_basepeak, INPUT_RatioMethod = input$ratio.method)
 
 
       # Table output: Single Analysis, summary statistics ----------------------------
 
 
-      output$summary.single <- DT::renderDataTable({
+      output$summary <- DT::renderDataTable({
 
-        datatable( data.single_output, rownames= FALSE ,
+        datatable( data.output, rownames= FALSE ,
                    extensions = c('Buttons','ColReorder'),
                    options = list(
                      # autoWidth = TRUE, #scroll bar to see enture table
                      scrollX = TRUE, #scrollbar when table is not visible
-                     columnDefs = list(list(
-                       targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
-                     )),
+                     # columnDefs = list(list(
+                     #   targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                     # )),
                      dom = 'Bfrtip',
                      buttons = c('colvis','copy',  'excel', 'pdf' ),
                      colReorder = TRUE #columns can be reordered
@@ -279,6 +327,28 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         )
 
       })
+
+  #   output$summary <- DT::renderDataTable({
+  #
+  #     datatable( data.output(), rownames= FALSE ,
+  #                extensions = c('Buttons','ColReorder'),
+  #                options = list(
+  #                  # autoWidth = TRUE, #scroll bar to see enture table
+  #                  scrollX = TRUE, #scrollbar when table is not visible
+  #                  columnDefs = list(list(
+  #                    targets = c(7L, 10L), visible = FALSE
+  #                  )),
+  #                  dom = 'Bfrtip',
+  #                  buttons = list(list(extend = 'colvis'),
+  #                                 list(extend = 'copy', exportOptions = list(columns = ':visible')),
+  #                                 list(extend = 'excel', exportOptions = list(columns = ':visible')),
+  #                                 list(extend = 'pdf', exportOptions = list(columns = ':visible'))
+  #                  ), #temp donwload only visible columns; validate more thoroughly and implement in all tables; define common sytles in a function?
+  #                  colReorder = TRUE #columns can be reordered
+  #                )
+  #     )
+  #
+  #
 
     #   # Plot output: Single Analysis--------------------------------------------------------
     #
@@ -313,7 +383,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
 
-      output$plot.single <- renderPlotly({
+      output$plot <- renderPlotly({
 
         # isolate to avoid triggers on other input parameter selections
         isolate({
@@ -321,22 +391,17 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot2::ggplot(data = data.single_output, ggplot2::aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopolog)) +
+                ggplot(data = data.output, aes(x = Injection, y = Ratio, color=isotopolog)) + scale_color_brewer(palette="Dark2") +
 
-            ggplot2::scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+                  geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
+                                    ymax=(Ratio+Ratio.SEM)),
+                                width=0.7,
+                                size=0.3,
+                                color="black",
+                                position=position_dodge(.9))       +        geom_point(size=3, shape=10) + facet_wrap(~ filename, ncol=1), # temp: could be interesting option: + facet_grid(isotopolog~.),
 
-            # geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
-            #                   ymax=(Ratio+Ratio.SEM)),
-            #               width=0.7,
-            #               size=0.3,
-            #               color="black",
-            #               position=position_dodge(.9))       +
-            ggplot2::geom_point(size=3, shape=10) +
-            ggplot2::geom_abline(slope=1) +
-            ggplot2::ylab(paste("relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("shot noise limit", "[\u2030]")),
-
-          dynamicTicks = TRUE #change ticks on zoom
-        ) %>%
+                dynamicTicks = TRUE #change ticks on zoom
+              ) %>%
 
             plotly::config(
               displaylogo = FALSE,
@@ -354,7 +419,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
                 width = 900,
                 height = 600,
                 scale = 4,
-                filename = paste("single_analysis",
+                filename = paste("dual_inlet",
                                  tools::file_path_sans_ext(ns(input$upload$name)),
                                  sep = "_")
               )
@@ -366,7 +431,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
       # Single analysis: Make Excel file ---------------------------------------------
 
-      data_single.xls <- make.xls.onetab(df.stat = data.single_output, params = inputs.single)
+      data_dual.xls <- make.xls.onetab(df.stat = data.output, params = inputs.dual)
 
 
     # Download output: Single Analysis Excel file ----------------------------------
@@ -375,18 +440,17 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     output$download_xlsx <- downloadHandler(
       filename = function(){  paste(tools::file_path_sans_ext(input$upload$name), "_IsoXL.xlsx", sep="")},
       content = function(file) {
-        saveWorkbook(data_single.xls, file)
+        saveWorkbook(data_dual.xls, file)
       }
     )
 
 
     shinyjs::show("main-rest")
 
-    })
-
-
+})
 
 }
+
 
 
 # user interface
@@ -548,14 +612,14 @@ module_isoxl_dual_inlet_ui <- function(id) {
       div(
         id = ns("main-plot"),
 
-      box(
-        title = "Overview of Results",
-        width = "auto" ,
-        height = "auto",
-        status = "primary",
-        solidHeader = T,
-        withSpinner(plotlyOutput(ns("plot.single")))
-      )
+
+      box(title = "Overview of Results",
+          width = "auto",
+          height ="auto",
+          status = "primary",
+          solidHeader = T,
+          withSpinner(plotlyOutput("plot"))), #height="auto",
+
       ),
       #how to save png at higher resolution?
 
@@ -572,7 +636,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
         width = "auto" ,
         status = "primary",
         solidHeader = T,
-        DT::dataTableOutput(ns("summary.single"))
+        DT::dataTableOutput(ns("summary"))
       ),
 
       hr(),
@@ -583,7 +647,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
         width = "auto" ,
         status = "primary",
         solidHeader = T,
-        DT::dataTableOutput(ns("mytable.single"))
+        DT::dataTableOutput(ns("mytable"))
       )
 
 )

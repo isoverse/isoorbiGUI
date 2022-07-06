@@ -3,48 +3,42 @@
 # Dual Inlet: define experiment -------------------------------------------
 
 define.dual.inlet <-
-  function(INPUT_Ref,
-           INPUT_Sample,
-           INPUT_Blocks,
-           INPUT_Segments,
-           INPUT_Idle.time,
-           INPUT_Startup.time,
-           INPUT_Block.time) {
+  function(input) {
     validate(
-      need(input$INPUT_Ref, 'Missing input name of reference'),
-      need(input$INPUT_Sample, 'Missing input name of sample'),
-      need(input$INPUT_Blocks, 'Missing input Blocks'),
-      need(input$INPUT_Idle.time, 'Missing input Idle Time'),
-      need(input$INPUT_Block.time, 'Missing input Block Time'),
-      need(input$INPUT_Startup.time, 'Missing input Startup Time'),
+      need(input$reference, 'Missing input name of reference'),
+      need(input$sample, 'Missing input name of sample'),
+      need(input$blocks, 'Missing input Blocks'),
+      need(input$idle.time, 'Missing input Idle Time'),
+      need(input$block.time, 'Missing input Block Time'),
+      need(input$startup.time, 'Missing input Startup Time'),
 
       need(
-        input$INPUT_Idle.time < input$INPUT_Block.time,
+        input$idle.time < input$block.time,
         'Idle Time is longer than Block Time!'
       ),
-      need(input$INPUT_Startup.time < 100, 'Startup time seems too long!'),
-      need(input$INPUT_Blocks < 100, 'Looks like too many blocks!'),
-      need(input$INPUT_Block.time < 100, 'Block Time appears too long'),
-      need(input$INPUT_Segments < 10 , 'Looks like too many segments')
+      need(input$startup.time < 100, 'Startup time seems too long!'),
+      need(input$blocks < 100, 'Looks like too many blocks!'),
+      need(input$block.time < 100, 'Block Time appears too long'),
+      need(input$segments < 10 , 'Looks like too many segments')
     )
 
     injections <-
-      rep(c(INPUT_Ref, INPUT_Sample), 1E3)[1:INPUT_Blocks] #limited to maximum 1,000 blocks
-    injections <- rep(injections, each = INPUT_Segments)
+      rep(c(input$reference, input$sample), 1E3)[1:input$blocks] #limited to maximum 1,000 blocks
+    injections <- rep(injections, each = input$segments)
     segment.time <-
-      (INPUT_Block.time - INPUT_Idle.time) / INPUT_Segments
+      (input$block.time - input$idle.time) / input$segments
     start.time <-
-      0:(INPUT_Blocks - 1) * INPUT_Block.time + INPUT_Idle.time #Define start times to integrate (in minutes)
+      0:(input$blocks - 1) * input$block.time + input$idle.time #Define start times to integrate (in minutes)
     out.start <- c()
 
     for (i in 1:(length(start.time))) {
       a <-
         seq(start.time[i],
-            start.time[i] + INPUT_Block.time - INPUT_Idle.time,
+            start.time[i] + input$block.time - input$idle.time,
             segment.time)
       out.start  <- append(out.start, head(a,-1))
     }
-    start.time <- out.start + INPUT_Startup.time
+    start.time <- out.start + input$startup.time
     end.time <- start.time + segment.time
 
     #combine all information
