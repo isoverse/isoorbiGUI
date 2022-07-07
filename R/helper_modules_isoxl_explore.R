@@ -5,15 +5,15 @@
 #' @return a \code{shiny::\link[shiny]{tagList}} containing UI elements
 varselect_mod_ui <- function(id) {
   ns <- NS(id)
-  
+
   # define choices for X and Y variable selection
-  var_choices <- list(  "scan.no", "time.min",  
+  var_choices <- list(  "scan.no", "time.min",
                          "ions.incremental", "tic", "it.ms", "intensity", "resolution",
                          "peakResolution", "peakNoise", "mzMeasured", "basePeakIntensity",
                          "rawOvFtT", "intensCompFactor", "agc", "agcTarget", "microscans",
                          "numberLockmassesFound", "analyzerTemperature"
   )
-  
+
   # assemble UI elements
   tagList(
     selectInput(
@@ -44,15 +44,15 @@ varselect_mod_ui <- function(id) {
 
 varselect_mod_density_ui <- function(id) {
   ns <- NS(id)
-  
+
   # define choices for X and Y variable selection
-  var_choices <- list(  "scan.no", "time.min",  
+  var_choices <- list(  "scan.no", "time.min",
                         "ions.incremental", "tic", "it.ms", "intensity", "resolution",
                         "peakResolution", "peakNoise", "mzMeasured", "basePeakIntensity",
                         "rawOvFtT", "intensCompFactor", "agc", "agcTarget", "microscans",
                         "numberLockmassesFound", "analyzerTemperature"
   )
-  
+
   # assemble UI elements
   tagList(
     selectInput(
@@ -85,7 +85,7 @@ varselect_mod_density_ui <- function(id) {
 #'   \item{facetvar}{reactive character indicating variable used for defining plot facets}
 #' }
 varselect_mod_server <- function(input, output, session) {
-  
+
 
   return(
     list(
@@ -124,14 +124,16 @@ dataviewer_mod_ui <- function(id) {
 #' @return reactive vector of row IDs corresponding to the current view in the
 #'   datatable widget.
 dataviewer_mod_server <- function(input, output, session, dataset) {
-  
-   cols_select <- c("filename", "scan.no", "time.min", "compound", "isotopolog", 
-                    "ions.incremental", "tic", "it.ms", "intensity", "resolution", 
+
+   cols_select <- c("filename", "scan.no", "time.min", "compound", "isotopolog",
+                    "ions.incremental", "tic", "it.ms", "intensity", "resolution",
                     "peakResolution", "peakNoise", "mzMeasured", "basePeakIntensity",
                     "rawOvFtT", "intensCompFactor", "agc", "agcTarget", "microscans",
                     "numberLockmassesFound", "analyzerTemperature"
                     )
-  
+
+   #FIXME: get column names as variables for plotting
+
   output$table <- DT::renderDataTable({
     filter(dataset(), selected_) %>%
       select(one_of(cols_select))
