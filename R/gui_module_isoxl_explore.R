@@ -33,7 +33,9 @@ module_isoxl_explore_server <- function(input, output, session) {
   # values
   values <- reactiveValues(upload_file = NULL,
                            upload_error = NULL,
-                           data = NULL)
+                           data = NULL,
+                           plot = NULL,
+                           plot2 = NULL)
 
   # upload file ----
   observeEvent(input$upload, {
@@ -156,7 +158,7 @@ module_isoxl_explore_server <- function(input, output, session) {
     shinyjs::show("main-panel")
     req(values$data)
 
-    dat <- callModule(
+    values$plot <- callModule(
       scatterplot_mod_server,
       ns("plots"), #ns?
       dataset = values$data,
@@ -168,10 +170,10 @@ module_isoxl_explore_server <- function(input, output, session) {
       })
     )
 
-    callModule(dataviewer_mod_server, ns("dataviewer"), ns("dat")) #FIXME: ns() appropriate?
+    callModule(dataviewer_mod_server, ns("dataviewer"), values$plot) #FIXME: ns() appropriate?
 
 
-    dat2 <- callModule(
+    values$plot2 <- callModule(
       densityplot_mod_server,
       ns("plots"),
       dataset = values$data,
@@ -182,7 +184,7 @@ module_isoxl_explore_server <- function(input, output, session) {
       })
     )
 
-    callModule(dataviewer_mod_server, ns("dataviewer"), dat2)
+    callModule(dataviewer_mod_server, id = "dataviewer", dataset =values$plot2)
 
   })
 
@@ -250,8 +252,13 @@ module_isoxl_explore_ui <- function(id) {
 
       width = 9,
 
+
+
       div(
         id = ns("main-panel"),
+
+        # #temp for debugging
+        #titlePanel(...),
 
       h5(
         "Please note: When you upload a second .isox file, the plots currently are not loading the new data. Reload the website to explore a different .isox file."
