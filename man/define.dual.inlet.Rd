@@ -4,15 +4,7 @@
 \alias{define.dual.inlet}
 \title{functions specific to dual inlet module}
 \usage{
-define.dual.inlet(
-  INPUT_Ref,
-  INPUT_Sample,
-  INPUT_Blocks,
-  INPUT_Segments,
-  INPUT_Idle.time,
-  INPUT_Startup.time,
-  INPUT_Block.time
-)
+define.dual.inlet(input)
 }
 \description{
 functions specific to dual inlet module
