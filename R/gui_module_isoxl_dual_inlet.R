@@ -141,8 +141,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   }, ignoreNULL = FALSE)
 
 
-  isoXL.version <-
-    "Version 0.2 (July-2022)" #should be later only in main gui
+  isoXL.version <-utils::packageVersion("isoorbi") #FIXME: get version information directly from main UI?
 
 
 

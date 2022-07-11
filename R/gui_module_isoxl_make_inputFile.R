@@ -44,7 +44,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
 
 
-  isoXL.version <- "Version 0.2 (July-2022)" #should be later only in main gui
+  isoXL.version <- utils::packageVersion("isoorbi") #FIXME: get version information directly?
 
   data(isotopes, package = "enviPat") #needed for isopat function
 

@@ -35,12 +35,11 @@ module_isoxl_info_ui <- function(id) {
     sidebarPanel(
 
 
-      h4("Contact and Infos"),
+      #h4("Contact and Infos"),
 
-      tags$hr(style = "border-color: grey;"),
-
-      h4("Caj Neubauer, Sebastian Kopf & Kristýna Kantnerová"),
-      h4("University of Colorado Boulder"),
+      h5("Caj Neubauer, Sebastian Kopf & Kristýna Kantnerová"),
+      tags$h1(""),
+      h5("University of Colorado Boulder"),
 
       tags$h1(""),
 
