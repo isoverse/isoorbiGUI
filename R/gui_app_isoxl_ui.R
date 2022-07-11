@@ -1,5 +1,6 @@
 
 
+
 #' Orbitrap ShinyApp UI
 #'
 #' Generates the top-level GUI, rest is generated dynamically by \code{orbitrap_server}.
@@ -7,10 +8,14 @@
 #' @param app_title the title of the application
 #' @param app_color the dashboard color, see \link[shinydashboard]{dashboardPage} skin for available options
 #' @param sidebar_width the width of the left-side navigation sidebar
-orbitrap_ui <- function(app_title = "Orbitrap Data Explorer", app_color = "blue", sidebar_width = NULL) {
+orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://www.isoverse.org/images/hex-isoverse.png', height=40 )), "IsoXL"), ), app_color = "blue", sidebar_width = NULL) {
 
-  #box_default <- "#222d32" # darker
+#FIXME: get sioorbi logo from www folder?
+  # #title = tags$a(href='https://www.isoverse.org/',
+  # tags$img(src='isoorbi.png')
+
   box_default <- "#2c3b41" # ligther
+
 
   # set spinner color
   options(spinner.color = app_color)
