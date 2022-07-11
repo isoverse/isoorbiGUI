@@ -18,7 +18,7 @@ test_module_isoxl_dual_inlet <- function(port = 5000) {
 }
 
 # server
-module_isoxl_dual_inlet_server <- function(input, output, session) {
+module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.version) {
 
 
   # namespace
@@ -141,7 +141,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   }, ignoreNULL = FALSE)
 
 
-  isoXL.version <-utils::packageVersion("isoorbi") #FIXME: get version information directly from main UI?
+ # isoXL.version <- utils::packageVersion("isoorbi") #FIXME: get version information directly from main UI?
 
 
 

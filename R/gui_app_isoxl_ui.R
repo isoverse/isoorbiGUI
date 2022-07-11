@@ -1,6 +1,3 @@
-
-
-
 #' Orbitrap ShinyApp UI
 #'
 #' Generates the top-level GUI, rest is generated dynamically by \code{orbitrap_server}.
@@ -14,7 +11,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
   # #title = tags$a(href='https://www.isoverse.org/',
   # tags$img(src='isoorbi.png')
 
-  box_default <- "#2c3b41" # ligther
+  box_default <- "#2c3b41" # lighter
 
 
   # set spinner color
@@ -85,7 +82,6 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
     # BODY ====
     dashboardBody(
 
-
       #div(class = "row",
 
       tabItems(
@@ -137,8 +133,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
           module_isoxl_explore_ui(id = "explore")
 
-
-        ),
+       ),
 
         # UI: Create an IsoX Input File ----------------------------------------------
         tabItem(

@@ -19,7 +19,7 @@ test_module_isoxl_single <- function(port = 5000) {
 
 # server ----
 
-module_isoxl_single_server <- function(input, output, session) {
+module_isoxl_single_server <- function(input, output, session, isoXL.version) {
   # namespace
   ns <- session$ns
 

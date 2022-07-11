@@ -18,12 +18,12 @@ scatter_isox <- function(dataset,
                           facetvar = NULL,
                           label = FALSE,
                           point_colors = c("darkblue", "#66D65C")) {
-  
+
   x <- rlang::sym(xvar)
   y <- rlang::sym(yvar)
-  
+
   p <- ggplot(dataset, aes(x = !!x, y = !!y))
-  
+
   p <- p +
     geom_point(aes(color = selected_), alpha=1/2) +
     scale_color_manual(values = point_colors, guide = FALSE) +
@@ -31,21 +31,21 @@ scatter_isox <- function(dataset,
     scale_y_continuous(labels = function(l) plot_labeller(l, varname = yvar)) +
     theme(axis.title = element_text(size = rel(1.2)),
           axis.text = element_text(size = rel(1.1)))
-  
+
   if (!is.null(facetvar)) {
     fvar <- rlang::sym(facetvar)
-    
+
     p <- p +
       facet_grid(fvar, scales="free")
   }
-  
+
   if (label && any(dataset$selected_)) {
     p <- p + geom_label_repel(
       data = filter(dataset, selected_),
       aes(label = scan.no)
     )
   }
-  
+
   p
 }
 
@@ -68,17 +68,12 @@ density_isox <- function(dataset,
                          label = FALSE#,
                          #point_colors = c("darkblue", "#66D65C")
                          ) {
-  
+
   x <- rlang::sym(xvar)
 
 
-    
-
-  
   p <- ggplot(dataset, aes(x = !!x))
-  
 
-  
   p <- p +
     geom_density() +
     #scale_color_manual(values = point_colors, guide = FALSE) +
@@ -86,12 +81,12 @@ density_isox <- function(dataset,
    # scale_y_continuous(labels = function(l) plot_labeller(l, varname = yvar)) +
     theme(axis.title = element_text(size = rel(1.2)),
           axis.text = element_text(size = rel(1.1)))
-  
 
-  
+
+
   if (!is.null(facetvar)) {
     fvar <- rlang::sym(facetvar)
-    
+
     p <- p + facet_grid(fvar, scales="free")
   }
   p

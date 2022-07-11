@@ -19,7 +19,7 @@ test_module_isoxl_flow <- function(port = 5000) {
 
 # server ----
 
-module_isoxl_flow_server <- function(input, output, session) {
+module_isoxl_flow_server <- function(input, output, session, isoXL.version) {
 
 # namespace
   ns <- session$ns
@@ -134,7 +134,7 @@ module_isoxl_flow_server <- function(input, output, session) {
   }, ignoreNULL = FALSE)
 
 
-  isoXL.version <- "Version 0.2 (July-2022)" #should be later only in main gui
+  #isoXL.version <- utils::packageVersion("isoorbi") #FIXME: get version information directly?
 
 
 
