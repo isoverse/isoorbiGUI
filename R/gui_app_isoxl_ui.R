@@ -39,7 +39,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
         menuItem("Flow Injection", tabName = "flow", icon = icon("syringe")),
         menuItem("Single Analysis", tabName = "single", icon = icon("vial")),
-        menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
+        menuItem("Explore Data", tabName = "explore_in", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
         menuItem("Make IsoX Input File", tabName = "make_inputFile", icon = icon("magic")),
@@ -126,14 +126,83 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         # UI: Explore Data --------------------------------------------------------
 
-        tabItem(
-          tabName = "explore",
 
-          h4("Explore MS data in more detail"),
+        tabItem(tabName = "explore_in",
 
-          module_isoxl_explore_ui(id = "explore")
+                h4("Explore MS data in more detail"),
 
-       ),
+                fluidPage(
+
+                  sidebarLayout(
+
+                    sidebarPanel(width=3,
+
+
+
+                                 fileInput("upload_explore", label="Upload .isox file", accept = c(".isox"), placeholder="No file loaded..."),
+
+                                 hr(),
+
+                                 submitButton("Update output", icon("sync")),
+
+                                 #actionButton("action_explore", "Explore isox data"),
+
+                                 tags$hr(style="border-color: grey;"),
+
+                                 h4("Plot 1"),
+
+                                 wellPanel(varselect_mod_ui("plot1_vars")),
+
+
+                                 h4("Plot 2"),
+
+                                 wellPanel(varselect_mod_ui("plot2_vars")),
+
+                                 h4("Plot 3"),
+
+                                 wellPanel(varselect_mod_density_ui("plot3_vars")),
+
+
+
+                                 h4("Plot 4"),
+                                 wellPanel(varselect_mod_density_ui("plot4_vars"))
+
+
+                    ),
+
+
+                    # UI: Explore Data Main Panel ---------------------------------------------
+
+
+                    mainPanel(width=9,
+
+                              h5("Please note: When you upload a second .isox file, the plots currently are not loading the new data. Reload the website to explore a different .isox file."),
+
+                              hr(),
+                              #titlePanel("Explore IsoX File"),
+
+                              #verbatimTextOutput(outputId="test", placeholder = TRUE), ##temp
+
+
+                              box(title = "Interactive plots of MS data (select points and update display to show in table)", width = "auto" , height="auto", status = "primary", solidHeader = T, scatterplot_mod_ui("plots"),
+                                  checkboxInput("label", "Label selected points?", value = FALSE)),
+
+
+                              hr(),
+
+
+
+                              box(title = "Table of selected data points", width = "auto" , height="auto", status = "primary", solidHeader = T, dataviewer_mod_ui("dataviewer")),
+
+
+                              box(title = "Density plots", width = "auto" , height="auto", status = "primary", solidHeader = T, densityplot_mod_ui("plots"))
+
+
+                    )
+                  )
+                )
+
+        ),
 
         # UI: Create an IsoX Input File ----------------------------------------------
         tabItem(
