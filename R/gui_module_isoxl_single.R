@@ -147,7 +147,7 @@ module_isoxl_single_server <- function(input, output, session, isoXL.version) {
   }, ignoreNULL = FALSE)
 
 
-  isoXL.version <- utils::packageVersion("isoorbi") #FIXME: get version information directly?
+  #isoXL.version <- "FIXME" #utils::packageVersion("isoorbi") #FIXME: get version information directly?
 
 
 
