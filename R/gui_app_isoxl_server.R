@@ -70,6 +70,8 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     # })
 
 
+    shinyjs::hide("explore-main-panel")
+
     # values
     values <- reactiveValues(
       upload_file = NULL,
@@ -142,6 +144,8 @@ observeEvent(input$upload_explore, {
     # Plot: Exploration -------------------------------------------------------
 
     observeEvent(input$action_explore, {
+
+    shinyjs::show("explore-main-panel")
 
     plot1vars <- callModule(varselect_mod_server, "plot1_vars")
     plot2vars <- callModule(varselect_mod_server, "plot2_vars")

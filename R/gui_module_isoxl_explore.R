@@ -52,6 +52,9 @@ module_isoxl_explore_ui <- function(id) {
 
     # UI: Explore Data Main Panel ---------------------------------------------
 
+    # parameters ----
+    div(
+      id = "explore-main-panel",
 
     mainPanel(
       width = 9,
@@ -102,6 +105,7 @@ module_isoxl_explore_ui <- function(id) {
 
 
     )
+  )
   ))
 }
 
