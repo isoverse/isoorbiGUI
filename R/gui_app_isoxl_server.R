@@ -249,6 +249,7 @@ observeEvent(input$upload_explore, {
     )
 
     callModule(dataviewer_mod_server, "dataviewer", dat2)
+ })
 
     # Server: Shot Noise Analysis -------------------------------------------------
     shot_noise <- callModule(module_isoxl_shot_noise_server, id = "shot_noise")
@@ -260,7 +261,7 @@ observeEvent(input$upload_explore, {
     info <- callModule(module_isoxl_info_server, id = "info")
 
     })
-    })
+
 
 }
 

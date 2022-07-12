@@ -20,14 +20,18 @@ module_isoxl_explore_ui <- function(id) {
         placeholder = "No file loaded..."
       ),
 
-      hr(),
-
-      #submitButton("Update output", icon("sync")),
-
-      actionButton("action_explore", "Explore isox data"),
 
       div(
         id = "explore-input-panel",
+
+      #submitButton("Update output", icon("sync")),
+
+
+      hr(),
+
+      actionButton("action_explore", "Explore isox data"),
+
+
 
       tags$hr(style = "border-color: grey;"),
 
@@ -62,11 +66,6 @@ module_isoxl_explore_ui <- function(id) {
     mainPanel(
       width = 9,
 
-      h5(
-        "Please note: When you upload a second .isox file, the plots currently are not loading the new data. Reload the website to explore a different .isox file."
-      ),
-
-      hr(),
       #titlePanel("Explore IsoX File"),
 
       #verbatimTextOutput(outputId="test", placeholder = TRUE), ##temp
