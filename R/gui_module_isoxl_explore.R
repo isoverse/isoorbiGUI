@@ -7,9 +7,6 @@ module_isoxl_explore_server <- function(input, output, session) {
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 
-  # shinyjs::hide("explore-main-panel")
-  # shinyjs::hide("explore-input-panel")
-
   # values
   values <- reactiveValues(
     upload_file = NULL,
@@ -30,14 +27,12 @@ module_isoxl_explore_server <- function(input, output, session) {
     )
 
     # reset the reactive values that hold the file and data
-    #values$upload_file <- input$upload$name
     values$upload_file <- input$upload$name
     values$upload_error <- NULL
     values$data <- NULL
 
     # try to read the uploaded file
     tryCatch(
-      #values$data <- iso_read_isox_file(input$upload$datapath),
       values$data <- iso_read_isox_file(input$upload$datapath),
       warning = function(w)
         values$upload_error <- w$message,
@@ -52,9 +47,6 @@ module_isoxl_explore_server <- function(input, output, session) {
     validate(need(is.null(values$upload_error), message = values$upload_error))
     paste0(values$upload_file, " uploaded")
   })
-
-
-
   # update plot options ----
   observeEvent(values$data, {
 
@@ -209,6 +201,7 @@ module_isoxl_explore_ui <- function(id) {
         accept = c(".isox"),
         placeholder = "No file loaded..."
       ),
+      textOutput(ns("upload_info")),
 
 
       div(
