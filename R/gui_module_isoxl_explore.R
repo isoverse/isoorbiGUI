@@ -13,8 +13,6 @@ module_isoxl_explore_ui <- function(id) {
     sidebarPanel(
       width = 3,
 
-
-
       fileInput(
         "upload_explore",
         label = "Upload .isox file",
@@ -24,9 +22,9 @@ module_isoxl_explore_ui <- function(id) {
 
       hr(),
 
-      submitButton("Update output", icon("sync")),
+      #submitButton("Update output", icon("sync")),
 
-      #actionButton("action_explore", "Explore isox data"),
+      actionButton("action_explore", "Explore isox data"),
 
       tags$hr(style = "border-color: grey;"),
 

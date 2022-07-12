@@ -96,7 +96,7 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
     # Plot: Exploration -------------------------------------------------------
 
-
+    observeEvent(input$action_explore, {
 
     plot1vars <- callModule(varselect_mod_server, "plot1_vars")
     plot2vars <- callModule(varselect_mod_server, "plot2_vars")
@@ -139,7 +139,7 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     # Server: Contact and info -------------------------------------------------
     info <- callModule(module_isoxl_info_server, id = "info")
 
-
+    })
     })
 
 }
