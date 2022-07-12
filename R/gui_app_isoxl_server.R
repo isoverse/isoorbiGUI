@@ -49,50 +49,95 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
 
 
-    data.explore <- reactive({
+    # data.explore <- reactive({
+    #
+    #   req(input$upload_explore)
+    #
+    #
+    #   ext <- tools::file_ext(input$upload_explore$name)
+    #   switch(ext,
+    #          isox = readr::read_tsv(input$upload_explore$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
+    #                                 col_types = list(
+    #                                   filename = readr::col_factor(),
+    #                                   compound = readr::col_factor(),
+    #                                   isotopolog = readr::col_factor()
+    #                                 ) ),
+    #
+    #
+    #          validate("Invalid file; Please upload a .isox file")
+    #   )
+    #
+    # })
 
-      req(input$upload_explore)
 
+    # values
+    values <- reactiveValues(
+      upload_file = NULL,
+      upload_error = NULL,
+      data = NULL,
+      plot = NULL
+    )
 
-      ext <- tools::file_ext(input$upload_explore$name)
-      switch(ext,
-             isox = readr::read_tsv(input$upload_explore$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
-                                    col_types = list(
-                                      filename = readr::col_factor(),
-                                      compound = readr::col_factor(),
-                                      isotopolog = readr::col_factor()
-                                    ) ),
+    # upload file ----
+observeEvent(input$upload_explore, {
+      # module_message(
+      #   ns,
+      #   "info",
+      #   "new file uploaded file '",
+      #   input$upload$name,
+      #   "' into temporary path ",
+      #   input$upload$datapath
+      # )
 
+      # reset the reactive values that hold the file and data
+      #values$upload_file <- input$upload$name
+      values$upload_file <- input$upload_explore$name
+      values$upload_error <- NULL
+      values$data <- NULL
 
-             validate("Invalid file; Please upload a .isox file")
+      # try to read the uploaded file
+      tryCatch(
+        #values$data <- iso_read_isox_file(input$upload$datapath),
+        values$data <- iso_read_isox_file(input$upload_explore$datapath),
+        warning = function(w)
+          values$upload_error <- w$message,
+        error = function(e)
+          values$upload_error <- e$message
       )
-
     })
+
+    # provide feedback on file upload success
+    output$upload_info <- renderText({
+      req(values$upload_file)
+      validate(need(is.null(values$upload_error), message = values$upload_error))
+      paste0(values$upload_file, " uploaded")
+    })
+
 
 
     # Data: Exploration -------------------------------------------------------
 
 
 
-    data.explore <- reactive({
-
-      req(input$upload_explore)
-
-
-      ext <- tools::file_ext(input$upload_explore$name)
-      switch(ext,
-             isox = readr::read_tsv(input$upload_explore$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
-                                    col_types = list(
-                                      filename = readr::col_factor(),
-                                      compound = readr::col_factor(),
-                                      isotopolog = readr::col_factor()
-                                    ) ),
-
-
-             validate("Invalid file; Please upload a .isox file")
-      )
-
-    })
+    # data.explore <- reactive({
+    #
+    #   req(input$upload_explore)
+    #
+    #
+    #   ext <- tools::file_ext(input$upload_explore$name)
+    #   switch(ext,
+    #          isox = readr::read_tsv(input$upload_explore$datapath, # may no longer need to include: skipNul = TRUE: https://github.com/tidyverse/readr/issues/338
+    #                                 col_types = list(
+    #                                   filename = readr::col_factor(),
+    #                                   compound = readr::col_factor(),
+    #                                   isotopolog = readr::col_factor()
+    #                                 ) ),
+    #
+    #
+    #          validate("Invalid file; Please upload a .isox file")
+    #   )
+    #
+    # })
 
     # Plot: Exploration -------------------------------------------------------
 
@@ -107,8 +152,10 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
       scatterplot_mod_server,
       "plots",
-      dataset = data.explore(), #somehow this gets not updated when new isox file is loaded!!??
-      plot1vars = plot1vars,
+     # dataset = data.explore(), #somehow this gets not updated when new isox file is loaded!!??
+
+     dataset = values$data,
+     plot1vars = plot1vars,
       plot2vars = plot2vars,
       label = reactive({ input$label })
     )
@@ -122,7 +169,8 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     dat2 <- callModule(
       densityplot_mod_server,
       "plots",
-      dataset = data.explore(),
+      #dataset = data.explore(),
+      dataset = values$data,
       plot3vars = plot3vars,
       plot4vars = plot4vars,
       label = reactive({ input$label })
