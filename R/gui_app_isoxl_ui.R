@@ -39,7 +39,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
         menuItem("Flow Injection", tabName = "flow", icon = icon("syringe")),
         menuItem("Single Analysis", tabName = "single", icon = icon("vial")),
-        menuItem("Explore Data", tabName = "explore_in", icon = icon("eye")),
+        menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
         menuItem("Make IsoX Input File", tabName = "make_inputFile", icon = icon("magic")),
@@ -127,7 +127,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         # UI: Explore Data --------------------------------------------------------
 
 
-        tabItem(tabName = "explore_in",
+        tabItem(tabName = "explore",
 
                 h4("Explore MS data in more detail"),
 
