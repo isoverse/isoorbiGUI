@@ -70,7 +70,8 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     # })
 
 
-    shinyjs::hide("explore-main-panel")
+    # shinyjs::hide("explore-main-panel")
+    # shinyjs::hide("explore-input-panel")
 
     # values
     values <- reactiveValues(
@@ -116,6 +117,73 @@ observeEvent(input$upload_explore, {
     })
 
 
+
+    # update plot options ----
+    observeEvent(values$data, {
+
+     # module_message(ns, "info", "updating parameter table")
+      if (is.null(values$data) || nrow(values$data) == 0) {
+        # no data (maybe incorrect input file --> hide)
+
+        shinyjs::hide("explore-main-panel")
+        shinyjs::hide("explore-input-panel")
+
+        # shinyjs::hide("parameters-panel")
+        # shinyjs::hide("main-plot")
+        # updateSelectInput(inputId = "isotopolog", choices = c())
+        # updateSelectInput(inputId = "base_peak", choices = c())
+        # updateSelectInput(inputId = "filename", choices = c())
+        # updateSelectInput(inputId = "compound", choices = c())
+        # shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
+        # updateNumericInput(inputId = "rare", value = c())
+        # updateNumericInput(inputId = "extreme", value = c())
+
+
+
+      } else {
+        # yes data --> update parameters and show
+        # updateSelectInput(
+        #   inputId = "isotopolog",
+        #   choices = levels(values$data$isotopolog),
+        #   selected = values$data$isotopolog[2]
+        # )
+        # updateSelectInput(
+        #   inputId = "base_peak",
+        #   choices = levels(values$data$isotopolog),
+        #   selected = values$data$isotopolog[1]
+        # )
+        # updateSelectInput(
+        #   inputId = "filename",
+        #   choices = c("all", levels(values$data$filename)),
+        #   selected = "all"
+        # )
+        # updateSelectInput(
+        #   inputId = "compound",
+        #   choices = c("all", levels(values$data$compound)),
+        #   selected = "all"
+        # )
+        # shinyWidgets::updateNumericRangeInput(session,
+        #                                       inputId = "timerange",
+        #                                       value = 0:ceiling(max(values$data$time.min)))
+        #
+        # updateNumericInput(
+        #   inputId = "rare",
+        #   min = 0, #how to avoid negative input by keyboard?
+        #   max = 100,
+        #   value = 30
+        # )
+        #
+        # updateNumericInput(
+        #   inputId = "extreme",
+        #   min = 0, #how to avoid negative input by keyboard?
+        #   max = 10,
+        #   value = 1,
+        #   step = 0.1
+        # )
+
+        shinyjs::show("explore-input-panel")
+      }
+    }, ignoreNULL = FALSE)
 
     # Data: Exploration -------------------------------------------------------
 

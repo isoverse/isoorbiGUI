@@ -26,6 +26,9 @@ module_isoxl_explore_ui <- function(id) {
 
       actionButton("action_explore", "Explore isox data"),
 
+      div(
+        id = "explore-input-panel",
+
       tags$hr(style = "border-color: grey;"),
 
       h4("Plot 1"),
@@ -46,7 +49,7 @@ module_isoxl_explore_ui <- function(id) {
       h4("Plot 4"),
       wellPanel(varselect_mod_density_ui("plot4_vars"))
 
-
+    )
     ),
 
 
