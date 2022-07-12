@@ -227,21 +227,21 @@ module_isoxl_explore_ui <- function(id) {
 
       h4("Plot 1"),
 
-      wellPanel(varselect_mod_ui("plot1_vars")),
+      wellPanel(varselect_mod_ui(ns("plot1_vars"))),
 
 
       h4("Plot 2"),
 
-      wellPanel(varselect_mod_ui("plot2_vars")),
+      wellPanel(varselect_mod_ui(ns("plot2_vars"))),
 
       h4("Plot 3"),
 
-      wellPanel(varselect_mod_density_ui("plot3_vars")),
+      wellPanel(varselect_mod_density_ui(ns("plot3_vars"))),
 
 
 
       h4("Plot 4"),
-      wellPanel(varselect_mod_density_ui("plot4_vars"))
+      wellPanel(varselect_mod_density_ui(ns("plot4_vars")))
 
     )
     ),
