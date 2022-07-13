@@ -453,7 +453,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
         numericInput(
           inputId = ns("blocks"),
           label = "Blocks",
-          7,
+          3,
           min = 1,
           max = 100,
           step = 1,
@@ -463,7 +463,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
         numericInput(
           inputId = ns("block.time"),
           label = "Block time [min]",
-          10,
+          1,
           min = 1,
           max = 20,
           step = 1,
@@ -473,7 +473,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
         numericInput(
           inputId = ns("idle.time"),
           label = "Switch time [min]",
-          0.5,
+          0.1,
           min = 0,
           max = 2,
           step = 0.1,

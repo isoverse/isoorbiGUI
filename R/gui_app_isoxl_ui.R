@@ -5,19 +5,26 @@
 #' @param app_title the title of the application
 #' @param app_color the dashboard color, see \link[shinydashboard]{dashboardPage} skin for available options
 #' @param sidebar_width the width of the left-side navigation sidebar
-orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://www.isoverse.org/images/hex-isoverse.png', height=40 )), "IsoXL"), ), app_color = "blue", sidebar_width = NULL) {
+orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://www.isoverse.org/images/hex-isoverse.png', height=40 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
 
-#FIXME: get sioorbi logo from www folder?
+#FIXME: get isooorbi logo from www folder?
   # #title = tags$a(href='https://www.isoverse.org/',
   # tags$img(src='isoorbi.png')
 
+#FIXME show app logo in browser tab
+  #      tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico"))
+
+
   box_default <- "#2c3b41" # lighter
+
 
 
   # set spinner color
   options(spinner.color = app_color)
 
-  dashboardPage(
+  dashboardPage(title="IsoXL", #Shown as title of browser window/ tab
+
+
     # SKIN ----
     skin = app_color,
 
