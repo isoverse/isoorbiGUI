@@ -1,49 +1,26 @@
-# rm(list=ls())
-# require(enviPat) # isotopic patterns
-# require(dplyr)
-# require(tidyr)
-# data(isotopes)
-#
-# INPUT_formula <- c("NO3", "HSO4")
-# INPUT_compound <- c("nitrate", "sulfate")
-#
-# INPUT_charge <- c(-1,-1)
-#
-# INPUT_tolerance <- 0.3
+#' functions specific to make_inputFile module
 
 
 # check sum formula input -------------------------------------------------
 
-run_check <- function(INPUT_formula){
+run_check <- function(INPUT_formula) {
+  for (i in INPUT_formula) {
+    check <-
+      check_chemform(
+        isotopes,
+        chemforms = INPUT_formula,
+        get_sorted = FALSE,
+        get_list = FALSE
+      )
 
-
-
-  for(i in INPUT_formula){
-    check <- check_chemform(isotopes,chemforms= INPUT_formula,get_sorted=FALSE,get_list=FALSE)
-
-    ifelse(check$warning==FALSE, return(check$new_formula), validate("Error in sum formula"))
+    ifelse(check$warning == FALSE,
+           return(check$new_formula),
+           validate("Error in sum formula"))
 
   }
 
 
 }
-
-# INPUT_formula.check <- run_check(INPUT_formula)
-#
-# INPUT_formula.check
-#
-# pattern <- isopattern(
-#   isotopes=isotopes,
-#   chemforms=INPUT_formula.check,
-#   threshold=0.0001,
-#   plotit=FALSE,
-#   charge= INPUT_charge, #eg 1 or -1
-#   emass=0.00054858,
-#   algo=1,
-#   rel_to = 4,
-#   verbose = TRUE,
-#   return_iso_calc_amount = FALSE
-# )
 
 
 
@@ -124,6 +101,3 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
 
   return(df.out)
 }
-
-# out <- make.isox.input(pattern.list = pattern)
-# write.table(out, file="isotopologs.tsv", sep="\t", row.names =FALSE, quote = FALSE)

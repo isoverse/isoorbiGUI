@@ -1,0 +1,49 @@
+#' functions specific to flow analysis module
+
+##Actual number crunching to generate Excel output for flow analysis
+
+calc.output.flow <- function(df, INPUT_RatioMethod){
+
+  df.stat <- df  %>%  iso_simplify_isox_file() %>% group_by(filename,
+                               #Injection,
+                               #Sample.Name,
+                               compound,
+                               Basepeak,
+                               isotopolog) %>%
+
+    mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
+
+    mutate(Ratio.SEM = se(ions.incremental/Basepeak.Ions))      #For simplicity use basic standard error for all options
+
+  df.stat <- df.stat %>% mutate(No.of.scans = length(Ratio),
+                                Mins.to.1mio = (1E6/sum(ions.incremental)) * ( max(time.min) - min(time.min)),
+                                Shot.Noise.permil = 1000 * (sqrt((sum(ions.incremental) + sum(Basepeak.Ions)) / (sum(ions.incremental) * sum(Basepeak.Ions)))),
+                                relSE.permil = 1000*(Ratio.SEM/Ratio)) %>%
+
+    #Round values for output
+    mutate(Ratio = round(Ratio, 8),
+           Ratio.SEM = round(Ratio.SEM, 8),
+           Shot.Noise.permil = round(Shot.Noise.permil, 3),
+           relSE.permil = round(relSE.permil, 3),
+           Mins.to.1mio = round(Mins.to.1mio, 2)) %>%
+
+    select(filename,
+           # Injection,
+           #Sample.Name,
+           Basepeak,
+           compound,
+           isotopolog,
+           Ratio,
+           Ratio.SEM,
+           relSE.permil,
+           Shot.Noise.permil,
+           Mins.to.1mio,
+           No.of.scans) %>%
+    unique() %>% #mutate(Injection= as.integer(Injection)) %>%
+    #arrange(filename, Injection, isotopolog)
+    arrange(filename, isotopolog)
+
+  df.stat <- as.data.frame(df.stat)
+  return(df.stat)
+}
+

@@ -9,4 +9,3 @@ This R package is providing functions and graphical user interfaces for processi
 <code># install.packages("devtools") # only needed once </code>
 
 <code>devtools::install_github("isoverse/isoorbi")</code>
-

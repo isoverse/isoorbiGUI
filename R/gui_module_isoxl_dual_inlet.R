@@ -1,0 +1,599 @@
+# test ----
+# test the dual inlet module as a standalone app
+
+test_module_isoxl_dual_inlet <- function(port = 5000) {
+  app <-
+    shinyApp(
+      ui = fluidPage(
+        shinyjs::useShinyjs(),
+        h1("Dual Inlet Module Test"),
+        module_isoxl_dual_inlet_ui(id = "dual_inlet")
+      ),
+      server = function(input, output) {
+        dual_inlet <-
+          callModule(module_isoxl_dual_inlet_server, id = "dual_inlet")
+      }
+    )
+  runApp(app, display.mode = "normal", port = 5000)
+}
+
+# server
+module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.version) {
+
+
+  # namespace
+  ns <- session$ns
+
+  # increase upload file size
+  options(shiny.maxRequestSize = 100 * 1024 ^ 2)
+
+  # values
+  values <- reactiveValues(
+    upload_file = NULL,
+    upload_error = NULL,
+    data = NULL,
+    plot = NULL
+  )
+
+  # upload file ----
+  observeEvent(input$upload, {
+    module_message(
+      ns,
+      "info",
+      "new file uploaded file '",
+      input$upload$name,
+      "' into temporary path ",
+      input$upload$datapath
+    )
+
+    # reset the reactive values that hold the file and data
+    values$upload_file <- input$upload$name
+    values$upload_error <- NULL
+    values$data <- NULL
+
+    # try to read the uploaded file
+    tryCatch(
+      values$data <- iso_read_isox_file(input$upload$datapath),
+      warning = function(w)
+        values$upload_error <- w$message,
+      error = function(e)
+        values$upload_error <- e$message
+    )
+  })
+
+  # provide feedback on file upload success
+  output$upload_info <- renderText({
+    req(values$upload_file)
+    validate(need(is.null(values$upload_error), message = values$upload_error))
+    paste0(values$upload_file, " uploaded")
+  })
+
+  # update plot options ----
+  observeEvent(values$data, {
+    module_message(ns, "info", "updating parameter table")
+    if (is.null(values$data) || nrow(values$data) == 0) {
+      # no data (maybe incorrect input file --> hide)
+      shinyjs::hide("parameters-panel")
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
+      updateTextInput(inputId = "sample", value = c())
+      updateTextInput(inputId = "reference", value = c())
+      updateSelectInput(inputId = "base_peak", choices = c())
+      updateNumericInput(inputId = "segments", value = c())
+      updateNumericInput(inputId = "blocks", value = c()) #FIX: is this what we want? Eg. update when loading a new file?
+      updateNumericInput(inputId = "block.time", value = c())
+
+      updateNumericInput(inputId = "startup.time", value = c())
+      updateNumericInput(inputId = "idle.time", value = c())
+      updateNumericInput(inputId = "rare", value = c())
+      updateNumericInput(inputId = "extreme", value = c())
+      updateRadioButtons(inputId = "ratio.method", choices = c())
+
+
+
+    } else {
+      # yes data --> update parameters and show
+
+      updateTextInput(
+        inputId = "sample",
+        value = paste("sample",  values$data$compound[1], sep = "_")
+      )
+
+      updateTextInput(
+        inputId = "reference",
+        value = paste("reference", values$data$compound[1], sep = "_")
+      )
+
+      updateSelectInput(
+        inputId = "base_peak",
+        choices = levels(values$data$isotopolog),
+        selected = values$data$isotopolog[1]
+      )
+
+      # add segments, blocks, block.time, startup.time etc?
+
+      updateNumericInput(
+        inputId = "rare",
+        min = 0,
+        #how to avoid negative input by keyboard?
+        max = 100,
+        value = 30
+      )
+
+      updateNumericInput(
+        inputId = "extreme",
+        min = 0,
+        #how to avoid negative input by keyboard?
+        max = 10,
+        value = 1,
+        step = 0.1
+      )
+
+      updateRadioButtons(
+        inputId = "ratio.method",
+        choiceNames = c("sum",  "mean", "median", "geometric"),
+        choiceValues = c("sum",  "mean", "median", "geometric.mean"),
+        selected = "sum"
+      )
+
+      shinyjs::show("parameters-panel")
+    }
+  }, ignoreNULL = FALSE)
+
+
+ # isoXL.version <- utils::packageVersion("isoorbi") #FIXME: get version information directly from main UI?
+
+
+
+  # Table of processing parameters
+
+  observeEvent(input$start, {
+    shinyjs::show("main-plot")
+
+
+    # Message with processing parameters
+
+    module_message(
+      ns,
+      "info",
+      "Processing data with selected parameters:",
+      "\n - sample: ",
+      paste(input$sample %then% ""),
+      "\n - reference: ",
+      paste(input$reference %then% ""),
+      "\n - basepeak: ",
+      input$base_peak %then% "",
+      "\n - segments: ",
+      input$segments %then% "",
+      "\n - blocks: ",
+      input$blocks %then% "",
+      "\n - block.time: ",
+      input$block.time %then% "",
+      "\n - startup.time: ",
+      input$startup.time %then% "",
+      "\n - idle.time: ",
+      input$idle.time %then% "",
+      "\n - rare: ",
+      input$rare %then% "",
+      "\n - extreme: ",
+      input$extreme %then% "",
+      #)#edit
+      "\n - ratio.method: ",
+      input$ratio.method %then% "" #)#edit
+    )
+
+
+    # Data: Dual Inlet Analysis ---------------------------------------------------
+
+    inputs.dual <- data.frame(
+      parameter = c(
+        "IsoXL Version",
+        "Reference",
+        "Sample",
+        "Blocks",
+        "Basepeak",
+
+        "Idle time",
+        "Startup time [min]",
+        "Block time [min]",
+        "Segments",
+        "Rarely detected [%]",
+
+        "Extreme TICxIT [%]",
+        "Ratio Method"
+      ),
+
+
+      value = c(
+        isoXL.version,
+        input$reference,
+        input$sample,
+        input$blocks,
+        input$base_peak,
+
+
+        input$idle.time,
+        input$startup.time,
+        input$block.time,
+        input$segments,
+        input$rare,
+
+        input$extreme,
+        input$ratio.method
+      )
+
+    )
+
+    #req(input$INPUT_Rare)
+    data.dual_inlet_filtered <- values$data %>%
+      iso_simplify_isox_file() %>%
+      na.omit() %>%
+      remove.ticxit(input = input) %>% #temp: validate correct functioning
+      remove.satellitePeaks() %>%
+      remove.rare(input = input)
+
+
+    #  Dual Inlet annotation table --------------------------------------------
+
+    # req(input$reference)
+    # req(input$sample)
+    # req(input$blocks)
+    # req(input$segments)
+    # req(input$idle.time)
+    # req(input$startup.time)
+    # req(input$block.time)
+
+    dual.inlet.annotation     <- define.dual.inlet(input)
+
+
+    # Dual Inlet: Merge data with annotation ----------------------------------
+
+
+    data.annotated <-
+      merge.di.annotations(data.dual_inlet_filtered, dual.inlet.annotation)
+
+
+
+
+    # Dual Inlet: Assign base peak --------------------------------------------
+
+
+    data.basepeak <-
+      assign.basepeak(data.annotated, input$base_peak)  #needs validation; e.g. is basepeak present in data?
+
+
+    # Dual Inlet: Calculate output table for results file ---------------
+
+    data.output <-
+      calc.output(df = data.basepeak, INPUT_RatioMethod = input$ratio.method)
+
+    # Dual Inlet: Make Excel file ---------------------------------------------
+
+    data.xls <- make.xls(data.output, params = inputs.dual)
+
+
+    # Table output: Show rows of .isox file------------------------------------------------
+
+
+    output$mytable = DT::renderDataTable({
+      datatable(
+        data.dual_inlet_filtered %>% mutate_if(is.numeric, round, digits = 4),
+        rownames = FALSE ,
+        extensions = c('Buttons', 'ColReorder', 'Select'),
+
+        options = list(
+          #   autoWidth = TRUE, #scroll bar to see enture table
+          scrollX = TRUE,
+          #scroll bar to see enture table
+
+          #   columnDefs = list(list(targets = c(2L), visible = FALSE #hide some columns
+          # )),
+
+          dom = 'Bfrtip',
+          buttons = c('colvis', 'copy',  'excel', 'pdf'),
+          colReorder = TRUE#, #columns can be reordered,
+          # selection = list(target = "column")#,
+          # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
+        )
+      )
+
+    })
+
+    # Table output: Summary statistics ----------------------------
+
+
+    output$summary <- DT::renderDataTable({
+      datatable(
+        data.output,
+        rownames = FALSE ,
+        extensions = c('Buttons', 'ColReorder'),
+        options = list(
+          # autoWidth = TRUE, #scroll bar to see entire table
+          scrollX = TRUE,
+          #scrollbar when table is not visible
+          # columnDefs = list(list(
+          #   targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+          # )),
+          dom = 'Bfrtip',
+          buttons = c('colvis', 'copy',  'excel', 'pdf'),
+          colReorder = TRUE #columns can be reordered
+        )
+      )
+
+    })
+
+
+
+    # Plot output: Single Analysis--------------------------------------------------------
+
+    output$plot <- renderPlotly({
+      # isolate to avoid triggers on other input parameter selections
+      isolate({
+        plotly::ggplotly(
+          ggplot(data = data.output, aes(
+            x = Injection, y = Ratio, color = isotopolog
+          )) + scale_color_brewer(palette = "Dark2") +
+
+            geom_errorbar(
+              aes(
+                ymin = (Ratio - Ratio.SEM),
+                ymax = (Ratio + Ratio.SEM)
+              ),
+              width = 0.7,
+              size = 0.3,
+              color = "black",
+              position = position_dodge(.9)
+            )       +        geom_point(size = 3, shape = 10) + facet_wrap(~ filename, ncol = 1),
+          # temp: could be interesting option: + facet_grid(isotopolog~.),
+
+          dynamicTicks = TRUE #change ticks on zoom
+        ) %>%
+
+          plotly::config(
+            displaylogo = FALSE,
+            modeBarButtonsToRemove = c(
+              "zoomIn2d",
+              "zoomOut2d",
+              "lasso2d",
+              "select2d",
+              "hoverClosestCartesian",
+              "hoverCompareCartesian"
+            ),
+            #options on how to save an image
+            toImageButtonOptions = list(
+              format = "png",
+              width = 900,
+              height = 600,
+              scale = 4,
+              filename = paste("dual_inlet",tools::file_path_sans_ext(input$upload$name), sep = "_") #FIX
+            )
+          )
+
+      })
+    })
+
+
+    # Make Excel file ---------------------------------------------
+
+    data_dual.xls <-
+      make.xls(df.stat = data.output, params = inputs.dual)
+
+
+    # Download output: Excel file ----------------------------------
+
+
+    output$download_xlsx <- downloadHandler(
+      filename = function() {
+        paste(tools::file_path_sans_ext(input$upload$name),
+              "_IsoXL.xlsx",
+              sep = "")
+      },
+      content = function(file) {
+        saveWorkbook(data_dual.xls, file)
+      }
+    )
+
+    shinyjs::show("main-rest")
+
+  })
+}
+
+
+
+# user interface
+module_isoxl_dual_inlet_ui <- function(id) {
+
+
+  # namespace
+  ns <- NS(id)
+
+  fluidPage(sidebarLayout(
+    sidebarPanel(
+      width = 3,
+
+      # upload ----
+      fileInput(
+        ns("upload"),
+        label = "Upload .isox file",
+        accept = c(".isox"),
+        placeholder = "No file loaded..."
+      ),
+      textOutput(ns("upload_info")),
+
+
+
+      # parameters ----
+      div(
+        id = ns("parameters-panel"), #can be shown or made hidden
+
+        tags$hr(style = "border-color: grey;"),
+
+        h6("Define Dual Inlet"),
+
+        textInput(
+          inputId = ns("sample"),
+          label = "Sample",
+          value = c()
+        ),
+
+        textInput(
+          inputId = ns("reference"),
+          label = "Reference",
+          value = c()
+        ),
+
+        selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
+
+
+        tags$hr(style = "border-color: grey;"),
+
+
+        h6("Parameters:"),
+
+        numericInput(
+          inputId = ns("blocks"),
+          label = "Blocks",
+          3,
+          min = 1,
+          max = 100,
+          step = 1,
+          width = NULL
+        ),
+
+        numericInput(
+          inputId = ns("block.time"),
+          label = "Block time [min]",
+          1,
+          min = 1,
+          max = 20,
+          step = 1,
+          width = NULL
+        ),
+
+        numericInput(
+          inputId = ns("idle.time"),
+          label = "Switch time [min]",
+          0.1,
+          min = 0,
+          max = 2,
+          step = 0.1,
+          width = NULL
+        ),
+
+        numericInput(
+          inputId = ns("startup.time"),
+          label = "Startup time [min]",
+          0,
+          min = 0,
+          max = 10,
+          step = 0.1,
+          width = NULL
+        ),
+
+        tags$hr(style = "border-color: grey;"),
+
+        h6("Processing options:"),
+
+
+        tippy(
+          numericInput(
+            inputId = ns("segments"),
+            label = "Segments",
+            1,
+            min = 1,
+            max = 10,
+            step = 1,
+            width = NULL
+          ),
+          "Processing option: Split blocks into multiple segments",
+          placement = "right"
+        ),
+
+        #Use shinyBS::bsTooltip instead of tippy?
+        tippy(
+          numericInput(
+            ns("rare"),
+            "Remove weak signals",
+            value = c(),
+            width = NULL
+          ),
+          "Processing option: Isotopocule must have been detected > x % of scans",
+          placement = "right"
+        ),
+        tippy(
+          numericInput(
+            ns("extreme"),
+            "Remove extreme scans",
+            value = c(),
+            width = NULL
+          ),
+          "Processing option: Truncate data based on TICxIT",
+          placement = "right"
+        ),
+
+        radioButtons(
+          inputId = ns("ratio.method"),
+          label = "Ratio method",
+          choiceNames = c("sum",  "mean", "median", "geometric"),
+          choiceValues = c("sum",  "mean", "median", "geometric.mean"),
+          selected = "sum"
+        ),
+
+        hr(),
+        actionButton(ns("start"), label = "Start", icon = icon("sync"))
+      ) %>% shinyjs::hidden() #need this?
+
+    ),
+
+    # UI: Dual Inlet Analysis Main Panel ------------------------------------------
+
+    mainPanel(
+      width = 9,
+
+      # parameters ----
+      div(
+        id = ns("main-plot"), #can be shown or hidden
+
+       box(
+          title = "Overview of Results",
+          width = "auto" ,
+          height = "auto",
+          status = "primary",
+          solidHeader = T,
+          withSpinner(plotlyOutput(ns("plot")))
+        )
+      ),
+      #how to save png at higher resolution?
+
+      hr(),
+      div(
+        id = ns("main-rest"),
+        downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
+
+        hr(),
+
+        box(
+          title = "Results Table",
+          width = "auto" ,
+          status = "primary",
+          solidHeader = T,
+          DT::dataTableOutput(ns("summary"))
+        ),
+
+        hr(),
+
+
+        box(
+          title = "Filtered .isox File",
+          width = "auto" ,
+          status = "primary",
+          solidHeader = T,
+          DT::dataTableOutput(ns("mytable"))
+        )
+
+      )
+
+    )
+
+  ))
+}
