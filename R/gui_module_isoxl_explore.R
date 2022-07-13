@@ -12,7 +12,7 @@ module_isoxl_explore_server <- function(input, output, session) {
     upload_file = NULL,
     upload_error = NULL,
     data = NULL,
-    plot = NULL
+    plot = NULL #NEED THIS? note: all data will be plotted
   )
 
   # upload file ----
@@ -47,8 +47,12 @@ module_isoxl_explore_server <- function(input, output, session) {
     validate(need(is.null(values$upload_error), message = values$upload_error))
     paste0(values$upload_file, " uploaded")
   })
+
   # update plot options ----
   observeEvent(values$data, {
+
+    shinyjs::hide("explore-main-panel")
+    shinyjs::hide("explore-input-panel") #FIXME: optimized placing the show and hide commands
 
     # module_message(ns, "info", "updating parameter table")
     if (is.null(values$data) || nrow(values$data) == 0) {
@@ -71,6 +75,7 @@ module_isoxl_explore_server <- function(input, output, session) {
 
     } else {
       # yes data --> update parameters and show
+
       # updateSelectInput(
       #   inputId = "isotopolog",
       #   choices = levels(values$data$isotopolog),
@@ -144,6 +149,25 @@ module_isoxl_explore_server <- function(input, output, session) {
 
     shinyjs::show("explore-main-panel")
 
+    module_message(
+      ns, "info",
+      "generating plot with selected parameters:" #,
+      # "\n - isotopolog: ", input$isotopolog %then% "",
+      # "\n - basepeak: ", input$base_peak %then% "",
+      # "\n - files: ", paste(input$filename %then% "", collapse = ", "),
+      # "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
+      # "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
+      # "\n - rare: ", input$rare %then% "",
+      # "\n - extreme: ", input$extreme %then% ""#)#edit
+    )
+
+
+    values$plot <- values$data
+  })
+
+
+observeEvent(input$action_explore, {
+
     plot1vars <- callModule(varselect_mod_server, "plot1_vars")
     plot2vars <- callModule(varselect_mod_server, "plot2_vars")
 
@@ -204,11 +228,7 @@ module_isoxl_explore_ui <- function(id) {
       textOutput(ns("upload_info")),
 
 
-      div(
-        id = ns("explore-input-panel"),
-
-      #submitButton("Update output", icon("sync")),
-
+      div( id = ns("explore-input-panel"), #used to hide certain ui elements initially
 
       hr(),
 
