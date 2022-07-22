@@ -1,17 +1,11 @@
 #' Produce scatterplot with sales data and a single continuous variable
-#'
 #' @param data data frame with variables necessary for scatterplot.
 #' @param xvar variable (string format) to be used on x-axis.
 #' @param yvar variable (string format) to be used on y-axis.
 #' @param facetvar optional variable (string format) to use for facetted version of plot.
 #' @param label whether or not to label brushed points.
-#'
-#' @return {\code{ggplot2} object for the scatterplot.
+#' @return \code{ggplot2} object for the scatterplot.
 #' @export
-#'
-#' @examples
-#' plot_obj <- scatter_isox(data = data.explore(), xvar = "Lot_Frontage")
-#' plot_obj
 scatter_isox <- function(dataset,
                           xvar,
                           yvar,

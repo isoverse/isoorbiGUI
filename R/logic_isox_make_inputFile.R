@@ -46,9 +46,10 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     df.sel$M0 <- 0
     df.sel[which.min(df.sel$'m/z'),]$M0 <- 1 #add M0 info; temp: error when there is no M0, min....! Look for a better way
 
-    df.temp <- df.sel %>% tidyr::gather(isotope, count, -'m/z') %>% filter(count>0)
+    df.temp <- df.sel %>% tidyr::pivot_longer( -c("m/z"), names_to= "isotope", values_to= "count",) %>% filter(count>0)
 
     df.temp$isotopolog <- NA
+    df.temp$temp.string <- NA
 
     for(j in 1:nrow(df.temp)){
 
@@ -58,8 +59,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
       df.temp$temp.string[j] <- temp.string
     }
 
-    df.temp2 <- df.temp %>% select(-count)%>% tidyr::spread(isotope, temp.string)
-
+    df.temp2 <- df.temp %>% select(-count)%>% tidyr::pivot_wider(names_from = "isotope", values_from="temp.string") #FIXME: improve nomenclature
 
     cols <- colnames(df.temp2)[-1] # columns to paste together
 

@@ -248,7 +248,7 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         hr(),
 
-        actionButton(ns("render_plot"), label = "Plot", icon = icon("sync"))
+        actionButton(ns("render_plot"), label = "Plot", icon = icon("rotate"))
       ) %>% shinyjs::hidden()
 
     ),
@@ -268,7 +268,7 @@ module_isoxl_shotnoise_ui <- function(id) {
           solidHeader = T,
           withSpinner(plotlyOutput(ns("plot")))
         )
-        #how to save png at higher resolution?
+        #FIXME: how to save png at higher resolution?
       ),
 
 

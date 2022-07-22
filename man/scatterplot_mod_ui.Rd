@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_modules.R
 \name{scatterplot_mod_ui}
 \alias{scatterplot_mod_ui}
-\title{Scatterplot module user interface}
+\title{Scatter plot module user interface}
 \usage{
 scatterplot_mod_ui(id)
 }
@@ -13,5 +13,5 @@ scatterplot_mod_ui(id)
 a \code{shiny::\link[shiny]{tagList}} containing UI elements
 }
 \description{
-Scatterplot module user interface
+Scatter plot module user interface
 }

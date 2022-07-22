@@ -227,26 +227,18 @@ module_isoxl_flow_server <- function(input, output, session, isoXL.version) {
 
     output$mytable.flow = DT::renderDataTable({
 
-      datatable(    data.flow_filtered %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
-                    extensions = c('Buttons','ColReorder', 'Select'),
-
-                    options = list(
-                      #   autoWidth = TRUE, #scroll bar to see enture table
-                      scrollX = TRUE, #scroll bar to see enture table
-
-                      #   columnDefs = list(list(
-                      #
-                      #        targets = c(2L), visible = FALSE #hide some columns
-                      # )),
-
-                      dom = 'Bfrtip',
-                      buttons = c('colvis','copy',  'excel', 'pdf' ),
-                      colReorder = TRUE#, #columns can be reordered,
-                      # selection = list(target = "column")#,
-                      # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
-                    )
+      datatable(
+        data.flow_filtered %>% ungroup() %>% mutate_if(is.double, round, digits = 2),
+        rownames = FALSE ,
+        extensions = c('Buttons', 'ColReorder'),
+        options = list(
+          scrollX = TRUE,
+          #scroll bar to see entire table
+          dom = 'Bfrtip',
+          buttons = c('colvis', 'copy',  'excel', 'pdf'),
+          colReorder = TRUE #columns can be reordered
+        )
       )
-
 
     })
 
@@ -430,7 +422,7 @@ module_isoxl_flow_ui <- function(id) {
         ),
 
         hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("sync"))
+        actionButton(ns("start"), label = "Start", icon = icon("rotate"))
       ) %>% shinyjs::hidden()
 
     ),

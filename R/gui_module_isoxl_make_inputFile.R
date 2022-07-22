@@ -99,10 +99,10 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
     output$isox = DT::renderDataTable({
 
-      datatable( out.isox, rownames= FALSE ,
-                 extensions = c('Buttons','ColReorder', 'Select'),
+      datatable( out.isox, rownames= FALSE,
+                 extensions = c('Buttons'),
                  options = list(
-                   scrollX = TRUE, #scroll bar to see enture table
+                   scrollX = TRUE, #scroll bar to see entirre table
                    dom = 'Bfrtip',
                    buttons = list( #temp: option to show all rows of table (for copy & paste); show more rows in other tables also?
                      list(
@@ -214,7 +214,7 @@ module_isoxl_make_inputFile_ui <- function(id) {
 
       hr(),
 
-      actionButton(ns("start"), label = "Make IsoX input file", icon = icon("sync"))
+      actionButton(ns("start"), label = "Make IsoX input file", icon = icon("rotate"))
 
     ),
 

@@ -46,7 +46,7 @@ calc_shotnoise <- function(dataset){
 
   df.out <- df.out %>% na.omit() %>% select(-shotnoise, -shotnoise.neff)
 
-  df.out <- df.out %>% tidyr::gather(key, value, -scans, -neff)
+  df.out <- df.out %>% tidyr::pivot_longer(-c("scans", "neff"), names_to="key", values_to="value") #FIXME: improve nomenclature of columns
 
  return(df.out)
 }

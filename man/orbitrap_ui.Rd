@@ -5,7 +5,8 @@
 \title{Orbitrap ShinyApp UI}
 \usage{
 orbitrap_ui(
-  app_title = "Orbitrap Data Explorer",
+  app_title = span(tagList(a(href = "https://www.isoverse.org/", tags$img(src =
+    "https://www.isoverse.org/images/hex-isoverse.png", height = 40))), "IsoXL"),
   app_color = "blue",
   sidebar_width = NULL
 )
