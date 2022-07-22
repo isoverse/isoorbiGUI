@@ -11,10 +11,10 @@
 #' @import tidyr
 #' @importFrom magrittr %>%
 #' @import openxlsx
-#' @import DT
+#' @rawNamespace import(DT, except = c(dataTableOutput, renderDataTable))
 #' @import plotly
 #' @import shinycssloaders
-#' @import ggplot2
+#' @rawNamespace import(ggplot2, except = last_plot)
 #' @import RColorBrewer
 #' @import tippy
 #' @import mailtoR
