@@ -277,7 +277,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
 
     output$mytable = DT::renderDataTable({
       datatable(
-        data.dual_inlet_filtered %>% ungoup() %>% mutate_if(is.double, round, digits = 3),
+        data.dual_inlet_filtered %>% ungroup() %>% mutate_if(is.double, round, digits = 3),
         rownames = FALSE ,
         extensions = c('Buttons', 'ColReorder'),
         options = list(
