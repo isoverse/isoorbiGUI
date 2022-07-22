@@ -25,12 +25,8 @@ scatter_isox(
 \item{data}{data frame with variables necessary for scatterplot.}
 }
 \value{
-
+\code{ggplot2} object for the scatterplot.
 }
 \description{
 Produce scatterplot with sales data and a single continuous variable
-}
-\examples{
-plot_obj <- scatter_isox(data = data.explore(), xvar = "Lot_Frontage")
-plot_obj
 }
