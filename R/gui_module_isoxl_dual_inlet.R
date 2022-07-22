@@ -540,7 +540,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
         ),
 
         hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("sync"))
+        actionButton(ns("start"), label = "Start", icon = icon("rotate"))
       ) %>% shinyjs::hidden() #need this?
 
     ),

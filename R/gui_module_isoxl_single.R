@@ -468,7 +468,7 @@ module_isoxl_single_ui <- function(id) {
         ),
 
         hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("sync"))
+        actionButton(ns("start"), label = "Start", icon = icon("rotate"))
       ) %>% shinyjs::hidden()
 
     ),

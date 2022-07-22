@@ -248,7 +248,7 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         hr(),
 
-        actionButton(ns("render_plot"), label = "Plot", icon = icon("sync"))
+        actionButton(ns("render_plot"), label = "Plot", icon = icon("rotate"))
       ) %>% shinyjs::hidden()
 
     ),
