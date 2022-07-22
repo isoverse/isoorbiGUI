@@ -268,7 +268,7 @@ module_isoxl_shotnoise_ui <- function(id) {
           solidHeader = T,
           withSpinner(plotlyOutput(ns("plot")))
         )
-        #how to save png at higher resolution?
+        #FIXME: how to save png at higher resolution?
       ),
 
 

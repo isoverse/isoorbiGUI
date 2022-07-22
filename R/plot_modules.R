@@ -1,4 +1,4 @@
-#' Scatterplot module user interface
+#' Scatter plot module user interface
 #' @param id, character used to specify namespace, see \code{shiny::\link[shiny]{NS}}
 #' @return a \code{shiny::\link[shiny]{tagList}} containing UI elements
 #' @export
