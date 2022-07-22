@@ -217,26 +217,16 @@ module_isoxl_single_server <- function(input, output, session, isoXL.version) {
 
     output$mytable.single = DT::renderDataTable({
 
-      datatable(    data.single_filtered %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
-                 extensions = c('Buttons','ColReorder', 'Select'),
+      datatable(    data.single_filtered %>% ungroup() %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
+                 extensions = c('Buttons','ColReorder'),
 
                  options = list(
-                   #   autoWidth = TRUE, #scroll bar to see enture table
                    scrollX = TRUE, #scroll bar to see enture table
-
-                   #   columnDefs = list(list(
-                   #
-                   #        targets = c(2L), visible = FALSE #hide some columns
-                   # )),
-
                    dom = 'Bfrtip',
                    buttons = c('colvis','copy',  'excel', 'pdf' ),
-                   colReorder = TRUE#, #columns can be reordered,
-                   # selection = list(target = "column")#,
-                   # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
+                   colReorder = TRUE #columns can be reordered
                  )
       )
-
 
     })
 
