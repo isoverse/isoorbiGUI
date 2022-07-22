@@ -20,7 +20,6 @@ scatter_isox <- function(dataset,
 
   p <- p +
     geom_point(aes(color = selected_), alpha=1/2) +
-    #scale_color_manual(values = point_colors, guide = FALSE) +
     scale_color_manual(values = point_colors, guide = "none") +
     scale_x_continuous(labels = function(l) plot_labeller(l, varname = xvar)) +
     scale_y_continuous(labels = function(l) plot_labeller(l, varname = yvar)) +
