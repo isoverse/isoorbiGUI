@@ -46,7 +46,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     df.sel$M0 <- 0
     df.sel[which.min(df.sel$'m/z'),]$M0 <- 1 #add M0 info; temp: error when there is no M0, min....! Look for a better way
 
-    df.temp <- df.sel %>% tidyr::gather(isotope, count, -'m/z') %>% filter(count>0)
+    df.temp <- df.sel %>% tidyr::pivot_longer( -c("m/z"), names_to= "isotope", values_to= "count",) %>% filter(count>0)
 
     df.temp$isotopolog <- NA
 
