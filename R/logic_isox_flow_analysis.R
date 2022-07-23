@@ -4,7 +4,7 @@
 
 calc.output.flow <- function(df, INPUT_RatioMethod){
 
-  df.stat <- df  %>%  iso_simplify_isox_file() %>% group_by(filename,
+  df.stat <- df  %>%  group_by(filename,
                                #Injection,
                                #Sample.Name,
                                compound,
