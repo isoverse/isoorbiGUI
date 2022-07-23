@@ -110,13 +110,13 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
         selected = values$data$isotopolog[1]
       )
 
-      # add segments, blocks, block.time, startup.time etc?
+      # FIXME: add segments, blocks, block.time, startup.time etc?
 
       updateNumericInput(
         inputId = "rare",
         min = 0,
         #how to avoid negative input by keyboard?
-        max = 100,
+        max = 90,
         value = 30
       )
 
@@ -157,11 +157,11 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
 
     iv$enable()
 
+    #Required inputs
     iv$add_rule("sample", shinyvalidate::sv_required())
     iv$add_rule("reference", shinyvalidate::sv_required())
     iv$add_rule("blocks", shinyvalidate::sv_required())
     iv$add_rule("block.time", shinyvalidate::sv_required())
-
     iv$add_rule("idle.time", shinyvalidate::sv_required())
     iv$add_rule("startup.time", shinyvalidate::sv_required())
     iv$add_rule("segments", shinyvalidate::sv_required())
@@ -169,12 +169,14 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
     iv$add_rule("extreme", shinyvalidate::sv_required())
     iv$add_rule("ratio.method", shinyvalidate::sv_required())
 
-
-
+    #Input values
     iv$add_rule("blocks", shinyvalidate::sv_between(1, 10))
-    iv$add_rule("block.time", shinyvalidate::sv_between(1, 30)) #FIXME: max
-    iv$add_rule("idle.time", shinyvalidate::sv_between(0, 5)) #FIXME: max
-    iv$add_rule("startup.time", shinyvalidate::sv_between(0, 10)) #FIXME: max
+    iv$add_rule("block.time", shinyvalidate::sv_between(1, 30)) #FIXME: max depends on .isox file
+    iv$add_rule("idle.time", shinyvalidate::sv_between(0, 5)) #FIXME: max depends on .isox file
+    iv$add_rule("startup.time", shinyvalidate::sv_between(0, 10)) #FIXME: max depends on .isox file
+    iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
+    iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+
 
 
     if (iv$is_valid()) {
@@ -548,6 +550,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           step = 0.1,
           width = NULL
         ),
+
         "Initial time to stabilize the spray ",
         placement = "right"
         ),
