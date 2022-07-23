@@ -54,10 +54,10 @@ remove.satellitePeaks <- function(df){
 #' @export
 remove.ticxit <- function(df, input){
 
-  validate(
-    need(input$extreme, 'Missing input input$extreme'),
-    need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
-  )
+  # validate(
+  #   need(input$extreme, 'Missing input input$extreme'),
+  #   need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
+  # )
 
 
   df <- df %>% group_by(filename) %>% mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files

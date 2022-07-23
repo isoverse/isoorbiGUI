@@ -20,6 +20,7 @@
 #' @import mailtoR
 #' @import enviPat
 #' @import shinyBS
+#' @import shinyvalidate
 NULL
 
 #' @export

@@ -20,7 +20,7 @@ scatter_isox <- function(dataset,
 
   p <- p +
     geom_point(aes(color = selected_), alpha=1/2) +
-    scale_color_manual(values = point_colors, guide = FALSE) +
+    scale_color_manual(values = point_colors, guide = "none") +
     scale_x_continuous(labels = function(l) plot_labeller(l, varname = xvar)) +
     scale_y_continuous(labels = function(l) plot_labeller(l, varname = yvar)) +
     theme(axis.title = element_text(size = rel(1.2)),
@@ -70,9 +70,7 @@ density_isox <- function(dataset,
 
   p <- p +
     geom_density() +
-    #scale_color_manual(values = point_colors, guide = FALSE) +
     scale_x_continuous(labels = function(l) plot_labeller(l, varname = xvar)) +
-   # scale_y_continuous(labels = function(l) plot_labeller(l, varname = yvar)) +
     theme(axis.title = element_text(size = rel(1.2)),
           axis.text = element_text(size = rel(1.1)))
 

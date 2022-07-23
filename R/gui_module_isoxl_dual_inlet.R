@@ -425,10 +425,13 @@ module_isoxl_dual_inlet_ui <- function(id) {
       textOutput(ns("upload_info")),
 
 
-
       # parameters ----
       div(
         id = ns("parameters-panel"), #can be shown or made hidden
+
+        hr(),
+        actionButton(ns("start"), label = "Start", icon = icon("rotate")),
+
 
         tags$hr(style = "border-color: grey;"),
 
@@ -448,9 +451,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
-
         tags$hr(style = "border-color: grey;"),
-
 
         h6("Parameters:"),
 
@@ -484,6 +485,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
           width = NULL
         ),
 
+        tippy(
+
         numericInput(
           inputId = ns("startup.time"),
           label = "Startup time [min]",
@@ -493,11 +496,13 @@ module_isoxl_dual_inlet_ui <- function(id) {
           step = 0.1,
           width = NULL
         ),
+        "Initial time to stabilize the spray ",
+        placement = "right"
+        ),
 
         tags$hr(style = "border-color: grey;"),
 
         h6("Processing options:"),
-
 
         tippy(
           numericInput(
@@ -509,7 +514,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             step = 1,
             width = NULL
           ),
-          "Processing option: Split blocks into multiple segments",
+          "Split each block into segments",
           placement = "right"
         ),
 
@@ -521,7 +526,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          "Processing option: Isotopocule must have been detected > x % of scans",
+          "Isotopocule must have been detected in more than x % of scans",
           placement = "right"
         ),
         tippy(
@@ -531,7 +536,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          "Processing option: Truncate data based on TICxIT",
+          "Truncate data based on ions in Orbitrap (ITxTIC)",
           placement = "right"
         ),
 
@@ -541,10 +546,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
           choiceNames = c("sum",  "mean", "median", "geometric"),
           choiceValues = c("sum",  "mean", "median", "geometric.mean"),
           selected = "sum"
-        ),
+        )
 
-        hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("rotate"))
       ) %>% shinyjs::hidden() #need this?
 
     ),

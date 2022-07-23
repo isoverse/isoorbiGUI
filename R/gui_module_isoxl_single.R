@@ -401,6 +401,9 @@ module_isoxl_single_ui <- function(id) {
       div(
         id = ns("parameters-panel"),
 
+        hr(),
+        actionButton(ns("start"), label = "Start", icon = icon("rotate")),
+
         tags$hr(style = "border-color: grey;"),
 
         h6("Define Single Analysis"),
@@ -432,7 +435,7 @@ module_isoxl_single_ui <- function(id) {
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
+        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0),
         tags$hr(style = "border-color: grey;"),
 
 
@@ -455,10 +458,7 @@ module_isoxl_single_ui <- function(id) {
           choiceNames = c("sum",  "mean", "median", "geometric"),
           choiceValues = c("sum",  "mean", "median", "geometric.mean"),
           selected = "sum"
-        ),
-
-        hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("rotate"))
+        )
       ) %>% shinyjs::hidden()
 
     ),
