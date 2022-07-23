@@ -417,7 +417,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
                ns("upload_info"),
                "{
                font-size:12px;
-               color:black;
+               color:navy;
          }"
         )
       ),
