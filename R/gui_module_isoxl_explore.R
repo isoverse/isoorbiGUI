@@ -232,7 +232,7 @@ module_isoxl_explore_ui <- function(id) {
 
       hr(),
 
-      actionButton(ns("action_explore"), "Explore isox data"),
+      actionButton(ns("action_explore"), "Explore data"),
 
 
 
