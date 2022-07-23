@@ -182,6 +182,26 @@ dat2 <- reactive({
       label = label()
 
     )
+    )%>% plotly::config(
+
+      displaylogo = FALSE,
+      modeBarButtonsToRemove = c(
+        "zoomIn2d",
+        "zoomOut2d",
+        "lasso2d",
+        "select2d",
+        "hoverClosestCartesian",
+        "hoverCompareCartesian"
+      ),
+
+      #options on how to save an image
+      toImageButtonOptions = list(
+        format = "png",
+        width = 900,
+        height = 600,
+        scale = 4,
+        filename = paste("data_explore_density") #FIXME: better output name
+      )
     )
   })
 
@@ -199,6 +219,26 @@ dat2 <- reactive({
       label = label()
 
     )
+    ) %>% plotly::config(
+
+      displaylogo = FALSE,
+      modeBarButtonsToRemove = c(
+        "zoomIn2d",
+        "zoomOut2d",
+        "lasso2d",
+        "select2d",
+        "hoverClosestCartesian",
+        "hoverCompareCartesian"
+      ),
+
+      #options on how to save an image
+      toImageButtonOptions = list(
+        format = "png",
+        width = 900,
+        height = 600,
+        scale = 4,
+        filename = paste("data_explore_density2") #FIXME: better output name
+      )
     )
   })
 
