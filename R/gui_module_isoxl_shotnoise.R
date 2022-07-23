@@ -95,12 +95,12 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       updateSelectInput(
         inputId = "isotopolog",
         choices = levels(values$data$isotopolog),
-        selected = values$data$isotopolog[2]
+        selected = levels(values$data$isotopolog)[2]
       )
       updateSelectInput(
         inputId = "base_peak",
         choices = levels(values$data$isotopolog),
-        selected = values$data$isotopolog[1]
+        selected = levels(values$data$isotopolog)[1]
       )
       updateSelectInput(
         inputId = "filename",
@@ -166,9 +166,9 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     #Input values
     iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
     iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+    iv$add_rule("isotopolog", shinyvalidate::sv_not_equal(input$base_peak, message_fmt = "Equal to base peak")) #basepeak and isotopolog must not be identical
 
     # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
-    # FIXME: basepeak and isotopolog must not be identical
 
     if (iv$is_valid()) {
 

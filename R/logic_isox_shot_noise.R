@@ -2,7 +2,7 @@
 
 assign_basepeak_shotnoise <- function(dataset, input) {
 
-
+#FIXME: what to do when beasepeak and signal are the same?
   df.out <- dataset %>%
     filter(isotopolog %in% c(input$base_peak, input$isotopolog)) %>% #cross check with core logic filter function
     droplevels() %>%
@@ -14,7 +14,6 @@ assign_basepeak_shotnoise <- function(dataset, input) {
 
   return(df.out)
 }
-
 
 
 # shot noise calculation (yields a vector!)
