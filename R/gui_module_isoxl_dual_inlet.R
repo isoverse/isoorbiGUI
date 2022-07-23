@@ -65,7 +65,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
   output$upload_info <- renderText({
     req(values$upload_file)
     validate(need(is.null(values$upload_error), message = values$upload_error))
-    paste0(values$upload_file, " uploaded")
+    paste0("uploaded ", values$upload_file)
   })
 
   # update plot options ----
@@ -402,6 +402,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
     sidebarPanel(
       width = 3,
 
+
+
       # upload ----
       fileInput(
         ns("upload"),
@@ -409,6 +411,17 @@ module_isoxl_dual_inlet_ui <- function(id) {
         accept = c(".isox"),
         placeholder = "No file loaded..."
       ),
+
+      tags$style(
+        paste0("#",
+               ns("upload_info"),
+               "{
+               font-size:12px;
+               color:black;
+         }"
+        )
+      ),
+
       textOutput(ns("upload_info")),
 
 
