@@ -23,31 +23,6 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
 
-
-  # 1. Create an InputValidator object
-  iv <- shinyvalidate::InputValidator$new()
-  iv$enable()
-
-  # # 2. Add validation rules
-  # iv$add_rule(ns(input$timerange[1]), function(value) {
-  #   if (value < 0) {
-  #     "Negative values are not allowed"
-  #   }
-  # })  #
-  # # 3. Start displaying errors in the UI
-  # iv$enable()
-  #
-  # output$greeting <- renderText({
-  #   # 4. Don't proceed if any input is invalid
-  #   req(iv$is_valid())
-  #
-  #   paste0("Nice to meet you, ", input$name, " <", input$email, ">!")
-  # })
-
-
-
-
-
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 
@@ -98,12 +73,7 @@ output$upload_info <- renderText({
 # update plot options ----
 observeEvent(values$data, {
 
-  # iv <- shinyvalidate::InputValidator$new()
-  # iv$add_rule(ns(input$filename), shinyvalidate::sv_required())
-  #
-  # # iv$enable()
-  # #
-  # # req(iv$is_valid())
+
 
   module_message(ns, "info", "updating parameter table")
   if (is.null(values$data) || nrow(values$data) == 0) {
@@ -184,24 +154,24 @@ observeEvent(values$data, {
       "\n - extreme: ", input$extreme %then% ""#)#edit
     )
 
-    iv$add_rule(ns(input$timerange[1]), function(value) {
-      if (value < 0) {
-        "Negative values are not allowed"
-      }
-    })
+    # Create an InputValidator object
+    iv <- shinyvalidate::InputValidator$new()
+
+    iv$add_rule("timerange", shinyvalidate::sv_required())
 
     iv$enable()
-    #
-    #req(iv$is_valid())
 
     if (iv$is_valid()) {
       # use inputs...
     } else {
       showNotification(
-        "Please fix the errors in the form before continuing",
-        type = "error"
+        "Time range is a required input",
+        type = "error",
+        duration = 10,
       )
     }
+
+    req(iv$is_valid())
 
     values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
     #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
@@ -288,7 +258,7 @@ module_isoxl_shotnoise_ui <- function(id) {
             c(),
             multiple = FALSE),
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
+        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min = 0), #FIXME: validate that timerange[2] > timerange[1]
         tags$hr(style = "border-color: grey;"),
 
         #currently not used in data processing!
