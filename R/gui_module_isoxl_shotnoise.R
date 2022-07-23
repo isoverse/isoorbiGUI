@@ -154,6 +154,8 @@ observeEvent(values$data, {
       "\n - extreme: ", input$extreme %then% ""#)#edit
     )
 
+
+    #FIME: learn how to correctly implement shinyvalidate
     # Create an InputValidator object
     iv <- shinyvalidate::InputValidator$new()
 
