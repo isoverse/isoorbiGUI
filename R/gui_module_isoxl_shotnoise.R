@@ -99,13 +99,13 @@ observeEvent(values$data, {
     )
     updateSelectInput(
       inputId = "filename",
-      choices = c("all", levels(values$data$filename)),
-      selected = "all"
+      choices = c(levels(values$data$filename)),
+      selected = levels(values$data$filename)[1]
     )
     updateSelectInput(
       inputId = "compound",
-      choices = c("all", levels(values$data$compound)),
-      selected = "all"
+      choices = c(levels(values$data$compound)),
+      selected = levels(values$data$compound)[1]
     )
     shinyWidgets::updateNumericRangeInput(session,
                                           inputId = "timerange",
@@ -142,7 +142,7 @@ observeEvent(values$data, {
       "\n - isotopolog: ", input$isotopolog %then% "",
       "\n - basepeak: ", input$base_peak %then% "",
       "\n - files: ", paste(input$filename %then% "", collapse = ", "),
-      "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
+      "\n - compound: ", paste(input$compound %then% "", collapse = ", "),
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
       "\n - rare: ", input$rare %then% "",
       "\n - extreme: ", input$extreme %then% ""#)#edit
@@ -212,25 +212,34 @@ module_isoxl_shotnoise_ui <- function(id) {
       # parameters ----
       div(
         id = ns("parameters-panel"),
+
+        hr(),
+
+        actionButton(ns("render_plot"), label = "Plot", icon = icon("rotate")),
+
         tags$hr(style = "border-color: grey;"),
-        selectInput(inputId = ns("isotopolog"), label = "Isotopolog", c()),
-        selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
         selectInput(
           inputId = ns("filename"),
-          label = "Files",
+          label = "File",
           c(),
-          multiple = TRUE
+          multiple = FALSE
         ),
 
         # tippy(
         #   "test text",
         #   placement = "right"),
 
-          selectInput(
-            inputId = ns("compound"),
-            label = "Compounds",
-            c(),
-            multiple = TRUE),
+        selectInput(
+          inputId = ns("compound"),
+          label = "Compound",
+          c(),
+          multiple = FALSE),
+
+        tags$hr(style = "border-color: grey;"),
+
+        selectInput(inputId = ns("isotopolog"), label = "Isotopolog", c()),
+        selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
+
 
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
         tags$hr(style = "border-color: grey;"),
@@ -244,11 +253,8 @@ module_isoxl_shotnoise_ui <- function(id) {
           "Processing option: Isotopocule must have been detected > x % of scans", placement = "right"),
         tippy(
           numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
-          "Processing option: Truncate data based on TICxIT", placement = "right"),
+          "Processing option: Truncate data based on TICxIT", placement = "right")
 
-        hr(),
-
-        actionButton(ns("render_plot"), label = "Plot", icon = icon("rotate"))
       ) %>% shinyjs::hidden()
 
     ),
@@ -270,8 +276,6 @@ module_isoxl_shotnoise_ui <- function(id) {
         )
         #FIXME: how to save png at higher resolution?
       ),
-
-
 
 
     )
