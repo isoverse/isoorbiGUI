@@ -373,6 +373,9 @@ module_isoxl_flow_ui <- function(id) {
       div(
         id = ns("parameters-panel"),
 
+        hr(),
+        actionButton(ns("start"), label = "Start", icon = icon("rotate")),
+
         tags$hr(style = "border-color: grey;"),
 
         h6("Define Parameters"),
@@ -419,10 +422,7 @@ module_isoxl_flow_ui <- function(id) {
           choiceNames = c("sum",  "mean", "median", "geometric"),
           choiceValues = c("sum",  "mean", "median", "geometric.mean"),
           selected = "sum"
-        ),
-
-        hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("rotate"))
+        )
       ) %>% shinyjs::hidden()
 
     ),
