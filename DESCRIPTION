@@ -46,7 +46,8 @@ Imports:
     ggrepel,
     mailtoR,
     scales,
-    tidyverse
+    tidyverse,
+    shinyvalidate
 Suggests:
     testthat,
     rmarkdown,
