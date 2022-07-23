@@ -74,8 +74,6 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
     if (is.null(values$data) || nrow(values$data) == 0) {
       # no data (maybe incorrect input file --> hide)
       shinyjs::hide("parameters-panel")
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
       updateTextInput(inputId = "sample", value = c())
       updateTextInput(inputId = "reference", value = c())
       updateSelectInput(inputId = "base_peak", choices = c())
@@ -150,6 +148,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
 
   observeEvent(input$start, {
 
+    shinyjs::hide("main-plot")
+    shinyjs::hide("main-rest")
 
     #FIME: learn how to correctly implement shinyvalidate
     #Create an InputValidator object
@@ -199,6 +199,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
 
     req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
 
+    #req(values$upload_file)
 
     shinyjs::show("main-plot")
 
@@ -603,7 +604,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           selected = "sum"
         )
 
-      ) %>% shinyjs::hidden() #need this?
+      ) %>% shinyjs::hidden() # so that element does not load during startup and refresh
 
     ),
 
@@ -625,7 +626,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           solidHeader = T,
           withSpinner(plotlyOutput(ns("plot")))
         )
-      ),
+      ) %>% shinyjs::hidden(),
       #how to save png at higher resolution?
 
       hr(),
@@ -654,7 +655,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           DT::dataTableOutput(ns("mytable"))
         )
 
-      )
+      ) %>% shinyjs::hidden()
 
     )
 
