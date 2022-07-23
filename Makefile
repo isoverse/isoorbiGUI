@@ -82,3 +82,10 @@ module_info_test:
 		sleep 1; \
 	done
 
+module_reports_test:
+	@echo "Starting module..."
+	@sleep 1
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();test_module_reports(port = 1234)'; do \
+		echo "Restarting GUI..."; \
+		sleep 1; \
+	done
