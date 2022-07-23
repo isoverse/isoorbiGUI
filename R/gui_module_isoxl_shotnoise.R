@@ -157,25 +157,6 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     )
 
 
-    #FIME: learn how to correctly implement shinyvalidate
-    # Create an InputValidator object
-    iv <- shinyvalidate::InputValidator$new()
-
-    iv$add_rule("timerange", shinyvalidate::sv_required())
-
-    iv$enable()
-
-    if (iv$is_valid()) {
-      # use inputs...
-    } else {
-      showNotification(
-        "Time range is a required input",
-        type = "error",
-        duration = 10,
-      )
-    }
-
-    req(iv$is_valid())
 
     values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
     #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
