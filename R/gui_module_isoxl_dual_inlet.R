@@ -415,6 +415,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
             )
           )
 
+
       })
     })
 
@@ -438,6 +439,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
         saveWorkbook(data_dual.xls, file)
       }
     )
+
 
     shinyjs::show("main-rest")
 
