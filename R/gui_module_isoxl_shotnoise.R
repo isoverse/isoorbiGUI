@@ -141,6 +141,53 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
   observeEvent(input$render_plot, {
     req(values$data)
 
+
+
+    #FIME: learn how to correctly implement shinyvalidate
+    #Create an InputValidator object
+    iv <- shinyvalidate::InputValidator$new()
+
+    iv$enable()
+
+
+    #Required inputs
+    iv$add_rule("filename", shinyvalidate::sv_required())
+    iv$add_rule("compound", shinyvalidate::sv_required())
+    iv$add_rule("isotopolog", shinyvalidate::sv_required())
+    iv$add_rule("base_peak", shinyvalidate::sv_required())
+    iv$add_rule("timerange", shinyvalidate::sv_required())
+    # #timerange input requires special attention
+    iv$add_rule("rare", shinyvalidate::sv_required())
+    iv$add_rule("extreme", shinyvalidate::sv_required())
+
+    #Input values
+    iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
+    iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+
+    # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
+    # FIXME: basepeak and isotopolog must not be identical
+
+    if (iv$is_valid()) {
+
+      showNotification(
+        "Inputs look ok",
+        type = "warning",
+        duration = 1,
+      )
+      # use inputs...
+    } else {
+      showNotification(
+        "Check for invalid input",
+        type = "error",
+        duration = 10,
+      )
+    }
+
+    #req(iv$is_valid())
+
+    req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
+
+
     shinyjs::show("main-plot")
 
 
@@ -157,25 +204,6 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     )
 
 
-    #FIME: learn how to correctly implement shinyvalidate
-    # Create an InputValidator object
-    iv <- shinyvalidate::InputValidator$new()
-
-    iv$add_rule("timerange", shinyvalidate::sv_required())
-
-    iv$enable()
-
-    if (iv$is_valid()) {
-      # use inputs...
-    } else {
-      showNotification(
-        "Time range is a required input",
-        type = "error",
-        duration = 10,
-      )
-    }
-
-    req(iv$is_valid())
 
     values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
     #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???

@@ -142,6 +142,50 @@ module_isoxl_flow_server <- function(input, output, session, isoXL.version) {
 
   observeEvent(input$start, {
 
+
+    #FIME: learn how to correctly implement shinyvalidate
+    #Create an InputValidator object
+    iv <- shinyvalidate::InputValidator$new()
+
+    iv$enable()
+
+
+    #Required inputs
+    iv$add_rule("filename.sel", shinyvalidate::sv_required())
+    iv$add_rule("base_peak", shinyvalidate::sv_required())
+    iv$add_rule("timerange", shinyvalidate::sv_required())
+    #timerange input requires special attention
+    iv$add_rule("rare", shinyvalidate::sv_required())
+    iv$add_rule("extreme", shinyvalidate::sv_required())
+    iv$add_rule("ratio.method", shinyvalidate::sv_required())
+
+    #Input values
+    iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
+    iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+
+    # FIXME: Bug if I delete rare or extreme input after clicking plot button
+
+    if (iv$is_valid()) {
+
+      showNotification(
+        "Inputs look ok",
+        type = "warning",
+        duration = 1,
+      )
+      # use inputs...
+    } else {
+      showNotification(
+        "Check for invalid input",
+        type = "error",
+        duration = 10,
+      )
+    }
+
+    #req(iv$is_valid())
+
+    req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
+
+
     shinyjs::show("main-plot")
 
     # Message with processing parameters
