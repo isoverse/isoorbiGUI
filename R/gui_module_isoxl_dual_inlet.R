@@ -110,13 +110,13 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
         selected = values$data$isotopolog[1]
       )
 
-      # add segments, blocks, block.time, startup.time etc?
+      # FIXME: add segments, blocks, block.time, startup.time etc?
 
       updateNumericInput(
         inputId = "rare",
         min = 0,
         #how to avoid negative input by keyboard?
-        max = 100,
+        max = 90,
         value = 30
       )
 
@@ -136,6 +136,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
         selected = "sum"
       )
 
+
       shinyjs::show("parameters-panel")
     }
   }, ignoreNULL = FALSE)
@@ -148,6 +149,57 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
   # Table of processing parameters
 
   observeEvent(input$start, {
+
+
+    #FIME: learn how to correctly implement shinyvalidate
+    #Create an InputValidator object
+    iv <- shinyvalidate::InputValidator$new()
+
+    iv$enable()
+
+    #Required inputs
+    iv$add_rule("sample", shinyvalidate::sv_required())
+    iv$add_rule("reference", shinyvalidate::sv_required())
+    iv$add_rule("blocks", shinyvalidate::sv_required())
+    iv$add_rule("block.time", shinyvalidate::sv_required())
+    iv$add_rule("idle.time", shinyvalidate::sv_required())
+    iv$add_rule("startup.time", shinyvalidate::sv_required())
+    iv$add_rule("segments", shinyvalidate::sv_required())
+    iv$add_rule("rare", shinyvalidate::sv_required())
+    iv$add_rule("extreme", shinyvalidate::sv_required())
+    iv$add_rule("ratio.method", shinyvalidate::sv_required())
+
+    #Input values
+    iv$add_rule("blocks", shinyvalidate::sv_between(1, 10))
+    iv$add_rule("block.time", shinyvalidate::sv_between(1, 30)) #FIXME: max depends on .isox file
+    iv$add_rule("idle.time", shinyvalidate::sv_between(0, 5)) #FIXME: max depends on .isox file
+    iv$add_rule("startup.time", shinyvalidate::sv_between(0, 10)) #FIXME: max depends on .isox file
+    iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
+    iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+
+
+
+    if (iv$is_valid()) {
+
+      showNotification(
+        "Inputs look ok",
+        type = "warning",
+        duration = 1,
+      )
+      # use inputs...
+    } else {
+      showNotification(
+        "Check for invalid input",
+        type = "error",
+        duration = 10,
+      )
+    }
+
+    #req(iv$is_valid())
+
+    req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
+
+
     shinyjs::show("main-plot")
 
 
@@ -319,6 +371,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
 
     output$plot <- renderPlotly({
       # isolate to avoid triggers on other input parameter selections
+
+
       isolate({
         plotly::ggplotly(
           ggplot(data = data.output, aes(
@@ -417,7 +471,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
                ns("upload_info"),
                "{
                font-size:12px;
-               color:black;
+               color:navy;
          }"
         )
       ),
@@ -470,7 +524,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           label = "Block time [min]",
           1,
           min = 1,
-          max = 20,
+          max = 30,
           step = 1,
           width = NULL
         ),
@@ -480,7 +534,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           label = "Switch time [min]",
           0.1,
           min = 0,
-          max = 2,
+          max = 5,
           step = 0.1,
           width = NULL
         ),
@@ -496,6 +550,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           step = 0.1,
           width = NULL
         ),
+
         "Initial time to stabilize the spray ",
         placement = "right"
         ),
@@ -560,6 +615,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
       # parameters ----
       div(
         id = ns("main-plot"), #can be shown or hidden
+
 
        box(
           title = "Overview of Results",
