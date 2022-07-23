@@ -10,19 +10,88 @@ check_dependencies <- function(dependencies) {
   return(invisible(missing_packages))
 }
 
-# install app
-install_app <- function(name, missing_deps, create_desktop_shortcut) {
-  if (length(missing_deps) > 0) {
-    sprintf("INFO: installing the following missing dependencies for the %s app: %s", name, paste(missing_deps, collapse = ", ")) %>%
-      message()
-    install.packages(missing_deps)
+# create shortcut for gui launch
+# @param name of the shortcut file
+# @param func the isoorbi function to call
+# @param the port to launch
+# @param operating_system "windows" or "unix", should be detected automatically
+# @param icon optional icon file name (has to be available in inst/icons/)
+# @param overwrite whether to overwrite the file if it already exists
+create_gui_desktop_shortcut <- function(shortcut, func, port = 5000, operating_system = .Platform$OS.type, icon = NULL, overwrite = FALSE) {
+
+  # both windows and mac os
+  desktop_path <- fs::path_expand("~/Desktop")
+
+  # OS specific paths and file names
+  if (operating_system == "windows") {
+    # windows bat file and command
+    desktop_file <- file.path(desktop_path, paste0(shortcut, ".bat"))
+    R_executable <- file.path(R.home(), "bin", "Rscript.exe")
+    exec_cmd <- sprintf("\"%s\" -e \"%s\"", R_executable, cmd)
+  } else if (operating_system == "unix") {
+    # mac os .command filed and command
+    desktop_file <- file.path(desktop_path, paste0(shortcut, ".command"))
+    R_executable <- file.path(R.home(), "bin", "Rscript")
+    exec_cmd <- sprintf("\"%s\" -e \"isoorbi::%s(port = %s)\" & open http://localhost:%s/;",
+                        R_executable, func, port, port)
+  } else {
+    stop("unsupported operating system: ", operating_system, call. = FALSE)
   }
-  if (create_desktop_shortcut) {
-    # FIXME
-    message("NOTE: desktop shortcuts functinoality not yet implmeneted")
+
+  # check if new shortcut
+  new <- FALSE
+  if (file.exists(desktop_file) && !overwrite) {
+    message("INFO: desktop shortcut ", basename(desktop_file),
+            " already exists. Set overwrite = TRUE to overwrite it.")
+    return(invisible(desktop_file))
+  } else if (file.exists(desktop_file) && overwrite) {
+    message("INFO: desktop shortcut ", basename(desktop_file),
+            " already exists but will be updated...")
+  } else {
+    message("INFO: creating desktop shortcut ", basename(desktop_file), "...")
+    new <- TRUE
   }
-  sprintf("INFO: all dependencies are installed. Run isoorbi::iso_start_%s_app() to start the user interface.", name) %>%
-    message()
+
+  # create shortcut and set permissions
+  write(exec_cmd, desktop_file)
+  if (operating_system == "windows") {
+    # anything to do?
+  } else if (operating_system == "unix") {
+    # os specfic messages
+    message("INFO: setting permissions for desktop shortcut...")
+    Sys.chmod(desktop_file, mode = "0777")
+  }
+
+  # create icon
+  if (!is.null(icon) && new) {
+    if (operating_system == "windows") {
+      icon_info <- paste0(
+        "INFO: copying icon file '", icon, "' to the desktop... ",
+        "please do xyz (@TODO: provide instructions for windows)."
+      )
+    } else if (operating_system == "unix") {
+      icon_info <- paste0(
+        "INFO: copying icon file '", icon, "' to the desktop... ",
+        "please manually right click '", basename(desktop_file),
+        "' on the desktop -> more info; ",
+        "then drag and drop icon file onto icon in the left top corner ",
+        "and delete icon file from desktop."
+      )
+    }
+
+    icons <- list.files(system.file(package = "isoorbi", "icons"))
+    if (icon %in% icons) {
+      icon_source_path <- system.file(package = "isoorbi", "icons", icon)
+      icon_desktop_path <- file.path(desktop_path, icon)
+      message(icon_info)
+      file.copy(from = icon_source_path, to = icon_desktop_path)
+    } else {
+      warning("icon '", icon, "' is not part of the package", immediate. = TRUE, call. = FALSE)
+    }
+  }
+
+  # return file path
+  return(invisible(desktop_file))
 }
 
 # missing dependencies info gui

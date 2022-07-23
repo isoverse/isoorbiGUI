@@ -4,10 +4,10 @@
 #'
 #' @param log whether to show log info messages or not. By default, shows logs when running in server mode (\code{iso_start_viewer_server}) and does not show them otherwise.
 #' @param reset whether to reset GUI settings for the data folder to their defaults. This option is only available when running a personal GUI as servers do not save any settings. Resetting settings is usually only necessary if your GUI crashed unexpectedly and gets stuck during restart. Please consider reporting the details of the crash at https://github.com/isoverse/isoorbi/issues, especially if you can easily reproduce it.
-#' @param port the localhost port where the app will be accessible, e.g. https://127.0.0.1:5000 (note that if it is a port that is open in your firewall such as 3838, the GUI will be accessible on your local network at your IP address https://xxx.xxx.xxx.xxx:3838)
+#' @param port the localhost port where the app will be accessible, e.g. https://127.0.0.1:5000 (note that if it is a port that is open in your firewall such as 3838, the GUI will be accessible on your local network at your IP address https://xxx.xxx.xxx.xxx:3838). By default looks for a random available port.
 #' @export
 #' @family isoxl functions
-iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, port = 5000) {
+iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, port = getOption("shiny.port")) {
   # launch viewer
   start_orbitrap_gui(
     local = TRUE,
@@ -21,7 +21,7 @@ iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, port = 5000) {
 # get additional dependencies
 get_isoxl_app_dependencies <- function() {
   # FIXME: needs more info
-  return(c("shinyjs", "shinyWidgets")) #envipat?
+  return(c("fs", "shinyjs", "shinyWidgets")) #envipat?
 }
 
 #' Install the orbitrap IsoXL GUI
@@ -30,11 +30,30 @@ get_isoxl_app_dependencies <- function() {
 #' @family isoxl functions
 #' @export
 iso_install_isoxl_app <- function(create_desktop_shortcut = TRUE) {
-  install_app(
-    "isoxl",
-    suppressWarnings(check_dependencies(get_isoxl_app_dependencies())),
-    create_desktop_shortcut = create_desktop_shortcut
-  )
+
+  # missing dependencies
+  missing_deps <- suppressWarnings(check_dependencies(get_isoxl_app_dependencies()))
+  if (length(missing_deps) > 0) {
+    sprintf(
+      "INFO: installing the following missing dependencies for the IsoXL app: %s",
+      paste(missing_deps, collapse = ", ")) %>%
+      message()
+    install.packages(missing_deps)
+  }
+
+  # desktop shortcut
+  if (create_desktop_shortcut) {
+    shortcut_path <- create_gui_desktop_shortcut(
+      "isoxl", "iso_start_isoxl_app", overwrite = TRUE, icon = "isoorbi.ico"
+    )
+
+    # finished
+    sprintf("INFO: all dependencies and desktop shortcuts are installed.\nINFO: run isoorbi::iso_start_isoxl_app() to start the user interface or click on '%s' on the desktop.", basename(shortcut_path)) %>% message()
+  } else {
+    # finished
+    message("INFO: all dependencies are installed.\nINFO: run isoorbi::iso_start_isoxl_app() to start the user interface.")
+  }
+  return(invisible(NULL))
 }
 
 #' Run the IsoXL user interface on a server
