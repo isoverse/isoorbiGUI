@@ -17,6 +17,25 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
       settings_file = reactive("orbitrap_gui_settings.rds")
     )
 
+    # app closing
+    observeEvent(input$close_app, showModal(close_dialog))
+
+    close_dialog <- modalDialog(
+      title = NULL, fade = FALSE, easyClose = TRUE, size = "s",
+      h2("Do you want to close IsoXL?"),
+      footer =
+        tagList(
+          actionButton("close_confirmed", label = "Close", icon = icon("window-close")),
+          modalButton("Cancel")
+        )
+    )
+
+    observeEvent(input$close_confirmed, {
+      gui_message("info", "closing isoXL app...")
+      shinyjs::runjs("window.close();") # this does not work in all browsers
+      stopApp()
+    })
+
 
     # FIXME: create data folder module that also coordinates what happens with the settings
     if (reset) settings$reset()

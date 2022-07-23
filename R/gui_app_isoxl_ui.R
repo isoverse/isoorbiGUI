@@ -29,7 +29,11 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
     skin = app_color,
 
     # HEADER ----
-    dashboardHeader(title = app_title, titleWidth = sidebar_width),
+    dashboardHeader(
+      title = app_title, titleWidth = sidebar_width,
+      tags$li(actionLink("close_app", label = " Close", icon = icon("close")),
+              class = "dropdown")
+    ),
 
     # SIDEBAR ----
     dashboardSidebar(
@@ -58,6 +62,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
       # Caj: Do we need to add dependencies here again, in addition to DESCRIPTION?
       shinyjs::useShinyjs(),
       shinyWidgets::useShinydashboard(),
+
       #shinyBS::addTooltip(),
       #shinycssloaders::withSpinner(),
       #tippy::with_tippy(),
