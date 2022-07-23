@@ -43,7 +43,13 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
       #         class = "dropdown"),
 
       #shiny::img(src = system.file("isoorbi.png"))
-      tags$img(src = system.file("isoorbi.png", package="isoorbi"), align = "right", alt="sth went wrong"),
+     # tags$img(src = system.file("isoorbi.png", package="isoorbi"), align = "right", alt="sth went wrong"),
+
+
+      tags$img(
+        src=system.file("www/isoorbi.png", package = "isoorbi"),
+        style="display:block; margin-left:auto; margin-right:auto;"
+      ),
 
       width = sidebar_width,
 
