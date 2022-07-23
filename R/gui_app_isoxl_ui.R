@@ -9,10 +9,10 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
 #FIXME: get isooorbi logo from www folder?
   # #title = tags$a(href='https://www.isoverse.org/',
-  # tags$img(src='isoorbi.png')
+   #tags$img(src='isoorbi.png')
 
-#FIXME show app logo in browser tab
-  #      tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico"))
+
+
 
 # FIXME: main panel shows briefly at startup and site refresh
 
@@ -35,6 +35,15 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
     # SIDEBAR ----
     dashboardSidebar(
+
+      #FIXME show app logo in browser tab
+      #      tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico"))
+      # tags$li(div(shiny::img(src = 'isoorbi.png', title = "A Test", height = "30px"),
+      #             style = "margin-left:1100px; margin-top:-25px; padding-top:-50px; padding-right:10px;"),
+      #         class = "dropdown"),
+
+      #shiny::img(src = system.file("isoorbi.png"))
+      tags$img(src = system.file("isoorbi.png", package="isoorbi"), align = "right", alt="sth went wrong"),
 
       width = sidebar_width,
 
