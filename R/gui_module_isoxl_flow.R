@@ -386,7 +386,7 @@ module_isoxl_flow_ui <- function(id) {
 
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
+        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0),
         tags$hr(style = "border-color: grey;"),
 
         h6("Processing options:"),

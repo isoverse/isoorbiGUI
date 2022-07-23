@@ -258,6 +258,9 @@ module_isoxl_shotnoise_ui <- function(id) {
             c(),
             multiple = FALSE),
 
+        #FIXME: negative values can still be typed into the input
+        #FIXME: what if there is an empty input for timerange
+
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min = 0), #FIXME: validate that timerange[2] > timerange[1]
         tags$hr(style = "border-color: grey;"),
 
