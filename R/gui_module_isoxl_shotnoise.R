@@ -99,13 +99,13 @@ observeEvent(values$data, {
     )
     updateSelectInput(
       inputId = "filename",
-      choices = c("all", levels(values$data$filename)),
-      selected = "all"
+      choices = c(levels(values$data$filename)),
+      selected = values$data$filename[1]
     )
     updateSelectInput(
       inputId = "compound",
-      choices = c("all", levels(values$data$compound)),
-      selected = "all"
+      choices = c(levels(values$data$compound)),
+      selected = values$data$compound[1]
     )
     shinyWidgets::updateNumericRangeInput(session,
                                           inputId = "timerange",
@@ -219,7 +219,7 @@ module_isoxl_shotnoise_ui <- function(id) {
           inputId = ns("filename"),
           label = "Files",
           c(),
-          multiple = TRUE
+          multiple = FALSE
         ),
 
         # tippy(
@@ -230,7 +230,7 @@ module_isoxl_shotnoise_ui <- function(id) {
             inputId = ns("compound"),
             label = "Compounds",
             c(),
-            multiple = TRUE),
+            multiple = FALSE),
 
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
         tags$hr(style = "border-color: grey;"),
