@@ -18,9 +18,11 @@ define.dual.inlet <-
       ),
       need(input$startup.time < 100, 'Startup time seems too long!'),
       need(input$blocks < 100, 'Looks like too many blocks!'),
+      need(input$blocks > 0, 'Need at lewast one block'),
       need(input$block.time < 100, 'Block Time appears too long'),
       need(input$segments < 10 , 'Looks like too many segments')
     )
+
 
     injections <-
       rep(c(input$reference, input$sample), 1E3)[1:input$blocks] #limited to maximum 1,000 blocks
