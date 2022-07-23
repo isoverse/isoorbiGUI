@@ -63,79 +63,79 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     )
   })
 
-# provide feedback on file upload success
-output$upload_info <- renderText({
-  req(values$upload_file)
-  validate(need(is.null(values$upload_error), message = values$upload_error))
-  paste0(values$upload_file, " uploaded")
-})
+  # provide feedback on file upload success
+  output$upload_info <- renderText({
+    req(values$upload_file)
+    validate(need(is.null(values$upload_error), message = values$upload_error))
+    paste0(values$upload_file, " uploaded")
+  })
 
-# update plot options ----
-observeEvent(values$data, {
-
-
-
-  module_message(ns, "info", "updating parameter table")
-  if (is.null(values$data) || nrow(values$data) == 0) {
-    # no data (maybe incorrect input file --> hide)
-    shinyjs::hide("parameters-panel")
-    shinyjs::hide("main-plot")
-    updateSelectInput(inputId = "isotopolog", choices = c())
-    updateSelectInput(inputId = "base_peak", choices = c())
-    updateSelectInput(inputId = "filename", choices = c())
-    updateSelectInput(inputId = "compound", choices = c())
-    shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
-    updateNumericInput(inputId = "rare", value = c())
-    updateNumericInput(inputId = "extreme", value = c())
+  # update plot options ----
+  observeEvent(values$data, {
 
 
 
-  } else {
-    # yes data --> update parameters and show
-    updateSelectInput(
-      inputId = "isotopolog",
-      choices = levels(values$data$isotopolog),
-      selected = values$data$isotopolog[2]
-    )
-    updateSelectInput(
-      inputId = "base_peak",
-      choices = levels(values$data$isotopolog),
-      selected = values$data$isotopolog[1]
-    )
-    updateSelectInput(
-      inputId = "filename",
-      choices = c(levels(values$data$filename)),
-      selected = levels(values$data$filename)[1]
+    module_message(ns, "info", "updating parameter table")
+    if (is.null(values$data) || nrow(values$data) == 0) {
+      # no data (maybe incorrect input file --> hide)
+      shinyjs::hide("parameters-panel")
+      shinyjs::hide("main-plot")
+      updateSelectInput(inputId = "isotopolog", choices = c())
+      updateSelectInput(inputId = "base_peak", choices = c())
+      updateSelectInput(inputId = "filename", choices = c())
+      updateSelectInput(inputId = "compound", choices = c())
+      shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
+      updateNumericInput(inputId = "rare", value = c())
+      updateNumericInput(inputId = "extreme", value = c())
 
-    )
-    updateSelectInput(
-      inputId = "compound",
-      choices = c(levels(values$data$compound)),
-      selected = levels(values$data$compound)[1]
 
-    )
-    shinyWidgets::updateNumericRangeInput(session,
-                                          inputId = "timerange",
-                                          value = 0:ceiling(max(values$data$time.min)))
 
-    updateNumericInput(
-      inputId = "rare",
-      min = 0, #how to avoid negative input by keyboard?
-      max = 100,
-      value = 30
-    )
+    } else {
+      # yes data --> update parameters and show
+      updateSelectInput(
+        inputId = "isotopolog",
+        choices = levels(values$data$isotopolog),
+        selected = values$data$isotopolog[2]
+      )
+      updateSelectInput(
+        inputId = "base_peak",
+        choices = levels(values$data$isotopolog),
+        selected = values$data$isotopolog[1]
+      )
+      updateSelectInput(
+        inputId = "filename",
+        choices = c(levels(values$data$filename)),
+        selected = levels(values$data$filename)[1]
 
-    updateNumericInput(
-      inputId = "extreme",
-      min = 0, #how to avoid negative input by keyboard?
-      max = 10,
-      value = 1,
-      step = 0.1
-    )
+      )
+      updateSelectInput(
+        inputId = "compound",
+        choices = c(levels(values$data$compound)),
+        selected = levels(values$data$compound)[1]
 
-    shinyjs::show("parameters-panel")
-  }
-}, ignoreNULL = FALSE)
+      )
+      shinyWidgets::updateNumericRangeInput(session,
+                                            inputId = "timerange",
+                                            value = 0:ceiling(max(values$data$time.min)))
+
+      updateNumericInput(
+        inputId = "rare",
+        min = 0, #how to avoid negative input by keyboard?
+        max = 100,
+        value = 30
+      )
+
+      updateNumericInput(
+        inputId = "extreme",
+        min = 0, #how to avoid negative input by keyboard?
+        max = 10,
+        value = 1,
+        step = 0.1
+      )
+
+      shinyjs::show("parameters-panel")
+    }
+  }, ignoreNULL = FALSE)
 
   # generate plot ----
   observeEvent(input$render_plot, {
@@ -181,38 +181,38 @@ observeEvent(values$data, {
     #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
   })
 
-# render plot ----
-output$plot <- renderPlotly({
+  # render plot ----
+  output$plot <- renderPlotly({
 
 
-  req(values$plot)
-  # isolate to avoid triggers on other input parameter selections
-  isolate({
-    plotly::ggplotly(values$plot) %>%
-      plotly::config(
-        displaylogo = FALSE,
-        modeBarButtonsToRemove = c(
-          "zoomIn2d",
-          "zoomOut2d",
-          "lasso2d",
-          "select2d",
-          "hoverClosestCartesian",
-          "hoverCompareCartesian"
-        ),
-        #options on how to save an image
-        toImageButtonOptions = list(
-          format = "png",
-          width = 900,
-          height = 600,
-          scale = 4,
-          filename = paste("shotnoise",
-                           input$isotopolog,
-                           input$base_peak,
-                           sep = "_")
+    req(values$plot)
+    # isolate to avoid triggers on other input parameter selections
+    isolate({
+      plotly::ggplotly(values$plot) %>%
+        plotly::config(
+          displaylogo = FALSE,
+          modeBarButtonsToRemove = c(
+            "zoomIn2d",
+            "zoomOut2d",
+            "lasso2d",
+            "select2d",
+            "hoverClosestCartesian",
+            "hoverCompareCartesian"
+          ),
+          #options on how to save an image
+          toImageButtonOptions = list(
+            format = "png",
+            width = 900,
+            height = 600,
+            scale = 4,
+            filename = paste("shotnoise",
+                             input$isotopolog,
+                             input$base_peak,
+                             sep = "_")
+          )
         )
-      )
+    })
   })
-})
 
 }
 
