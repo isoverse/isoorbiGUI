@@ -37,7 +37,7 @@ module_isoxl_info_ui <- function(id) {
 
       #h4("Contact and Infos"),
 
-      h5("Caj Neubauer, Sebastian Kopf & Kristýna Kantnerová"),
+      h5("Caj Neubauer, Sebastian Kopf & Kristyna Kantnerova"), #FIXME: supply ascii codes for Czech characters
       tags$h1(""),
       h5("University of Colorado Boulder"),
 
