@@ -47,7 +47,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
 
       tags$img(
-        src=system.file("www/isoorbi.png", package = "isoorbi"),
+        src=system.file("icons/isoorbi.png", package = "isoorbi"),
         style="display:block; margin-left:auto; margin-right:auto;"
       ),
 
