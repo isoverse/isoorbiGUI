@@ -1,9 +1,9 @@
 #' functions specific to flow analysis module
 
 ##Actual number crunching to generate Excel output for flow analysis
-#FIXME: DONE change calc.output.flow to calc.ratio.flow?
+#FIXME: change calc.output.flow to calc.ratio.flow?
 
-calc.ratio.flow <- function(df, INPUT_RatioMethod){
+calc.output.flow <- function(df, INPUT_RatioMethod){
 
   df.stat <- df  %>%  iso_simplify_isox_file() %>% group_by(filename,
                                #Injection,
