@@ -1,4 +1,9 @@
 #' functions specific to shot noise module
+#' @title Assign basepeak for shotnoise
+#' @description This function takes a dataset and input[?]
+#' @param dataset The dataset
+#' @param input The input
+#' @return processed dataframe
 
 assign_basepeak_shotnoise <- function(dataset, input) {
 
