@@ -2,30 +2,18 @@
 % Please edit documentation in R/logic_isox_shot_noise.R
 \name{assign_basepeak_shotnoise}
 \alias{assign_basepeak_shotnoise}
-
+\title{Assign base peak for shotnoise calculation}
 \usage{
-assign_basepeak_shotnoise(data, basepeak)
+assign_basepeak_shotnoise(data, input)
 }
 \arguments{
 \item{data}{a dataframe output from `iso_simplify_isox_file()`}
 
-\item{basepeak}{isotopocule assigned to be the base peak for ratio calculation}
+\item{input}{the isotopocule assigned to be the base peak for ratio calculation}
 }
 \value{
 processed dataframe containing new columns `Basepeak.Ions`, `Isotopolog. Ions`, and `Ratio`
 }
-\arguments{
-\item{dataset}{The dataset}
-
-\item{input}{The input}
-}
-\value{
-processed dataframe
-}
 \description{
-This function takes a dataset and input[?]
-}
-\details{
-functions specific to shot noise module
 This function assigns a base peak to data for shotnoise calculation
 }
