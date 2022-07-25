@@ -8,7 +8,7 @@ context("file loading")
 test_that("test that isox files can be read", {
 
   # test safety checks
-  expect_error(iso_read_isox_file(), "no file path")
+  expect_error(iso_simplify_isox_file(), "no file path")
   expect_error(iso_read_isox_file(c("one", "two")), "can only read.*1")
   expect_error(iso_read_isox_file("DNE"), "does not exist")
   temp_file <- tempfile(fileext = ".wrong")
@@ -17,7 +17,7 @@ test_that("test that isox files can be read", {
   unlink(temp_file) # destroy the temp file
 
   # corrupt files
-  expect_error(iso_read_isox_file(file.path(base_dir, "test_files", "missing_column.isox")), "file format error") #FIXME: base_dir not found
+  expect_error(iso_read_isox_file(file.path(base_dir, "test_files", "missing_column.isox")), "file format error")
 
   # test reading a file
   expect_true(is.tbl(df <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbi"))))
