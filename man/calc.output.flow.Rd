@@ -2,10 +2,21 @@
 % Please edit documentation in R/logic_isox_flow_analysis.R
 \name{calc.output.flow}
 \alias{calc.output.flow}
-\title{functions specific to flow analysis module}
+\title{Calculate output of flow module}
 \usage{
 calc.output.flow(df, INPUT_RatioMethod)
 }
+\arguments{
+\item{df}{A dataframe}
+
+\item{INPUT_RatioMethod}{A [value]}
+}
+\value{
+A dataframe with statisitics of interest
+}
 \description{
+This function takes a dataframe and returns processed information for the flow module
+}
+\details{
 functions specific to flow analysis module
 }

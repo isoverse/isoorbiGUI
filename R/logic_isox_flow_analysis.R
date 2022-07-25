@@ -1,6 +1,13 @@
 #' functions specific to flow analysis module
+#' @title Calculate output of flow module
+#'
+#' @description This function takes a dataframe and returns processed information for the flow module
+#' @param df A dataframe
+#' @param INPUT_RatioMethod A [value]
+#' @return A dataframe with statisitics of interest
 
 ##Actual number crunching to generate Excel output for flow analysis
+#FIXME: change calc.output.flow to calc.ratio.flow?
 
 calc.output.flow <- function(df, INPUT_RatioMethod){
 
