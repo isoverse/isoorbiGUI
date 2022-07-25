@@ -2,7 +2,7 @@
 % Please edit documentation in R/logic_isox_file_interactions.R
 \name{iso_read_isox_file}
 \alias{iso_read_isox_file}
-\title{read an isox file}
+\title{Read an isox file}
 \usage{
 iso_read_isox_file(filepath)
 }
@@ -10,5 +10,5 @@ iso_read_isox_file(filepath)
 \item{filepath}{the path to the isox file}
 }
 \description{
-read an isox file
+Read an isox file
 }

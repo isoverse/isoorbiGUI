@@ -1,4 +1,4 @@
-#' read an isox file
+#' Read an isox file
 #' @param filepath the path to the isox file
 #' @export
 iso_read_isox_file <- function(filepath) {

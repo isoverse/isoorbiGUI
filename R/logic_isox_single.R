@@ -1,4 +1,4 @@
-#' functions specific to single analysis module
+# Functions specific to single analysis module
 
 # Function to assign Base Peak --------------------------------------------
 
@@ -6,7 +6,15 @@
 
 #single analysis
 
-#' Assign a base peak (specific to the single analysis module)
+#' Assign a base peak
+#'
+#' @description `assign.basepeak.single` assigns one isotopocule in the data frame as the base peak
+#'
+#' @details This is a function specific to the analysis of data from a single analysis experiment.
+#' @param df A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopolog, ions.incremental.
+#' @param INPUT_Basepeak The isotopolog used as base peak in the ratio calculation by calc.ratio() function.
+#' @returns Outputs the input dataframe plus two columns called `Basepeak` and `Basepeak.Ions`
+#' @export
 assign.basepeak.single <- function(df, INPUT_Basepeak) {
   validate(
     need(INPUT_Basepeak, 'Missing input for Basepeak'),

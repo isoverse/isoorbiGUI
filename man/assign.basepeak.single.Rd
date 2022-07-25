@@ -2,12 +2,21 @@
 % Please edit documentation in R/logic_isox_single.R
 \name{assign.basepeak.single}
 \alias{assign.basepeak.single}
-\title{functions specific to single analysis module
-Assign a base peak (specific to the single analysis module)}
+\title{Assign a base peak}
 \usage{
 assign.basepeak.single(df, INPUT_Basepeak)
 }
+\arguments{
+\item{df}{A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopolog, ions.incremental.}
+
+\item{INPUT_Basepeak}{The isotopolog used as base peak in the ratio calculation by calc.ratio() function.}
+}
+\value{
+Outputs the input dataframe plus two columns called `Basepeak` and `Basepeak.Ions`
+}
 \description{
-functions specific to single analysis module
-Assign a base peak (specific to the single analysis module)
+`assign.basepeak.single` assigns one isotopocule in the data frame as the base peak
+}
+\details{
+This is a function specific to the analysis of data from a single analysis experiment.
 }
