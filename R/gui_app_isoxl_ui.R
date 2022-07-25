@@ -21,11 +21,31 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
     # SKIN ----
     skin = app_color,
 
+
+
     # HEADER ----
-    dashboardHeader(title = app_title, titleWidth = sidebar_width),
+    dashboardHeader(
+
+
+      #   # Set height of dashboardHeader
+      #   tags$li(class = "dropdown",
+      #           tags$style(".main-header {max-height: 20px}"),
+      #           tags$style(".main-header .logo {height: 20px;}"),
+      #           tags$style(".sidebar-toggle {height: 20px; padding-top: 1px !important;}"),
+      #           tags$style(".navbar {min-height:20px !important}")
+      #   )
+      # ),
+
+
+      title = app_title, titleWidth = sidebar_width),
 
     # SIDEBAR ----
     dashboardSidebar(
+
+
+      #   # Adjust the sidebar
+      #   tags$style(".left-side, .main-sidebar {padding-top: 20px}")
+      # ),
 
 
       width = sidebar_width,
@@ -57,6 +77,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
       #tippy::with_tippy(),
 
 
+
       # css headers
       tags$head(
         tags$style(
@@ -82,6 +103,9 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
     # BODY ====
     dashboardBody(
+
+      #Favicon for browser tab
+      tags$head(tags$link(rel = "shortcut icon", href = "https://github.com/isoverse/isoverse.github.io/blob/master/images/isoverse_icon.png?raw=true")),
 
       #div(class = "row",
 
