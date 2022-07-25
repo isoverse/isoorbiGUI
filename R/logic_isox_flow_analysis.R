@@ -1,7 +1,7 @@
 #' functions specific to flow analysis module
 
 ##Actual number crunching to generate Excel output for flow analysis
-#FIXME: change calc.output.flow to calc.ratio.flow?
+#FIXME: DONE change calc.output.flow to calc.ratio.flow?
 
 calc.ratio.flow <- function(df, INPUT_RatioMethod){
 
