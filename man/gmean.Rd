@@ -2,9 +2,15 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{gmean}
 \alias{gmean}
-\title{Define 'gmean' to calculate geometic mean}
+\title{gmean}
 \usage{
 gmean(x)
+}
+\arguments{
+\item{x}{value to compute geometric mean from}
+}
+\value{
+calculated geometric mean
 }
 \description{
 Define 'gmean' to calculate geometic mean
