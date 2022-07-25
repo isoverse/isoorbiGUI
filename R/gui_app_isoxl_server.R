@@ -26,7 +26,7 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
     # IsoX Version ------------------------------------------------------------
 
-    isoXL.version <- "Version 0.2.1" #utils::packageVersion("isoorbi") #FIXME: get version information directly?
+    isoXL.version <- as.character(utils::packageVersion("isoorbi"))
 
     # Maximum File Size for Upload --------------------------------------------
 
