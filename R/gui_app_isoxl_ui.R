@@ -5,7 +5,7 @@
 #' @param app_title the title of the application
 #' @param app_color the dashboard color, see \link[shinydashboard]{dashboardPage} skin for available options
 #' @param sidebar_width the width of the left-side navigation sidebar
-orbitrap_ui <- function(app_title = span(tagList(a(align = "left", href='https://www.isoverse.org/', tags$img(src='https://github.com/123caj/123caj.github.io/blob/main/isoorbi-draft.png?raw=true', height=40 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
+orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://github.com/123caj/123caj.github.io/blob/main/isoorbi-draft.png?raw=true', height=40 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
 
 
   box_default <- "#2c3b41" # lighter
