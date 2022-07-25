@@ -2,10 +2,21 @@
 % Please edit documentation in R/logic_isox_shot_noise.R
 \name{plot_shot_noise}
 \alias{plot_shot_noise}
-\title{plot shot noise}
+\title{Assign basepeak for shotnoise}
 \usage{
 plot_shot_noise(dataset, input)
 }
+\arguments{
+\item{dataset}{The dataset}
+
+\item{input}{The input}
+}
+\value{
+returns plot
+}
 \description{
+This function takes a dataset and input[?]
+}
+\details{
 plot shot noise
 }

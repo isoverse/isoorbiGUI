@@ -2,10 +2,18 @@
 % Please edit documentation in R/logic_isox_shot_noise.R
 \name{assign_basepeak_shotnoise}
 \alias{assign_basepeak_shotnoise}
-\title{functions specific to shot noise module}
+\title{Assign basepeak for shotnoise}
 \usage{
 assign_basepeak_shotnoise(dataset, input)
 }
+\arguments{
+\item{dataset}{The dataset}
+
+\item{input}{The input}
+}
+\value{
+processed dataframe
+}
 \description{
-functions specific to shot noise module
+This function takes a dataset and input[?]
 }
