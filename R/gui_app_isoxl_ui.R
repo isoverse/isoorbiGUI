@@ -5,16 +5,7 @@
 #' @param app_title the title of the application
 #' @param app_color the dashboard color, see \link[shinydashboard]{dashboardPage} skin for available options
 #' @param sidebar_width the width of the left-side navigation sidebar
-orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://www.isoverse.org/images/hex-isoverse.png', height=40 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
-
-#FIXME: get isooorbi logo from www folder?
-  # #title = tags$a(href='https://www.isoverse.org/',
-   #tags$img(src='isoorbi.png')
-
-
-
-
-# FIXME: main panel shows briefly at startup and site refresh
+orbitrap_ui <- function(app_title = span(tagList(a(align = "left", href='https://www.isoverse.org/', tags$img(src='https://github.com/123caj/123caj.github.io/blob/main/isoorbi-draft.png?raw=true', height=40 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
 
 
   box_default <- "#2c3b41" # lighter
@@ -36,20 +27,6 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
     # SIDEBAR ----
     dashboardSidebar(
 
-      #FIXME show app logo in browser tab
-      #      tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico"))
-      # tags$li(div(shiny::img(src = 'isoorbi.png', title = "A Test", height = "30px"),
-      #             style = "margin-left:1100px; margin-top:-25px; padding-top:-50px; padding-right:10px;"),
-      #         class = "dropdown"),
-
-      #shiny::img(src = system.file("isoorbi.png"))
-     # tags$img(src = system.file("isoorbi.png", package="isoorbi"), align = "right", alt="sth went wrong"),
-
-      #FIXME
-      # tags$img(
-      #   src=system.file("icons/isoorbi.png", package = "isoorbi"),
-      #   style="display:block; margin-left:auto; margin-right:auto;"
-      # ),
 
       width = sidebar_width,
 
