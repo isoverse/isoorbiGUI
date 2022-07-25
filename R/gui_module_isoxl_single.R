@@ -19,7 +19,7 @@ test_module_isoxl_single <- function(port = 5000) {
 
 # server ----
 
-module_isoxl_single_server <- function(input, output, session, isoXL.version) {
+module_isoxl_single_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
 
@@ -147,7 +147,7 @@ module_isoxl_single_server <- function(input, output, session, isoXL.version) {
   }, ignoreNULL = FALSE)
 
 
-  #isoXL.version <- "FIXME" #utils::packageVersion("isoorbi") #FIXME: get version information directly?
+  isoXL.version <- as.character(utils::packageVersion("isoorbi"))
 
 
 

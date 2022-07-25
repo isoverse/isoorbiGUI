@@ -26,7 +26,7 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
     # IsoX Version ------------------------------------------------------------
 
-    isoXL.version <- as.character(utils::packageVersion("isoorbi"))
+    # isoXL.version <- as.character(utils::packageVersion("isoorbi"))
 
     # Maximum File Size for Upload --------------------------------------------
 
@@ -34,13 +34,13 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
 
     # Server: Dual Inlet Analysis -----------------------------------------------------
-    dual_inlet <- callModule(module_isoxl_dual_inlet_server, id = "dual_inlet", isoXL.version = isoXL.version)
+    dual_inlet <- callModule(module_isoxl_dual_inlet_server, id = "dual_inlet")
 
     # Server: Single Analysis -----------------------------------------------------
-    single <- callModule(module_isoxl_single_server, id = "single", isoXL.version = isoXL.version)
+    single <- callModule(module_isoxl_single_server, id = "single")
 
     # Server: Flow Injection Inlet Analysis -----------------------------------------------------
-    flow <- callModule(module_isoxl_flow_server, id = "flow",  isoXL.version = isoXL.version)
+    flow <- callModule(module_isoxl_flow_server, id = "flow")
 
     # Server: Explore Data --------------------------------------------------------
     explore <- callModule(module_isoxl_explore_server, id = "explore")
