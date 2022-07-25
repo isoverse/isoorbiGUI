@@ -219,12 +219,21 @@ module_isoxl_explore_ui <- function(id) {
     sidebarPanel(
       width = 3,
 
+      # upload ----
       fileInput(
         ns("upload"),
         label = "Upload .isox file",
         accept = c(".isox"),
         placeholder = "No file loaded..."
       ),
+
+      tags$style(paste0("#",
+                        ns("upload_info"),
+                        "{
+               font-size:12px;
+               color:navy;
+         }")),
+
       textOutput(ns("upload_info")),
 
 

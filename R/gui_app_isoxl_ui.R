@@ -113,7 +113,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         tabItem(
           tabName = "dual",
-          h4("Process data from a Dual Inlet experiment"),
+          h4("Dual Inlet experiment"),
           module_isoxl_dual_inlet_ui(id = "dual_inlet")
         ),
 
@@ -122,7 +122,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "flow",
 
-          h4("Process data from flow injection experiments"),
+          h4("Flow Injection experiments"),
 
           module_isoxl_flow_ui(id = "flow")
 
@@ -133,7 +133,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "single",
 
-          h4("Analyze a single sample analysis"),
+          h4("Single sample experiment"),
 
           module_isoxl_single_ui(id = "single")
         ),
@@ -143,7 +143,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "shot",
 
-          h4("Analyze the observed precision of a ratio versus shot noise limits"),
+          h4("Compare data to shot noise limits"),
 
           module_isoxl_shotnoise_ui(id = "shot_noise")
         ),
@@ -163,7 +163,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "make_inputFile",
 
-          h4("Create an IsoX input file for your project"),
+          h4("Create an input file for IsoX"),
 
           module_isoxl_make_inputFile_ui(id = "make_inputFile")
 
@@ -174,7 +174,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "info",
 
-          h4("Contact and infos"),
+          h4("Contact"),
 
           module_isoxl_info_ui(id = "info")
         )

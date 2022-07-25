@@ -469,15 +469,12 @@ module_isoxl_dual_inlet_ui <- function(id) {
         placeholder = "No file loaded..."
       ),
 
-      tags$style(
-        paste0("#",
-               ns("upload_info"),
-               "{
+      tags$style(paste0("#",
+                        ns("upload_info"),
+                        "{
                font-size:12px;
                color:navy;
-         }"
-        )
-      ),
+         }")),
 
       textOutput(ns("upload_info")),
 

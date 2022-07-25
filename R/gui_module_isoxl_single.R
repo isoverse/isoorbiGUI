@@ -438,6 +438,14 @@ module_isoxl_single_ui <- function(id) {
         accept = c(".isox"),
         placeholder = "No file loaded..."
       ),
+
+      tags$style(paste0("#",
+                        ns("upload_info"),
+                        "{
+               font-size:12px;
+               color:navy;
+         }")),
+
       textOutput(ns("upload_info")),
 
 
