@@ -24,9 +24,9 @@ assign_basepeak_shotnoise <- function(data, input) {
 
 #' shot noise calculation (yields a vector!)
 #' @title Shot noise calculation
-#' @description This function takes a dataset and input[?]
-#' @param dataset The dataset
-#' @return processed dataframe, as vector
+#' @description This function computes the shot noise calculation
+#' @param dataset a dataframe output from `iso_simplify_isox_file()`
+#' @return The processed dataframe
 calc_shotnoise <- function(dataset){
 
   df.out <- data.frame(
