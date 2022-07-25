@@ -1,5 +1,4 @@
-# functions specific to shot noise module
-
+#' functions specific to shot noise module
 #' @title Assign basepeak for shotnoise
 #' @description This function takes a dataset and input[?]
 #' @param dataset The dataset
