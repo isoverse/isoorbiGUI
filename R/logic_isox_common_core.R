@@ -105,6 +105,9 @@ iso_filter_isox_file <- function(dataset, input) {
 se <- function(x) { sd(x) / sqrt(length(x)) }
 
 #' Define 'gmean' to calculate geometic mean
+#' @title gmean
+#' @param x value to compute geometric mean from
+#' @return calculated geometric mean
 #' @export
 gmean <- function(x)
   exp(mean(log(x))) #define geometric mean
