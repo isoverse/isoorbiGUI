@@ -5,6 +5,7 @@
 #' @param input The input
 #' @return processed dataframe
 
+#FIXME: desciption not showing up in packages help
 assign_basepeak_shotnoise <- function(dataset, input) {
 
 #FIXME: what to do when beasepeak and signal are the same?
