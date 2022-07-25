@@ -1,4 +1,4 @@
-#' functions specific to shot noise module
+# functions specific to shot noise module
 #' @title Assign basepeak for shotnoise
 #' @description This function takes a dataset and input[?]
 #' @param dataset The dataset
@@ -22,7 +22,11 @@ assign_basepeak_shotnoise <- function(dataset, input) {
 }
 
 
-# shot noise calculation (yields a vector!)
+#' shot noise calculation (yields a vector!)
+#' @title Shot noise calculation
+#' @description This function takes a dataset and input[?]
+#' @param dataset The dataset
+#' @return processed dataframe, as vector
 calc_shotnoise <- function(dataset){
 
   df.out <- data.frame(
@@ -61,6 +65,12 @@ calc_shotnoise <- function(dataset){
 
 # Plot: Shot noise --------------------------------------------------------
 
+#' plot shot noise
+#' @title Assign basepeak for shotnoise
+#' @description This function takes a dataset and input[?]
+#' @param dataset The dataset
+#' @param input The input
+#' @return returns plot
 plot_shot_noise <- function(dataset, input) {
 
   dataset %>%
