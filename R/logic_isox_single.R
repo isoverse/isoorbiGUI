@@ -6,7 +6,11 @@
 
 #single analysis
 
-#' Assign a base peak (specific to the single analysis module)
+#' @title Assign a base peak (specific to the single analysis module)
+#' @description This function assigns a base peak, for the single analysis module
+#' @param df a Dataframe
+#' @param INPUT_Basepeak a value for the input base peak
+#' @return Returns a processed dataframe
 assign.basepeak.single <- function(df, INPUT_Basepeak) {
   validate(
     need(INPUT_Basepeak, 'Missing input for Basepeak'),
