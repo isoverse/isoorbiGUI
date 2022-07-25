@@ -146,11 +146,12 @@ start_orbitrap_gui <- function(local, launch, log, reset, ...) {
   }
 }
 
+#FIXME: work towards a standalone version
 #test electricShine
-#https://github.com/chasemc/electricShine
-run_app_electricShine <- function(options = list()) {
-  shiny::shinyApp(ui = orbitrap_ui(),
-                  server = orbitrap_server(local = local, reset = reset),
-                  options = options)
-}
+# #https://github.com/chasemc/electricShine
+# run_app_electricShine <- function(options = list()) {
+#   shiny::shinyApp(ui = orbitrap_ui(),
+#                   server = orbitrap_server(local = local, reset = reset),
+#                   options = options)
+# }
 
