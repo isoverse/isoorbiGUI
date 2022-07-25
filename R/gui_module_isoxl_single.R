@@ -155,6 +155,51 @@ module_isoxl_single_server <- function(input, output, session, isoXL.version) {
 
   observeEvent(input$start, {
 
+
+    #FIME: learn how to correctly implement shinyvalidate
+    #Create an InputValidator object
+    iv <- shinyvalidate::InputValidator$new()
+
+    iv$enable()
+
+
+    #Required inputs
+    iv$add_rule("filename", shinyvalidate::sv_required())
+    iv$add_rule("compound", shinyvalidate::sv_required())
+    iv$add_rule("sample", shinyvalidate::sv_required())
+    iv$add_rule("timerange", shinyvalidate::sv_required())
+    #timerange input requires special attention
+    iv$add_rule("rare", shinyvalidate::sv_required())
+    iv$add_rule("extreme", shinyvalidate::sv_required())
+    iv$add_rule("ratio.method", shinyvalidate::sv_required())
+    #
+    # #Input values
+    iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
+    iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+
+    # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
+
+    if (iv$is_valid()) {
+
+      showNotification(
+        "Inputs look ok",
+        type = "warning",
+        duration = 1,
+      )
+      # use inputs...
+    } else {
+      showNotification(
+        "Check for invalid input",
+        type = "error",
+        duration = 10,
+      )
+    }
+
+    #req(iv$is_valid())
+
+    req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
+
+
     shinyjs::show("main-plot")
 
 
@@ -217,26 +262,16 @@ module_isoxl_single_server <- function(input, output, session, isoXL.version) {
 
     output$mytable.single = DT::renderDataTable({
 
-      datatable(    data.single_filtered %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
-                 extensions = c('Buttons','ColReorder', 'Select'),
+      datatable(    data.single_filtered %>% ungroup() %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
+                 extensions = c('Buttons','ColReorder'),
 
                  options = list(
-                   #   autoWidth = TRUE, #scroll bar to see enture table
                    scrollX = TRUE, #scroll bar to see enture table
-
-                   #   columnDefs = list(list(
-                   #
-                   #        targets = c(2L), visible = FALSE #hide some columns
-                   # )),
-
                    dom = 'Bfrtip',
                    buttons = c('colvis','copy',  'excel', 'pdf' ),
-                   colReorder = TRUE#, #columns can be reordered,
-                   # selection = list(target = "column")#,
-                   # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
+                   colReorder = TRUE #columns can be reordered
                  )
       )
-
 
     })
 
@@ -411,6 +446,9 @@ module_isoxl_single_ui <- function(id) {
       div(
         id = ns("parameters-panel"),
 
+        hr(),
+        actionButton(ns("start"), label = "Start", icon = icon("rotate")),
+
         tags$hr(style = "border-color: grey;"),
 
         h6("Define Single Analysis"),
@@ -442,7 +480,7 @@ module_isoxl_single_ui <- function(id) {
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c()),
+        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0),
         tags$hr(style = "border-color: grey;"),
 
 
@@ -465,10 +503,7 @@ module_isoxl_single_ui <- function(id) {
           choiceNames = c("sum",  "mean", "median", "geometric"),
           choiceValues = c("sum",  "mean", "median", "geometric.mean"),
           selected = "sum"
-        ),
-
-        hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("sync"))
+        )
       ) %>% shinyjs::hidden()
 
     ),

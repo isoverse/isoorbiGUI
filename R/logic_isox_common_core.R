@@ -30,7 +30,7 @@ remove.rare <- function(data, input){ #temp check functions correctly in differe
     select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
 
 
-  df <- anti_join(data, remove.df)
+  df <- anti_join(data, remove.df, by = c("filename", "scan.no", "time.min", "compound", "isotopolog", "ions.incremental", "tic", "it.ms")) #FIXME:More elegant/robust solution?
 
   return(df)
 
@@ -54,10 +54,10 @@ remove.satellitePeaks <- function(df){
 #' @export
 remove.ticxit <- function(df, input){
 
-  validate(
-    need(input$extreme, 'Missing input input$extreme'),
-    need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
-  )
+  # validate(
+  #   need(input$extreme, 'Missing input input$extreme'),
+  #   need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
+  # )
 
 
   df <- df %>% group_by(filename) %>% mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files

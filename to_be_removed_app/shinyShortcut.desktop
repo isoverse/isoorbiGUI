@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=shinyShortcut
+Comment=Run Shiny App
+Exec=/Users/caj/Library/CloudStorage/GoogleDrive-123caj@gmail.com/My Drive/Lab/software/isoorbi/to_be_removed_app/.shiny_run/shinyShortcut.r
+Terminal=false
+Type=Application

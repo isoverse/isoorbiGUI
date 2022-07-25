@@ -1,6 +1,8 @@
 #' functions specific to shot noise module
 
 assign_basepeak_shotnoise <- function(dataset, input) {
+
+#FIXME: what to do when beasepeak and signal are the same?
   df.out <- dataset %>%
     filter(isotopolog %in% c(input$base_peak, input$isotopolog)) %>% #cross check with core logic filter function
     droplevels() %>%
@@ -12,7 +14,6 @@ assign_basepeak_shotnoise <- function(dataset, input) {
 
   return(df.out)
 }
-
 
 
 # shot noise calculation (yields a vector!)
@@ -46,7 +47,7 @@ calc_shotnoise <- function(dataset){
 
   df.out <- df.out %>% na.omit() %>% select(-shotnoise, -shotnoise.neff)
 
-  df.out <- df.out %>% tidyr::gather(key, value, -scans, -neff)
+  df.out <- df.out %>% tidyr::pivot_longer(-c("scans", "neff"), names_to="key", values_to="value") #FIXME: improve nomenclature of columns
 
  return(df.out)
 }
@@ -71,13 +72,13 @@ plot_shot_noise <- function(dataset, input) {
       geom = 'text',
       label = 'shot noise \nlimit',
       color = "blue",
-      x = 0.05 * median(dataset$neff),
-      y = median(dataset$value) #find a better way to position label
+      x = min(dataset$neff),
+      y = 0.2*max(dataset$value)
     ) +
 
     scale_x_continuous(
       trans = log10_trans(),
-      breaks = c(10000, 100000, 1000000, 10000000, 100000000),
+      breaks = c( 10000, 100000, 1000000, 10000000, 100000000),
       labels = c("1E4", "1E5", "1E6", "1E7", "1E8")
     ) +
     scale_y_continuous(
@@ -92,8 +93,9 @@ plot_shot_noise <- function(dataset, input) {
         "0.5 permil",
         "0.2 permil",
         "0.1 permil"
-      ),
-      limits = c(0.0001, 0.01)
+      )
+      # ,
+      # limits = c(0.0001, 0.01)
     )
 
 }

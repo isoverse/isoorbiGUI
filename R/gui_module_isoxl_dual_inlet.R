@@ -65,7 +65,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
   output$upload_info <- renderText({
     req(values$upload_file)
     validate(need(is.null(values$upload_error), message = values$upload_error))
-    paste0(values$upload_file, " uploaded")
+    paste0("uploaded ", values$upload_file)
   })
 
   # update plot options ----
@@ -74,8 +74,6 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
     if (is.null(values$data) || nrow(values$data) == 0) {
       # no data (maybe incorrect input file --> hide)
       shinyjs::hide("parameters-panel")
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
       updateTextInput(inputId = "sample", value = c())
       updateTextInput(inputId = "reference", value = c())
       updateSelectInput(inputId = "base_peak", choices = c())
@@ -110,13 +108,13 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
         selected = values$data$isotopolog[1]
       )
 
-      # add segments, blocks, block.time, startup.time etc?
+      # FIXME: add segments, blocks, block.time, startup.time etc?
 
       updateNumericInput(
         inputId = "rare",
         min = 0,
         #how to avoid negative input by keyboard?
-        max = 100,
+        max = 90,
         value = 30
       )
 
@@ -136,6 +134,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
         selected = "sum"
       )
 
+
       shinyjs::show("parameters-panel")
     }
   }, ignoreNULL = FALSE)
@@ -148,6 +147,60 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
   # Table of processing parameters
 
   observeEvent(input$start, {
+
+    shinyjs::hide("main-plot")
+    shinyjs::hide("main-rest")
+
+    #FIME: learn how to correctly implement shinyvalidate
+    #Create an InputValidator object
+    iv <- shinyvalidate::InputValidator$new()
+
+    iv$enable()
+
+    #Required inputs
+    iv$add_rule("sample", shinyvalidate::sv_required())
+    iv$add_rule("reference", shinyvalidate::sv_required())
+    iv$add_rule("blocks", shinyvalidate::sv_required())
+    iv$add_rule("block.time", shinyvalidate::sv_required())
+    iv$add_rule("idle.time", shinyvalidate::sv_required())
+    iv$add_rule("startup.time", shinyvalidate::sv_required())
+    iv$add_rule("segments", shinyvalidate::sv_required())
+    iv$add_rule("rare", shinyvalidate::sv_required())
+    iv$add_rule("extreme", shinyvalidate::sv_required())
+    iv$add_rule("ratio.method", shinyvalidate::sv_required())
+
+    #Input values
+    iv$add_rule("blocks", shinyvalidate::sv_between(1, 10))
+    iv$add_rule("block.time", shinyvalidate::sv_between(1, 30)) #FIXME: max depends on .isox file
+    iv$add_rule("idle.time", shinyvalidate::sv_between(0, 5)) #FIXME: max depends on .isox file
+    iv$add_rule("startup.time", shinyvalidate::sv_between(0, 10)) #FIXME: max depends on .isox file
+    iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
+    iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+
+
+
+    if (iv$is_valid()) {
+
+      showNotification(
+        "Inputs look ok",
+        type = "warning",
+        duration = 1,
+      )
+      # use inputs...
+    } else {
+      showNotification(
+        "Check for invalid input",
+        type = "error",
+        duration = 10,
+      )
+    }
+
+    #req(iv$is_valid())
+
+    req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
+
+    #req(values$upload_file)
+
     shinyjs::show("main-plot")
 
 
@@ -277,23 +330,14 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
 
     output$mytable = DT::renderDataTable({
       datatable(
-        data.dual_inlet_filtered %>% mutate_if(is.numeric, round, digits = 4),
+        data.dual_inlet_filtered %>% ungroup() %>% mutate_if(is.double, round, digits = 3),
         rownames = FALSE ,
-        extensions = c('Buttons', 'ColReorder', 'Select'),
-
+        extensions = c('Buttons', 'ColReorder'),
         options = list(
-          #   autoWidth = TRUE, #scroll bar to see enture table
           scrollX = TRUE,
-          #scroll bar to see enture table
-
-          #   columnDefs = list(list(targets = c(2L), visible = FALSE #hide some columns
-          # )),
-
           dom = 'Bfrtip',
           buttons = c('colvis', 'copy',  'excel', 'pdf'),
-          colReorder = TRUE#, #columns can be reordered,
-          # selection = list(target = "column")#,
-          # options = list(ordering = FALSE, searching = FALSE, pageLength = 5)
+          colReorder = TRUE#, #columns can be reordered
         )
       )
 
@@ -328,6 +372,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
 
     output$plot <- renderPlotly({
       # isolate to avoid triggers on other input parameter selections
+
+
       isolate({
         plotly::ggplotly(
           ggplot(data = data.output, aes(
@@ -369,6 +415,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
             )
           )
 
+
       })
     })
 
@@ -393,6 +440,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session,  isoXL.versio
       }
     )
 
+
     shinyjs::show("main-rest")
 
   })
@@ -411,6 +459,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
     sidebarPanel(
       width = 3,
 
+
+
       # upload ----
       fileInput(
         ns("upload"),
@@ -418,13 +468,27 @@ module_isoxl_dual_inlet_ui <- function(id) {
         accept = c(".isox"),
         placeholder = "No file loaded..."
       ),
-      textOutput(ns("upload_info")),
 
+      tags$style(
+        paste0("#",
+               ns("upload_info"),
+               "{
+               font-size:12px;
+               color:navy;
+         }"
+        )
+      ),
+
+      textOutput(ns("upload_info")),
 
 
       # parameters ----
       div(
         id = ns("parameters-panel"), #can be shown or made hidden
+
+        hr(),
+        actionButton(ns("start"), label = "Start", icon = icon("rotate")),
+
 
         tags$hr(style = "border-color: grey;"),
 
@@ -444,9 +508,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
-
         tags$hr(style = "border-color: grey;"),
-
 
         h6("Parameters:"),
 
@@ -465,7 +527,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           label = "Block time [min]",
           1,
           min = 1,
-          max = 20,
+          max = 30,
           step = 1,
           width = NULL
         ),
@@ -475,10 +537,12 @@ module_isoxl_dual_inlet_ui <- function(id) {
           label = "Switch time [min]",
           0.1,
           min = 0,
-          max = 2,
+          max = 5,
           step = 0.1,
           width = NULL
         ),
+
+        tippy(
 
         numericInput(
           inputId = ns("startup.time"),
@@ -490,10 +554,13 @@ module_isoxl_dual_inlet_ui <- function(id) {
           width = NULL
         ),
 
+        "Initial time to stabilize the spray ",
+        placement = "right"
+        ),
+
         tags$hr(style = "border-color: grey;"),
 
         h6("Processing options:"),
-
 
         tippy(
           numericInput(
@@ -505,7 +572,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             step = 1,
             width = NULL
           ),
-          "Processing option: Split blocks into multiple segments",
+          "Split each block into segments",
           placement = "right"
         ),
 
@@ -517,7 +584,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          "Processing option: Isotopocule must have been detected > x % of scans",
+          "Isotopocule must have been detected in more than x % of scans",
           placement = "right"
         ),
         tippy(
@@ -527,7 +594,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          "Processing option: Truncate data based on TICxIT",
+          "Truncate data based on ions in Orbitrap (ITxTIC)",
           placement = "right"
         ),
 
@@ -537,11 +604,9 @@ module_isoxl_dual_inlet_ui <- function(id) {
           choiceNames = c("sum",  "mean", "median", "geometric"),
           choiceValues = c("sum",  "mean", "median", "geometric.mean"),
           selected = "sum"
-        ),
+        )
 
-        hr(),
-        actionButton(ns("start"), label = "Start", icon = icon("sync"))
-      ) %>% shinyjs::hidden() #need this?
+      ) %>% shinyjs::hidden() # so that element does not load during startup and refresh
 
     ),
 
@@ -554,6 +619,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
       div(
         id = ns("main-plot"), #can be shown or hidden
 
+
        box(
           title = "Overview of Results",
           width = "auto" ,
@@ -562,7 +628,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           solidHeader = T,
           withSpinner(plotlyOutput(ns("plot")))
         )
-      ),
+      ) %>% shinyjs::hidden(),
       #how to save png at higher resolution?
 
       hr(),
@@ -591,7 +657,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           DT::dataTableOutput(ns("mytable"))
         )
 
-      )
+      ) %>% shinyjs::hidden()
 
     )
 

@@ -2,10 +2,12 @@
 % Please edit documentation in R/logic_isox_single.R
 \name{assign.basepeak.single}
 \alias{assign.basepeak.single}
-\title{functions specific to single analysis module}
+\title{functions specific to single analysis module
+Assign a base peak (specific to the single analysis module)}
 \usage{
 assign.basepeak.single(df, INPUT_Basepeak)
 }
 \description{
 functions specific to single analysis module
+Assign a base peak (specific to the single analysis module)
 }

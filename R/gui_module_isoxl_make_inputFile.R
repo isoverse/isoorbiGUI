@@ -50,6 +50,48 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
   observeEvent(input$start, {
 
+
+    #FIME: learn how to correctly implement shinyvalidate
+    #Create an InputValidator object
+    iv <- shinyvalidate::InputValidator$new()
+
+    iv$enable()
+
+
+    #Required inputs
+    # iv$add_rule("filename", shinyvalidate::sv_required())
+    iv$add_rule("INPUT_IsoX_compound", shinyvalidate::sv_required())
+    iv$add_rule("INPUT_IsoX_tolerance", shinyvalidate::sv_between(0.1, 1))
+    iv$add_rule("INPUT_IsoX_threshold", shinyvalidate::sv_between(0.0001, 10))
+    iv$add_rule("INPUT_IsoX_massoffset", shinyvalidate::sv_between(-5, 5))
+    iv$add_rule("INPUT_IsoX_charge", shinyvalidate::sv_required())
+    iv$add_rule("INPUT_IsoX_charge", shinyvalidate::sv_between(-5, 5))
+
+    # FIXME: rename INPUT_IsoX_compound etc. Lagacy before introducing shiny modules
+    # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
+    # FIXME: basepeak and isotopolog must not be identical
+
+    if (iv$is_valid()) {
+
+      showNotification(
+        "Inputs look ok",
+        type = "warning",
+        duration = 1,
+      )
+      # use inputs...
+    } else {
+      showNotification(
+        "Check for invalid input",
+        type = "error",
+        duration = 10,
+      )
+    }
+
+    #req(iv$is_valid())
+
+    req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
+
+
     shinyjs::show("input-options")
     shinyjs::show("main-plot")
 
@@ -99,10 +141,10 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
     output$isox = DT::renderDataTable({
 
-      datatable( out.isox, rownames= FALSE ,
-                 extensions = c('Buttons','ColReorder', 'Select'),
+      datatable( out.isox, rownames= FALSE,
+                 extensions = c('Buttons'),
                  options = list(
-                   scrollX = TRUE, #scroll bar to see enture table
+                   scrollX = TRUE, #scroll bar to see entirre table
                    dom = 'Bfrtip',
                    buttons = list( #temp: option to show all rows of table (for copy & paste); show more rows in other tables also?
                      list(
@@ -214,7 +256,7 @@ module_isoxl_make_inputFile_ui <- function(id) {
 
       hr(),
 
-      actionButton(ns("start"), label = "Make IsoX input file", icon = icon("sync"))
+      actionButton(ns("start"), label = "Make IsoX input file", icon = icon("rotate"))
 
     ),
 

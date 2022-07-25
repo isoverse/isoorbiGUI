@@ -14,6 +14,8 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 #FIXME show app logo in browser tab
   #      tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico"))
 
+# FIXME: main panel shows briefly at startup and site refresh
+
 
   box_default <- "#2c3b41" # lighter
 
@@ -49,8 +51,8 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
-        menuItem("Make IsoX Input File", tabName = "make_inputFile", icon = icon("magic")),
-        menuItem("Contact", tabName = "info", icon = icon("info-circle")),
+        menuItem("Make IsoX Input File", tabName = "make_inputFile", icon = icon("wand-magic-sparkles")),
+        menuItem("Contact", tabName = "info", icon = icon("circle-info")),
         tags$li(a(uiOutput("help", inline = TRUE)))
       ),
 
