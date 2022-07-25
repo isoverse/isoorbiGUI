@@ -298,7 +298,7 @@ module_isoxl_flow_server <- function(input, output, session, isoXL.version) {
 
 
 
-    data.flow_output <- calc.ratio.flow(df = data.flow_basepeak, INPUT_RatioMethod = input$ratio.method)
+    data.flow_output <- calc.output.flow(df = data.flow_basepeak, INPUT_RatioMethod = input$ratio.method)
 
 
     # Table output: Flow Analysis, summary statistics ----------------------------
