@@ -1,15 +1,15 @@
 # functions specific to shot noise module
-#' @title Assign basepeak for shotnoise
-#' @description This function takes a dataset and input[?]
-#' @param dataset The dataset
-#' @param input The input
-#' @return processed dataframe
 
-#FIXME: desciption not showing up in packages help
-assign_basepeak_shotnoise <- function(dataset, input) {
 
-#FIXME: what to do when beasepeak and signal are the same?
-  df.out <- dataset %>%
+#' @title Assign base peak for shotnoise calculation
+#' @description This function assigns a base peak to data for shotnoise calculation
+#' @param data a dataframe output from `iso_simplify_isox_file()`
+#' @param input the isotopocule assigned to be the base peak for ratio calculation
+#' @return processed dataframe containing new columns `Basepeak.Ions`, `Isotopolog. Ions`, and `Ratio`
+assign_basepeak_shotnoise <- function(data, input) {
+
+#FIXME: what to do when beasepeak and signal are the same? add Input validation
+  df.out <- data %>%
     filter(isotopolog %in% c(input$base_peak, input$isotopolog)) %>% #cross check with core logic filter function
     droplevels() %>%
     pivot_wider(names_from = isotopolog, values_from = ions.incremental) %>% na.omit() %>%
