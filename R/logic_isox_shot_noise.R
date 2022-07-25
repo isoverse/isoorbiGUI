@@ -4,7 +4,6 @@
 #' @param dataset The dataset
 #' @param input The input
 #' @return processed dataframe
-
 assign_basepeak_shotnoise <- function(dataset, input) {
 
 #FIXME: what to do when beasepeak and signal are the same?
