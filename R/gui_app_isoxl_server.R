@@ -24,10 +24,6 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
 
 
-    # IsoX Version ------------------------------------------------------------
-
-    # isoXL.version <- as.character(utils::packageVersion("isoorbi"))
-
     # Maximum File Size for Upload --------------------------------------------
 
     options(shiny.maxRequestSize=100*1024^2) #Otherwise maximum file upload is 5MB!
