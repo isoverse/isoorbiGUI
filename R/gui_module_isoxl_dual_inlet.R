@@ -152,7 +152,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     shinyjs::hide("main-rest")
 
     #basic checks
-    if (input$idle.time > input$block.time) showNotification("Error: Input Switch time [min] exceeds Block time [min]",type="error")
+    if (input$idle.time >= input$block.time) showNotification("Error: Input Switch time [min] exceeds Block time [min]",type="error")
 
     req(input$idle.time < input$block.time)
 
