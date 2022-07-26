@@ -151,6 +151,14 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     shinyjs::hide("main-plot")
     shinyjs::hide("main-rest")
 
+    #basic checks
+    if (input$idle.time > input$block.time) showNotification("Error: Input Switch time [min] exceeds Block time [min]",type="error")
+
+    req(input$idle.time < input$block.time)
+
+
+
+
     #FIME: learn how to correctly implement shinyvalidate
     #Create an InputValidator object
     iv <- shinyvalidate::InputValidator$new()
@@ -170,7 +178,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     iv$add_rule("ratio.method", shinyvalidate::sv_required())
 
     #Input values
-    iv$add_rule("blocks", shinyvalidate::sv_between(1, 10))
+    iv$add_rule("blocks", shinyvalidate::sv_between(1, 20))
     iv$add_rule("block.time", shinyvalidate::sv_between(1, 30)) #FIXME: max depends on .isox file
     iv$add_rule("idle.time", shinyvalidate::sv_between(0, 5)) #FIXME: max depends on .isox file
     iv$add_rule("startup.time", shinyvalidate::sv_between(0, 10)) #FIXME: max depends on .isox file
@@ -360,12 +368,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         rownames = FALSE ,
         extensions = c('Buttons', 'ColReorder'),
         options = list(
-          # autoWidth = TRUE, #scroll bar to see entire table
           scrollX = TRUE,
-          #scrollbar when table is not visible
-          # columnDefs = list(list(
-          #   targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
-          # )),
           dom = 'Bfrtip',
           buttons = c('colvis', 'copy',  'excel', 'pdf'),
           colReorder = TRUE #columns can be reordered
@@ -398,6 +401,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
               color = "black",
               position = position_dodge(.9)
             )       +        geom_point(size = 3, shape = 10) + facet_wrap(~ filename, ncol = 1),
+          # +
+          #   scale_x_continuous(breaks=1:100), #temp
           # temp: could be interesting option: + facet_grid(isotopolog~.),
 
           dynamicTicks = TRUE #change ticks on zoom
@@ -533,7 +538,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           1,
           min = 1,
           max = 30,
-          step = 1,
+          step = 0.5,
           width = NULL
         ),
 

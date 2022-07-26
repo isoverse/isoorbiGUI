@@ -148,7 +148,7 @@ calc.output <- function(df, INPUT_RatioMethod) {
       Mins.to.1mio,
       No.of.scans
     ) %>%
-    unique() %>% mutate(Injection = as.integer(Injection)) %>%
+    unique() %>% mutate(Injection = as.factor(Injection)) %>%
     arrange(filename, Injection, isotopolog)
 
   df.stat <- as.data.frame(df.stat)
