@@ -143,7 +143,7 @@ module_isoxl_flow_server <- function(input, output, session) {
   observeEvent(input$start, {
 
     # special safety checks for shinywidget that does not work with shinyvalidate
-    if (input$timerange[2] < input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",type="error")
+    if (input$timerange[2] <= input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",type="error")
     if (input$timerange[1] < 0) showNotification("Input Time [min]: Check first input value",type="error")
     if (input$timerange[2] <= 0) showNotification("Input Time [min]: Check second input value",type="error")
 
