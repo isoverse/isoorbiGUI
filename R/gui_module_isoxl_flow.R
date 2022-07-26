@@ -147,9 +147,18 @@ module_isoxl_flow_server <- function(input, output, session) {
     if (input$timerange[1] < 0) showNotification("Input Time [min]: Check first input value",type="error")
     if (input$timerange[2] <= 0) showNotification("Input Time [min]: Check second input value",type="error")
 
+    if (input$timerange[1] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",type="error") #give a bit leeway
+    if (input$timerange[2] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",type="error") #give a bit leeway
+
+    if ((input$timerange[2] - input$timerange[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",type="error")
+
+
     req(input$timerange[2] > input$timerange[1])
     req(input$timerange[1] >= 0)
     req(input$timerange[2] > 0)
+    req(input$timerange[2] <= max(values$data$time.min)+0.01) #give a bit leeway
+    req(input$timerange[1] <= max(values$data$time.min)+0.01) #give a bit leeway; ~ redundant
+    req((input$timerange[2] - input$timerange[1]) > 0.5)
 
 
 
