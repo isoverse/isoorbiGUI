@@ -1,24 +1,25 @@
-#' functions specific to make_inputFile module
+# functions specific to make_inputFile module
 
 
-# check sum formula input -------------------------------------------------
-
+#' Check sum formula input
+#' @param INPUT_formula a string of the chemicial sum formula
+#' @export
 run_check <- function(INPUT_formula) {
   for (i in INPUT_formula) {
     check <-
-      check_chemform(
+      enviPat::check_chemform(
         isotopes,
         chemforms = INPUT_formula,
         get_sorted = FALSE,
         get_list = FALSE
       )
 
-    ifelse(check$warning == FALSE,
-           return(check$new_formula),
-           validate("Error in sum formula"))
+    return(check)
+    # ifelse(check$warning == FALSE,
+    #        showNotification(check$new_formula),
+    #         showNotification("Error in sum formula")) #FIXME: Make this function better!
 
   }
-
 
 }
 

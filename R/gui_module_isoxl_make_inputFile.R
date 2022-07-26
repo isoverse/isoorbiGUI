@@ -50,6 +50,15 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
   observeEvent(input$start, {
 
+    #Special checks for sum formula
+    INPUT_formula.check <-
+      run_check(INPUT_formula = input$INPUT_IsoX_sumformula)
+
+
+    if (INPUT_formula.check$warning == TRUE) showNotification("Sum formula not accepted by enviPat",type="error")
+    if (INPUT_formula.check$warning == FALSE) showNotification(paste0("Sum formula: ", INPUT_formula.check$new_formula), type="default")
+    req(INPUT_formula.check$warning == FALSE)
+
 
     #FIME: learn how to correctly implement shinyvalidate
     #Create an InputValidator object
@@ -67,7 +76,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
     iv$add_rule("INPUT_IsoX_charge", shinyvalidate::sv_required())
     iv$add_rule("INPUT_IsoX_charge", shinyvalidate::sv_between(-5, 5))
 
-    # FIXME: rename INPUT_IsoX_compound etc. Lagacy before introducing shiny modules
+    # FIXME: rename INPUT_IsoX_compound etc. Legacy before introducing shiny modules
     # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
     # FIXME: basepeak and isotopolog must not be identical
 
@@ -97,12 +106,11 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
     # Output table: Make IsoX Input  ------------------------------------------
 
-    INPUT_formula.check <-
-      run_check(INPUT_formula = input$INPUT_IsoX_sumformula)
+
 
     pattern <-  isopattern(
         isotopes = isotopes,
-        chemforms = INPUT_formula.check,
+        chemforms = INPUT_formula.check$new_formula,
         threshold =  input$INPUT_IsoX_threshold,
         plotit = FALSE,
         charge = input$INPUT_IsoX_charge, #eg 1 or -1
