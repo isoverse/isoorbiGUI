@@ -154,9 +154,11 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     #basic checks
     if (input$idle.time >= input$block.time) showNotification("Error: Input Switch time [min] exceeds Block time [min]",type="error")
 
-    req(input$idle.time < input$block.time)
 
+    #FIXME: add more and better validations
+    #basic checks that input to define dual inlet matches the data
 
+    if ( max(values$data$time.min) < ((input$blocks * input$block.time) + input$startup.time) ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data", type="error")
 
 
     #FIME: learn how to correctly implement shinyvalidate
@@ -207,6 +209,10 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     #req(iv$is_valid())
 
     req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
+
+    req( max(values$data$time.min) >= ((input$blocks * input$block.time) + input$startup.time) )
+    req(input$idle.time < input$block.time)
+
 
     #req(values$upload_file)
 
@@ -286,6 +292,10 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     )
 
+
+
+
+
     #req(input$INPUT_Rare)
     data.dual_inlet_filtered <- values$data %>%
       iso_simplify_isox_file() %>%
@@ -306,12 +316,6 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     # req(input$block.time)
 
     dual.inlet.annotation     <- define.dual.inlet(input)
-
-    #FIXME: add more and better validations
-    #basic checks that input to define dual inlet matches the data
-
-    if ( max(data.dual_inlet_filtered$time.min) < ((input$blocks * input$block.time) + input$startup.time) ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data", type="error")
-    req( max(data.dual_inlet_filtered$time.min) >= ((input$blocks * input$block.time) + input$startup.time) )
 
 
 
