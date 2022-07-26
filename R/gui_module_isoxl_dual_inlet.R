@@ -174,6 +174,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     iv$add_rule("block.time", shinyvalidate::sv_between(1, 30)) #FIXME: max depends on .isox file
     iv$add_rule("idle.time", shinyvalidate::sv_between(0, 5)) #FIXME: max depends on .isox file
     iv$add_rule("startup.time", shinyvalidate::sv_between(0, 10)) #FIXME: max depends on .isox file
+    iv$add_rule("segments", shinyvalidate::sv_between(1,10))
     iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
     iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
 
