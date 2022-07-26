@@ -299,12 +299,19 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     dual.inlet.annotation     <- define.dual.inlet(input)
 
+    #FIXME: add more and better validations
+    #basic checks that input to define dual inlet matches the data
+
+    if ( max(data.dual_inlet_filtered$time.min) < ((input$blocks * input$block.time) + input$startup.time) ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data", type="error")
+    req( max(data.dual_inlet_filtered$time.min) >= ((input$blocks * input$block.time) + input$startup.time) )
+
+
 
     # Dual Inlet: Merge data with annotation ----------------------------------
 
-
     data.annotated <-
       merge.di.annotations(data.dual_inlet_filtered, dual.inlet.annotation)
+
 
 
 
