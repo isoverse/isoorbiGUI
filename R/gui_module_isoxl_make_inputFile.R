@@ -57,7 +57,9 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
     if (INPUT_formula.check$warning == TRUE) showNotification("Sum formula not accepted by enviPat",type="error")
     if (INPUT_formula.check$warning == FALSE) showNotification(paste0("Sum formula: ", INPUT_formula.check$new_formula), type="default")
+    if (INPUT_formula.check$monoisotopic_mass > 2000) showNotification("Sum formula not accepted: >2,000Da",type="error")
     req(INPUT_formula.check$warning == FALSE)
+    req(INPUT_formula.check$monoisotopic_mass < 2000)
 
 
     #FIME: learn how to correctly implement shinyvalidate
