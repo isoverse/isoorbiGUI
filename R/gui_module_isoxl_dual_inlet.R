@@ -61,6 +61,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     )
   })
 
+
   # provide feedback on file upload success
   output$upload_info <- renderText({
     req(values$upload_file)
@@ -477,6 +478,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
       width = 3,
 
 
+      div(
+        id = ns("upload_panel"), #can be
 
       # upload ----
       fileInput(
@@ -484,6 +487,19 @@ module_isoxl_dual_inlet_ui <- function(id) {
         label = "Upload .isox file",
         accept = c(".isox"),
         placeholder = "No file loaded..."
+      )
+      ),
+
+      #TEMP:Use test data
+
+      tippy(
+      checkboxInput("use_test_data", "Use test data", value = FALSE),
+
+      "For details on test data see Contact tab",
+      animation="scale",
+      #theme="light",
+      placement ="top-start"
+
       ),
 
       tags$style(paste0("#",
