@@ -2,9 +2,17 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{make.xls}
 \alias{make.xls}
-\title{Save the summary statistics table as Excel}
+\title{make.xls}
 \usage{
 make.xls(df.stat, params)
+}
+\arguments{
+\item{df.stat}{The IsoX file with statistics of interest}
+
+\item{params}{IsoXL parameters}
+}
+\value{
+Returns statistics of interest as an excel file
 }
 \description{
 Save the summary statistics table as Excel

@@ -2,12 +2,16 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{se}
 \alias{se}
-\title{isox data manipulation
-Define 'se' as a new function to calculate standard error}
+\title{se}
 \usage{
 se(x)
 }
+\arguments{
+\item{x}{value to sompute standard error from}
+}
+\value{
+Returns value of standard error
+}
 \description{
-isox data manipulation
 Define 'se' as a new function to calculate standard error
 }

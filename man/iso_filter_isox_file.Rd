@@ -2,9 +2,17 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{iso_filter_isox_file}
 \alias{iso_filter_isox_file}
-\title{A basic filter (should be generalized for most use cases)}
+\title{iso_filter_isox_file}
 \usage{
 iso_filter_isox_file(dataset, input)
+}
+\arguments{
+\item{dataset}{The file.tsv to be filtered}
+
+\item{input}{???}
+}
+\value{
+Returns a filtered IsoX file
 }
 \description{
 A basic filter (should be generalized for most use cases)

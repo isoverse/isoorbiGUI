@@ -2,8 +2,7 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{calc.ratio}
 \alias{calc.ratio}
-\title{Ratio calculation
-NOTE: The formula used to average ratios matters! Do not simply use arithmetic mean.}
+\title{calc.ratio}
 \usage{
 calc.ratio(
   peak1,
@@ -12,7 +11,16 @@ calc.ratio(
     "weighted.vector.sum")
 )
 }
+\arguments{
+\item{peak1}{Peak 1 of interest}
+
+\item{peak2}{Peak 2 of interest}
+
+\item{ratio.method}{The desired method of computing ratio}
+}
+\value{
+calculated ratio between peak1 and peak2 with selected ratio method
+}
 \description{
-Ratio calculation
-NOTE: The formula used to average ratios matters! Do not simply use arithmetic mean.
+Ratio calculation between peaks of interest. NOTE: The formula used to average ratios matters! Do not simply use arithmetic mean.
 }

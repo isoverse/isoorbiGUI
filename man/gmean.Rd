@@ -10,7 +10,7 @@ gmean(x)
 \item{x}{value to compute geometric mean from}
 }
 \value{
-calculated geometric mean
+The calculated geometric mean
 }
 \description{
 Define 'gmean' to calculate geometic mean
