@@ -35,6 +35,13 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     plot = NULL
   )
 
+  # use test data ----
+  observeEvent(input$test_data, {
+
+    input$upload <- data("testfile_DualInlet_small.isox")
+
+  })
+
   # upload file ----
   observeEvent(input$upload, {
     module_message(
@@ -68,6 +75,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     validate(need(is.null(values$upload_error), message = values$upload_error))
     paste0("uploaded ", values$upload_file)
   })
+
 
   # update plot options ----
   observeEvent(values$data, {
