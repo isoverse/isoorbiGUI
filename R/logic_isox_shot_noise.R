@@ -1,6 +1,8 @@
 # functions specific to shot noise module
 
+#FIXME-LEIF: confirm all function descriptions
 
+#FIXME-LEIF: confirm a_b_s() descriptions below
 #' @title Assign base peak for shotnoise calculation
 #' @description This function assigns a base peak to data for shotnoise calculation
 #' @param data a dataframe output from `iso_simplify_isox_file()`
@@ -22,12 +24,12 @@ assign_basepeak_shotnoise <- function(data, input) {
   return(df.out)
 }
 
-
+#FIXME-LEIF: @return needs works
 #' shot noise calculation (yields a vector!)
 #' @title Shot noise calculation
 #' @description This function computes the shot noise calculation
 #' @param dataset a dataframe output from `iso_simplify_isox_file()`
-#' @return The processed dataframe
+#' @return The processed dataframe with new columns:...
 calc_shotnoise <- function(dataset){
 
   df.out <- data.frame(
@@ -66,12 +68,13 @@ calc_shotnoise <- function(dataset){
 
 # Plot: Shot noise --------------------------------------------------------
 
+#FIXME-LEIF: @description, @return needs works
 #' plot shot noise
-#' @title Assign basepeak for shotnoise
-#' @description This function takes a dataset and input[?]
-#' @param dataset The dataset
-#' @param input The input
-#' @return returns plot
+#' @title Plot Shot Noise
+#' @description This function plots RSE against Effective number of ions
+#' @param dataset dataset, a dataframe output from `iso_simplify_isox_file()`
+#' @param input the isotopocule assigned to be the base peak for ratio calculation
+#' @return returns a plot of Relative Standard Error vs Effective number of ions
 plot_shot_noise <- function(dataset, input) {
 
   dataset %>%
