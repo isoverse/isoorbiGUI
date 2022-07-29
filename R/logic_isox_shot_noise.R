@@ -30,6 +30,7 @@ assign_basepeak_shotnoise <- function(data, input) {
 #' @description This function computes the shot noise calculation
 #' @param dataset a dataframe output from `iso_simplify_isox_file()`
 #' @return The processed dataframe with new columns:...
+#' @export
 calc_shotnoise <- function(dataset){
 
   df.out <- data.frame(
@@ -75,6 +76,7 @@ calc_shotnoise <- function(dataset){
 #' @param dataset dataset, a dataframe output from `iso_simplify_isox_file()`
 #' @param input the isotopocule assigned to be the base peak for ratio calculation
 #' @return returns a plot of Relative Standard Error vs Effective number of ions
+#' @export
 plot_shot_noise <- function(dataset, input) {
 
   dataset %>%

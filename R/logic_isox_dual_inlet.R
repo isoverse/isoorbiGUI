@@ -1,7 +1,11 @@
 #' functions specific to dual inlet module
 
 # Dual Inlet: define experiment -------------------------------------------
-
+#' @title define.dual.inlet
+#' @description This function defines the experiment and ensure input has required information
+#' @param input Input IsoX file for dual inlet analysis
+#' @return Returns annotated dataframe for dual inlet analysis
+#' @export
 define.dual.inlet <-
   function(input) {
     validate(
@@ -54,12 +58,15 @@ define.dual.inlet <-
     return(dual.inlet.annot)
   }
 
-
-
 # Function to assign Base Peak --------------------------------------------
 
-
 # Dual Inlet
+#' @title assign.basepeak
+#' @description Assign basepeak for dual inlet analysis
+#' @param df a dataframe output from `iso_simplify_isox_file()`
+#' @param INPUT_Basepeak the isotopocule assigned to be the base peak for dual inlet analysis
+#' @return Returns dataframe with assigned base peak
+#' @export
 assign.basepeak <- function(df, INPUT_Basepeak) {
   validate(
     need(INPUT_Basepeak, 'Missing input for Basepeak'),
@@ -101,7 +108,12 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
 
 
 ##Actual number crunching to generate Excel output for dual inlet
-
+#' @title calc.output
+#' @description Logic for generating Excel output for Dual Inlet analysis
+#' @param df a dataframe output from `iso_simplify_isox_file()`
+#' @param INPUT_RatioMethod Method of computing isotopolog ratios
+#' @return Returns dataframe with statisitic of interest for dual inlet analysis
+#' @export
 calc.output <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  group_by(filename,
                                Injection,
@@ -157,8 +169,6 @@ calc.output <- function(df, INPUT_RatioMethod) {
 
 
 # Function: merge.di.annotations(df.in, dual.inlet.anno) ------------------
-
-
 
 merge.di.annotations <- function(df.in, dual.inlet.anno){
 
