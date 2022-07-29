@@ -16,5 +16,5 @@ make.isox.input(
 [return]
 }
 \description{
-[description]
+This function creates the input file for the isoX software
 }
