@@ -2,16 +2,16 @@
 % Please edit documentation in R/logic_isox_make_inputFile.R
 \name{run_check}
 \alias{run_check}
-\title{Check sum formula input}
+\title{run_check}
 \usage{
 run_check(INPUT_formula)
 }
 \arguments{
-\item{INPUT_formula}{[param]}
+\item{INPUT_formula}{Chemical formula for compound}
 }
 \value{
-[return]
+Returns formula if valid, else error message if invalid formula
 }
 \description{
-[description]
+This function checks the sum formula provided by user to ensure it is a valid Chemical Formula
 }
