@@ -6,6 +6,7 @@
 #' @param data a dataframe output from `iso_simplify_isox_file()`
 #' @param input the isotopocule assigned to be the base peak for ratio calculation
 #' @return processed dataframe containing new columns `Basepeak.Ions`, `Isotopolog. Ions`, and `Ratio`
+#' @export
 assign_basepeak_shotnoise <- function(data, input) {
 
 #FIXME: what to do when beasepeak and signal are the same? add Input validation
