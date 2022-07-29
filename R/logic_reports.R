@@ -1,13 +1,14 @@
+# logic for reports
 
-
-#' Create report
-#'
+#' @title iso_create_orbitrap_data_report
+#' @description Create report
 #' @export
 iso_create_orbitrap_data_report <- function() {
   stop("implement me")
 }
 
-#' Run report
+#' @title iso_run_orbitrap_data_report
+#' @description Run report
 #' @export
 iso_run_orbitrap_data_report <- function() {
   stop("implement me")

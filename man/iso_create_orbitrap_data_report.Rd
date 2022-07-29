@@ -2,7 +2,7 @@
 % Please edit documentation in R/logic_reports.R
 \name{iso_create_orbitrap_data_report}
 \alias{iso_create_orbitrap_data_report}
-\title{Create report}
+\title{iso_create_orbitrap_data_report}
 \usage{
 iso_create_orbitrap_data_report()
 }
