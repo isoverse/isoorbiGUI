@@ -2,13 +2,16 @@
 % Please edit documentation in R/logic_isox_file_interactions.R
 \name{iso_read_isox_file}
 \alias{iso_read_isox_file}
-\title{read an isox file}
+\title{Read an isox file}
 \usage{
 iso_read_isox_file(filepath)
 }
 \arguments{
-\item{filepath}{the path to the isox file}
+\item{filepath}{The path to the isox file}
+}
+\value{
+Return error, else reads file.tsv as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
 }
 \description{
-read an isox file
+This function reads in a IsoX file
 }

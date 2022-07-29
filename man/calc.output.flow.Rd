@@ -7,16 +7,13 @@
 calc.output.flow(df, INPUT_RatioMethod)
 }
 \arguments{
-\item{df}{A dataframe}
+\item{df}{a dataframe output from `iso_simplify_isox_file()`}
 
-\item{INPUT_RatioMethod}{A [value]}
+\item{INPUT_RatioMethod}{The method for computing ratio, method is signifigant}
 }
 \value{
 A dataframe with statisitics of interest
 }
 \description{
 This function takes a dataframe and returns processed information for the flow module
-}
-\details{
-functions specific to flow analysis module
 }

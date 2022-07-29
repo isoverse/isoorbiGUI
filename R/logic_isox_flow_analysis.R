@@ -1,14 +1,13 @@
-#' functions specific to flow analysis module
-#' @title Calculate output of flow module
-#'
-#' @description This function takes a dataframe and returns processed information for the flow module
-#' @param df A dataframe
-#' @param INPUT_RatioMethod A [value]
-#' @return A dataframe with statisitics of interest
+# functions specific to flow analysis module
 
+#FIXME-LEIF: complete and cofirm
+#' @title Calculate output of flow module
+#' @description This function takes a dataframe and returns processed information for the flow module
+#' @param df a dataframe output from `iso_simplify_isox_file()`
+#' @param INPUT_RatioMethod The method for computing ratio, method is signifigant
+#' @return A dataframe with statisitics of interest
 ##Actual number crunching to generate Excel output for flow analysis
 #FIXME: change calc.output.flow to calc.ratio.flow?
-
 calc.output.flow <- function(df, INPUT_RatioMethod){
 
   df.stat <- df  %>%  group_by(filename,
