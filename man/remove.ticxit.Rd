@@ -2,9 +2,17 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{remove.ticxit}
 \alias{remove.ticxit}
-\title{Remove extreme scans based on TIC x Injection time}
+\title{Remove.ticxit}
 \usage{
 remove.ticxit(df, input)
+}
+\arguments{
+\item{df}{Simplified IsoX file to have 'ticxit' removed}
+
+\item{input}{???}
+}
+\value{
+Returns filtered IsoXfile based of input value
 }
 \description{
 Remove extreme scans based on TIC x Injection time
