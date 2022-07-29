@@ -170,6 +170,12 @@ calc.output <- function(df, INPUT_RatioMethod) {
 
 # Function: merge.di.annotations(df.in, dual.inlet.anno) ------------------
 
+#' @title merge.di.annotations
+#' @description This function merges annotations between input data and dual inlet data
+#' @param df.in Filtered dual inlet data
+#' @param dual.inlet.anno Annotated dual inlet data
+#' @return Returns dataframe that is merged from Filtered and annotated dual inlet data
+#' @export
 merge.di.annotations <- function(df.in, dual.inlet.anno){
 
   #temp; Add validations later for Dual Inlet input parameters. Are provided values reasonable.
