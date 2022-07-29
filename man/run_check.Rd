@@ -2,10 +2,16 @@
 % Please edit documentation in R/logic_isox_make_inputFile.R
 \name{run_check}
 \alias{run_check}
-\title{functions specific to make_inputFile module}
+\title{Check sum formula input}
 \usage{
 run_check(INPUT_formula)
 }
+\arguments{
+\item{INPUT_formula}{[param]}
+}
+\value{
+[return]
+}
 \description{
-functions specific to make_inputFile module
+[description]
 }

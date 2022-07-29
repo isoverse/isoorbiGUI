@@ -7,13 +7,13 @@
 calc_shotnoise(dataset)
 }
 \arguments{
-\item{dataset}{The dataset}
+\item{dataset}{a dataframe output from `iso_simplify_isox_file()`}
 }
 \value{
-processed dataframe, as vector
+The processed dataframe with new columns:...
 }
 \description{
-This function takes a dataset and input[?]
+This function computes the shot noise calculation
 }
 \details{
 shot noise calculation (yields a vector!)

@@ -33,9 +33,9 @@ run_check <- function(INPUT_formula) {
 
 #FIXME-LEIF: complete below
 #' @title make.isox.input
-#' @description
-#' @param
-#' @return
+#' @description This function creates the input file for the isoX software
+#' @param [param]
+#' @return [return]
 #' @export
 make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_tolerance, INPUT_massOffset){
 
