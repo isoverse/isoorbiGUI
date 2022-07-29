@@ -3,6 +3,7 @@
 export("%>%")
 export(assign.basepeak.single)
 export(assign_basepeak_shotnoise)
+export(calc.output.single)
 export(calc.ratio)
 export(gmean)
 export(iso_create_orbitrap_data_report)
