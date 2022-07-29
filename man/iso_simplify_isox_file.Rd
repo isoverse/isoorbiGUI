@@ -2,9 +2,15 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{iso_simplify_isox_file}
 \alias{iso_simplify_isox_file}
-\title{Keep only columns that are useful for isotopocule ratio calculation}
+\title{iso_simplify_isox_file}
 \usage{
 iso_simplify_isox_file(dataset)
+}
+\arguments{
+\item{dataset}{The file.tsv that is to be simplified}
+}
+\value{
+Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'.
 }
 \description{
 Keep only columns that are useful for isotopocule ratio calculation

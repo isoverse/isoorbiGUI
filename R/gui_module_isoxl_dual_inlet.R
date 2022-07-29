@@ -463,8 +463,6 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   })
 }
 
-
-
 # user interface
 module_isoxl_dual_inlet_ui <- function(id) {
 

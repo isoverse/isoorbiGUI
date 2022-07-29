@@ -26,8 +26,6 @@ run_check <- function(INPUT_formula) {
 
 }
 
-
-
 # make.isox.input -------------------------------------------------------------
 #FIXME-LEIF: complete below
 #' @title make.isox.input

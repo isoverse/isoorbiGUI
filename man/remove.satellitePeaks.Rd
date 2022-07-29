@@ -2,9 +2,15 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{remove.satellitePeaks}
 \alias{remove.satellitePeaks}
-\title{Remove minor signals (e.g., satellite peaks) that were reported by IsoX}
+\title{remove.satellitePeaks}
 \usage{
 remove.satellitePeaks(df)
+}
+\arguments{
+\item{df}{Simplified IsoX file to have satellites removed from}
+}
+\value{
+IsoX file with satellites removed
 }
 \description{
 Remove minor signals (e.g., satellite peaks) that were reported by IsoX

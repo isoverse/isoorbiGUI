@@ -1,5 +1,9 @@
 # common core logic functions
-#' Keep only columns that are useful for isotopocule ratio calculation
+
+#' @title iso_simplify_isox_file
+#' @description Keep only columns that are useful for isotopocule ratio calculation
+#' @param dataset The file.tsv that is to be simplified
+#' @return Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'.
 #' @export
 iso_simplify_isox_file <- function(dataset) {
   df.out <- dataset %>% select(filename,
@@ -12,7 +16,12 @@ iso_simplify_isox_file <- function(dataset) {
                                it.ms) #ok to keep always?
 }
 
-#' Remove isotopologs that are not consistently detected across scans
+#FIXME-LEIF: complete @param input
+#' @title remove.rare
+#' @description Remove isotopologs that are not consistently detected across scans
+#' @param data Simplified IsoX file to be processed
+#' @param input ...
+#' @return Returns dataframe with inconsistent isotopologs removed
 #' @export
 remove.rare <- function(data, input){ #temp check functions correctly in different tabs
 
@@ -36,9 +45,11 @@ remove.rare <- function(data, input){ #temp check functions correctly in differe
 
 }
 
-
-
-#' Remove minor signals (e.g., satellite peaks) that were reported by IsoX
+#FIXME-LEIF: complete and confirm
+#' @title remove.satellitePeaks
+#' @description Remove minor signals (e.g., satellite peaks) that were reported by IsoX
+#' @param df Simplified IsoX file to have satellites removed from
+#' @return IsoX file with satellites removed
 #' @export
 remove.satellitePeaks <- function(df){
 
@@ -50,7 +61,12 @@ remove.satellitePeaks <- function(df){
 
 }
 
-#' Remove extreme scans based on TIC x Injection time
+#FIXME-LEIF: complete and confirm
+#' @title Remove.ticxit
+#' @description Remove extreme scans based on TIC x Injection time
+#' @param df Simplified IsoX file to have 'ticxit' removed
+#' @param input ???
+#' @return Returns filtered IsoXfile based of input value
 #' @export
 remove.ticxit <- function(df, input){
 

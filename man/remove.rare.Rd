@@ -2,9 +2,17 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{remove.rare}
 \alias{remove.rare}
-\title{Remove isotopologs that are not consistently detected across scans}
+\title{remove.rare}
 \usage{
 remove.rare(data, input)
+}
+\arguments{
+\item{data}{Simplified IsoX file to be processed}
+
+\item{input}{...}
+}
+\value{
+Returns dataframe with inconsistent isotopologs removed
 }
 \description{
 Remove isotopologs that are not consistently detected across scans
