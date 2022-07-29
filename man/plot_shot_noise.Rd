@@ -2,20 +2,20 @@
 % Please edit documentation in R/logic_isox_shot_noise.R
 \name{plot_shot_noise}
 \alias{plot_shot_noise}
-\title{Assign basepeak for shotnoise}
+\title{Plot Shot Noise}
 \usage{
 plot_shot_noise(dataset, input)
 }
 \arguments{
-\item{dataset}{The dataset}
+\item{dataset}{dataset, a dataframe output from `iso_simplify_isox_file()`}
 
-\item{input}{The input}
+\item{input}{the isotopocule assigned to be the base peak for ratio calculation}
 }
 \value{
-returns plot
+returns a plot of Relative Standard Error vs Effective number of ions
 }
 \description{
-This function takes a dataset and input[?]
+This function plots RSE against Effective number of ions
 }
 \details{
 plot shot noise

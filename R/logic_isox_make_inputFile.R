@@ -1,8 +1,12 @@
 # functions specific to make_inputFile module
 
+# check sum formula input -------------------------------------------------
 
-#' Check sum formula input
+#FIXME-LEIF: complete below
+#' @title Check sum formula input
+#' @description [description]
 #' @param INPUT_formula a string of the chemicial sum formula
+#' @return [return]
 #' @export
 run_check <- function(INPUT_formula) {
   for (i in INPUT_formula) {
@@ -27,7 +31,12 @@ run_check <- function(INPUT_formula) {
 
 # make.isox.input -------------------------------------------------------------
 
-
+#FIXME-LEIF: complete below
+#' @title make.isox.input
+#' @description This function creates the input file for the isoX software
+#' @param [param]
+#' @return [return]
+#' @export
 make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_tolerance, INPUT_massOffset){
 
   data(isotopes, package = "enviPat")
