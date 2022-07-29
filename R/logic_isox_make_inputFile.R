@@ -1,41 +1,43 @@
 # functions specific to make_inputFile module
 
 # check sum formula input -------------------------------------------------
-
 #FIXME-LEIF: complete below
-#' @title Check sum formula input
-#' @description [description]
-#' @param INPUT_formula a string of the chemicial sum formula
-#' @return [return]
+#' @title run_check
+#' @description This function checks the sum formula provided by user to ensure it is a valid Chemical Formula
+#' @param INPUT_formula Chemical formula for compound
+#' @return Returns formula if valid, else error message if invalid formula
 #' @export
 run_check <- function(INPUT_formula) {
   for (i in INPUT_formula) {
     check <-
-      enviPat::check_chemform(
+      check_chemform(
         isotopes,
         chemforms = INPUT_formula,
         get_sorted = FALSE,
         get_list = FALSE
       )
 
-    return(check)
-    # ifelse(check$warning == FALSE,
-    #        showNotification(check$new_formula),
-    #         showNotification("Error in sum formula")) #FIXME: Make this function better!
+    ifelse(check$warning == FALSE,
+           return(check$new_formula),
+           validate("Error in sum formula"))
 
   }
+
 
 }
 
 
 
 # make.isox.input -------------------------------------------------------------
-
 #FIXME-LEIF: complete below
 #' @title make.isox.input
-#' @description This function creates the input file for the isoX software
-#' @param [param]
-#' @return [return]
+#' @description This function creates the input file for the IsoX software
+#' @param pattern.list Chemical formula of compound
+#' @param INPUT_charge Charge of compound
+#' @param INPUT_compound Given name for compound
+#' @param INPUT_tolerance Tolerance [mDa]
+#' @param INPUT_massOffset Offset of mass to charge readings m/z [mDA]
+#' @return Returns a file.tsv containing columns '#Compound','Isotopolog','Mass', 'Tolerance[mmu]', 'Charge(z)'
 #' @export
 make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_tolerance, INPUT_massOffset){
 
