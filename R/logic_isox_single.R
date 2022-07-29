@@ -2,14 +2,10 @@
 
 # Function to assign Base Peak --------------------------------------------
 
-
-
 #single analysis
 
-#' Assign a base peak
-#'
+#' @title Assign a base peak
 #' @description `assign.basepeak.single` assigns one isotopocule in the data frame as the base peak
-#'
 #' @details This is a function specific to the analysis of data from a single analysis experiment.
 #' @param df A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopolog, ions.incremental.
 #' @param INPUT_Basepeak The isotopolog used as base peak in the ratio calculation by calc.ratio() function.
@@ -56,8 +52,15 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 
 
 
-##Actual number crunching to generate Excel output for single analysis
+# Actual number crunching to generate Excel output for single analysis
 
+#FIXME-LEIF: complete below
+#' @title calc.output.single
+#' @description Contains the logic to generate the Excel output for single analysis
+#' @param df A dataframe from a single analysis experiment
+#' @param INPUT_RatioMethod The method of computing ratio
+#' @return Returns table containing 'filename', 'sample.name', 'Basepeak', 'Compound', 'Isotopolog', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
+#' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  group_by(filename,
                                #Injection,
@@ -112,6 +115,7 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
   return(df.stat)
 }
 
+#FIXME-LEIF: Inquire below
 # Plot: Single analysis --------------------------------------------------------
 
 
