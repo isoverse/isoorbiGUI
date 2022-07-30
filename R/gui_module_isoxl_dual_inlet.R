@@ -80,7 +80,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-      values$data <- iso_read_isox_file("data/testfile_DualInlet_small.isox")
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
 
       # ,
       # warning = function(w)
