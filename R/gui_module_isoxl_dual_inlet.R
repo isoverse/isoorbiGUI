@@ -38,11 +38,16 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   # use test data ----
   observeEvent(input$test_data, {
 
-    test.data.path <- "data/testfile_DualInlet_small.isox"
+    if (input$test_data == TRUE) {
+
+    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))}
+
+    {shinyjs::hide("parameters-panel")}
+
 
     module_message(ns,
                    "info",
-       "test data selected: ", test.data.path
+       "test data selected: ", "testfile_DualInlet_small.isox"
      )
 
   })
