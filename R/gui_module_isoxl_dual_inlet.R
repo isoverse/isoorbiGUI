@@ -38,7 +38,12 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   # use test data ----
   observeEvent(input$test_data, {
 
-    input$upload <- data("testfile_DualInlet_small.isox")
+    test.data.path <- "data/testfile_DualInlet_small.isox"
+
+    module_message(ns,
+                   "info",
+       "test data selected: ", test.data.path
+     )
 
   })
 
@@ -58,15 +63,36 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     values$upload_error <- NULL
     values$data <- NULL
 
+
+    if (input$test_data == FALSE) {
     # try to read the uploaded file
     tryCatch(
+
+
       values$data <- iso_read_isox_file(input$upload$datapath),
       warning = function(w)
         values$upload_error <- w$message,
       error = function(e)
         values$upload_error <- e$message
+
     )
+    } else {
+      # try to read the test file
+      tryCatch(
+
+      values$data <- iso_read_isox_file("data/testfile_DualInlet_small.isox")
+
+      # ,
+      # warning = function(w)
+      #   values$upload_error <- w$message,
+      # error = function(e)
+      #   values$upload_error <- e$message
+      )
+
+  }
+
   })
+
 
 
   # provide feedback on file upload success
@@ -501,7 +527,9 @@ module_isoxl_dual_inlet_ui <- function(id) {
       #TEMP:Use test data
 
       tippy(
-      checkboxInput("use_test_data", "Use test data", value = FALSE),
+      checkboxInput(ns("test_data"), "Use test data", value = FALSE),
+
+        #actionButton(ns("start"), label = "Start", icon = icon("rotate")),
 
       "For details on test data see Contact tab",
       animation="scale",
