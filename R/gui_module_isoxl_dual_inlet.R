@@ -569,7 +569,10 @@ module_isoxl_dual_inlet_ui <- function(id) {
         label = "Upload .isox file",
         accept = c(".isox"),
         placeholder = "No file loaded..."
-      )
+      ),
+
+      textOutput(ns("upload_info")),
+
 
       ),
 
