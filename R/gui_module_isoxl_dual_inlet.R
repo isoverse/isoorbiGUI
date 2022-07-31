@@ -488,9 +488,12 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     output$download_xlsx <- downloadHandler(
       filename = function() {
+
+        if (input$test_data == TRUE) {"testfile_DualInlet_small"}
+        else{
         paste(tools::file_path_sans_ext(input$upload$name),
               "_IsoXL.xlsx",
-              sep = "")
+              sep = "")}
       },
       content = function(file) {
         saveWorkbook(data_dual.xls, file)
