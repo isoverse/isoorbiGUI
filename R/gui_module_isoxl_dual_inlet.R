@@ -40,15 +40,28 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     if (input$test_data == TRUE) {
 
-    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))}
+    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+
+
+
+    {shinyjs::hide("upload_panel")}
+
+    }
+
+    if (input$test_data == FALSE) {
+      {shinyjs::show("upload_panel")}
+
+      module_message(ns,
+                     "info",
+                     "test data selected: ", "testfile_DualInlet_small.isox"
+      )
+    }
+
 
     {shinyjs::hide("parameters-panel")}
 
 
-    module_message(ns,
-                   "info",
-       "test data selected: ", "testfile_DualInlet_small.isox"
-     )
+
 
   })
 
@@ -489,7 +502,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     output$download_xlsx <- downloadHandler(
       filename = function() {
 
-        if (input$test_data == TRUE) {"testfile_DualInlet_small"}
+        if (input$test_data == TRUE) {paste("testfile_DualInlet_small", "_IsoXL.xls", sep="")} #FIXME: use a variable for testfile name!
         else{
         paste(tools::file_path_sans_ext(input$upload$name),
               "_IsoXL.xlsx",
@@ -502,10 +515,9 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     # Download test data: .isox file ----------------------------------
 
-    #TEMP
     output$download_test_data <- downloadHandler(
       filename = function() {
-        "testfile_DualInlet_small.isox"
+        "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
       },
       content = function(file) {
         write.table(values$data, file, sep="\t", row.names = F)
@@ -532,8 +544,24 @@ module_isoxl_dual_inlet_ui <- function(id) {
       width = 3,
 
 
+      # Use test data instead of uploading data (or any data that has been already uploaded)
+
+      tippy(
+        checkboxInput(ns("test_data"), "Use test data", value = FALSE),
+
+        "For details on test data see Contact tab",
+        animation="scale",
+        #theme="light",
+        placement ="top-start"
+
+      ),
+
+      hr(),
+
       div(
         id = ns("upload_panel"), #can be
+
+
 
       # upload ----
       fileInput(
@@ -542,37 +570,16 @@ module_isoxl_dual_inlet_ui <- function(id) {
         accept = c(".isox"),
         placeholder = "No file loaded..."
       )
-      ),
-
-      #TEMP:Use test data
-
-      tippy(
-      checkboxInput(ns("test_data"), "Use test data", value = FALSE),
-
-        #actionButton(ns("start"), label = "Start", icon = icon("rotate")),
-
-      "For details on test data see Contact tab",
-      animation="scale",
-      #theme="light",
-      placement ="top-start"
 
       ),
 
-      tags$style(paste0("#",
-                        ns("upload_info"),
-                        "{
-               font-size:12px;
-               color:navy;
-         }")),
-
-      textOutput(ns("upload_info")),
 
 
       # parameters ----
       div(
         id = ns("parameters-panel"), #can be shown or made hidden
 
-        hr(),
+
         actionButton(ns("start"), label = "Start", icon = icon("rotate")),
 
 
