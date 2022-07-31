@@ -497,6 +497,18 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       }
     )
 
+    # Download test data: .isox file ----------------------------------
+
+    #TEMP
+    output$download_test_data <- downloadHandler(
+      filename = function() {
+        "testfile_DualInlet_small.isox"
+      },
+      content = function(file) {
+        write.table(values$data, file, sep="\t", row.names = F)
+      }
+    )
+
 
     shinyjs::show("main-rest")
 
@@ -707,6 +719,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
         id = ns("main-rest"),
         downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
 
+        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
         hr(),
 
         box(
