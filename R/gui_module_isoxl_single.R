@@ -1,6 +1,10 @@
 # test ----
 # test the single analysis module (direct infusion) as a standalone app
-
+#'@title test_module_isoxl_single
+#'@description test the single analysis module (direct infusion) as a standalone app
+#'@param port Device port being used
+#'@return ...
+#'@export
 test_module_isoxl_single <- function(port = 5000) {
   app <-
     shinyApp(
@@ -18,7 +22,13 @@ test_module_isoxl_single <- function(port = 5000) {
 }
 
 # server ----
-
+#' @title module_isoxl_single_server
+#' @description ...
+#' @param input ...
+#' @param output ...
+#' @param session ...
+#' @return ...
+#' @export
 module_isoxl_single_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
@@ -441,7 +451,11 @@ module_isoxl_single_server <- function(input, output, session) {
 
 
 # user interface ----
-
+#' @title module_isoxl_single_ui
+#' @description ...
+#' @param id ...
+#' @return ...
+#' @export
 module_isoxl_single_ui <- function(id) {
 
   # namespace
