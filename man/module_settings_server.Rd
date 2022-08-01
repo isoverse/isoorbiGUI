@@ -2,7 +2,7 @@
 % Please edit documentation in R/gui_module_settings.R
 \name{module_settings_server}
 \alias{module_settings_server}
-\title{stores the settings}
+\title{module_settings_server}
 \usage{
 module_settings_server(
   input,
@@ -14,10 +14,64 @@ module_settings_server(
 )
 }
 \arguments{
+\item{input}{...}
+
+\item{output}{...}
+
 \item{save_settings}{whether to save settings to the settings file}
 
 \item{settings_file_path}{reactive function returning the settings file path}
+
+\item{value}{...}
+
+\item{quiet}{...}
+
+\item{name}{...}
+
+\item{ns}{...}
+
+\item{variable}{...}
+
+\item{default}{...}
+}
+\value{
+...
+
+...
+
+returns setting name for gui
+
+Returns generates save character
+
+...
+
+...
+
+...
+
+...
+
+...
 }
 \description{
+stores the settings
+
+reset gui settings
+
+generate gui setting name
+
+generate message save character
+
+set gui setting
+
+returns gui setting if available, otherwise returns the default
+
+get all gui settings as table
+
+save gui settings
+
+load gui settings
+}
+\details{
 stores the settings
 }
