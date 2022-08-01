@@ -14,11 +14,11 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
     settings = list()
   )
 
-  # reset gui settings
-  #' @title reset
-  #' @description reset gui settings
-  #' @return ...
-  #' @export
+   # reset gui settings
+#  #' @title reset
+#  #' @description reset gui settings
+#  #' @return ...
+#  #' @export
   reset <- function() {
     module_message(session$ns, "info", "RESETTING gui settings")
     isolate({ values$settings <- list() })
@@ -26,13 +26,13 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
   }
 
   # generate gui setting name
-  #' @title make_name
-  #' @description generate gui setting name
-  #' @param name ...
-  #' @param ns ...
-  #' @param variable ...
-  #' @return returns setting name for gui
-  #' @export
+#  #' @title make_name
+#  #' @description generate gui setting name
+#  #' @param name ...
+#  #' @param ns ...
+#  #' @param variable ...
+#  #' @return returns setting name for gui
+#  #' @export
   make_name <- function(name, ns = NULL, variable = NULL) {
     if (!is.null(variable)){
       name <- paste0(name, "-", variable)
@@ -44,11 +44,11 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
   }
 
   # generate message save char
-  #' @title make_msg_value
-  #' @description generate message save character
-  #' @param value ...
-  #' @return Returns generates save character
-  #' @export
+#  #' @title make_msg_value
+#  #' @description generate message save character
+#  #' @param value ...
+#  #' @return Returns generates save character
+#  #' @export
   make_msg_value <- function(value) {
     if (is.list(value)) "<list>"
     else if (is.data.frame(value)) "<tibble>"
@@ -56,15 +56,15 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
   }
 
   # set gui setting
-  #' @title set
-  #' @description set gui setting
-  #' @param name ...
-  #' @param value ...
-  #' @param ns ...
-  #' @param variable ...
-  #' @param quiet ...
-  #' @return ...
-  #' @export
+#  #' @title set
+#  #' @description set gui setting
+#  #' @param name ...
+#  #' @param value ...
+#  #' @param ns ...
+#  #' @param variable ...
+#  #' @param quiet ...
+#  #' @return ...
+#  #' @export
   set <- function(name, value, ns = NULL, variable = NULL, quiet = FALSE) {
     # make name
     name <- make_name(name, ns = ns, variable = variable)
@@ -81,14 +81,14 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
   }
 
   # returns gui setting if available, otherwise returns the default
-  #' @title get
-  #' @description returns gui setting if available, otherwise returns the default
-  #' @param name ...
-  #' @param ns ...
-  #' @param variable ...
-  #' @param default ...
-  #' @return ...
-  #' @export
+#  #' @title get
+#  #' @description returns gui setting if available, otherwise returns the default
+#  #' @param name ...
+#  #' @param ns ...
+#  #' @param variable ...
+#  #' @param default ...
+#  #' @return ...
+#  #' @export
   get <- function(name, ns = NULL, variable = NULL, default = NULL) {
     # make name
     name <- make_name(name, ns = ns, variable = variable)
@@ -100,10 +100,10 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
   }
 
   # get all gui settings table
-  #' @title get_all_as_table
-  #' @description get all gui settings as table
-  #' @return ...
-  #' @export
+#  #' @title get_all_as_table
+#  #' @description get all gui settings as table
+#  #' @return ...
+#  #' @export
   get_all_as_table <- function() {
     isolate({
       if (length(values$settings) == 0) return(tibble::tibble())
@@ -117,10 +117,10 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
   }
 
   # save gui settings
-  #' @title save
-  #' @description save gui settings
-  #' @return ...
-  #' @export
+#  #' @title save
+#  #' @description save gui settings
+#  #' @return ...
+#  #' @export
   save <- function() {
     if (save_settings) {
       isolate({
@@ -135,10 +135,10 @@ module_settings_server <- function(input, output, session, save_settings = FALSE
   }
 
   # load gui settings
-  #' @title load
-  #' @description load gui settings
-  #' @return ...
-  #' @export
+#  #' @title load
+#  #' @description load gui settings
+#  #' @return ...
+#  #' @export
   load <- function() {
     isolate({
       file_path <- settings_file_path()
