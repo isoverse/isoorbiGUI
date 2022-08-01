@@ -1,6 +1,10 @@
 # test ----
 # test the shot noise module as a standalone app
-
+#' @title test_module_isoxl_shot_noise
+#' @description test the shot noise module as a standalone app
+#' @param port ...
+#' @return ...
+#' @export
 test_module_isoxl_shot_noise <- function(port = 5000) {
   app <-
     shinyApp(
@@ -18,7 +22,13 @@ test_module_isoxl_shot_noise <- function(port = 5000) {
 }
 
 # server ----
-
+#' @title module_isoxl_shot_noise_server
+#' @description ...
+#' @param input ...
+#' @param output ...
+#' @param sesion ...
+#' @return ...
+#' @export
 module_isoxl_shot_noise_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
@@ -269,7 +279,11 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
 
 # user interface ----
-
+#' @title module_isoxl_shotnoise_ui
+#' @description ...
+#' @param id ...
+#' @return ...
+#' @export
 module_isoxl_shotnoise_ui <- function(id) {
 
   # namespace
