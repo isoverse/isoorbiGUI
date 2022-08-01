@@ -1,6 +1,10 @@
 # test ----
 # test the info module as a standalone app
-
+#' @title test_module_isoxl_info
+#' @description ...
+#' @param port ...
+#' @return ...
+#' @export
 test_module_isoxl_info <- function(port = 5000) {
   app <-
     shinyApp(
@@ -18,7 +22,13 @@ test_module_isoxl_info <- function(port = 5000) {
 }
 
 # server ----
-
+#' @title module_isoxl_info_server
+#' @description ...
+#' @param input ...
+#' @param output ...
+#' @param session ...
+#' @return ...
+#' @export
 module_isoxl_info_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
@@ -26,6 +36,11 @@ module_isoxl_info_server <- function(input, output, session) {
 
 # user interface ----
 
+#' @title module_isoxl_info_ui
+#' @description ...
+#' @param id ...
+#' @return ...
+#' @export
 module_isoxl_info_ui <- function(id) {
 
   # namespace

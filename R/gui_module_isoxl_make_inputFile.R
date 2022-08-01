@@ -1,6 +1,10 @@
 # test ----
 # test the make_inputFile module as a standalone app
-
+#' @title test_module_isoxl_make_inputFile
+#' @description test the make_inputFile module as a standalone app
+#' @param port ...
+#' @return ...
+#' @export
 test_module_isoxl_make_inputFile <- function(port = 5000) {
   app <-
     shinyApp(
@@ -19,7 +23,13 @@ test_module_isoxl_make_inputFile <- function(port = 5000) {
 
 
 # server ----
-
+#' @title module_isoxl_make_inputFile_server
+#' @description ...
+#' @param input ...
+#' @param output ...
+#' @param sesion ...
+#' @return ...
+#' @export
 module_isoxl_make_inputFile_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
@@ -188,7 +198,11 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
 
 # user interface ----
-
+#' @title module_isoxl_make_inputFile_ui
+#' @description ...
+#' @param id ...
+#' @return ...
+#' @export
 module_isoxl_make_inputFile_ui <- function(id) {
 
   # namespace
