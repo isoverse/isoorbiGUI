@@ -55,6 +55,14 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
                      "info",
                      "test data selected: ", "testfile_DualInlet_small.isox"
       )
+
+      # # provide feedback on file upload success
+      # output$upload_info <- renderText({
+      #   paste0("Please upload a new .isox file")
+      # })
+
+
+
     }
 
 
@@ -570,6 +578,13 @@ module_isoxl_dual_inlet_ui <- function(id) {
         accept = c(".isox"),
         placeholder = "No file loaded..."
       ),
+
+      tags$style(paste0("#",
+                        ns("upload_info"),
+                        "{
+               font-size:12px;
+               color:navy;
+         }")),
 
       textOutput(ns("upload_info")),
 
