@@ -1,6 +1,11 @@
 # test ----
 # test the flow injection analysis module as a standalone app
-
+# test the info module as a standalone app
+#' @title test_module_isoxl_flow
+#' @description ...
+#' @param port ...
+#' @return ...
+#' @export
 test_module_isoxl_flow <- function(port = 5000) {
   app <-
     shinyApp(
@@ -18,7 +23,13 @@ test_module_isoxl_flow <- function(port = 5000) {
 }
 
 # server ----
-
+#' @title module_isoxl_flow_server
+#' @description ...
+#' @param input ...
+#' @param output ...
+#' @param session ...
+#' @return ...
+#' @export
 module_isoxl_flow_server <- function(input, output, session) {
 
 # namespace
@@ -412,7 +423,11 @@ output$download_xlsx <- downloadHandler(
 
 
 # user interface ----
-
+#' @title module_isoxl_flow_ui
+#' @description ...
+#' @param id ...
+#' @return ...
+#' @export
 module_isoxl_flow_ui <- function(id) {
 
 
