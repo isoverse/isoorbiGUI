@@ -1,5 +1,14 @@
+#FIXME-LEIF: there is no test function for this module. needed?
+
 # server ----
 
+#' @title module_isoxl_explore_server
+#' @description ...
+#' @param input ...
+#' @param output ...
+#' @param session ...
+#' @return ...
+#' @export
 module_isoxl_explore_server <- function(input, output, session) {
   # namespace
   ns <- session$ns
@@ -208,7 +217,11 @@ observeEvent(input$action_explore, {
 
 # user interface ----
 
-
+#' @title module_isoxl_explore_ui
+#' @description ...
+#' @param id ...
+#' @return ...
+#' @export
 module_isoxl_explore_ui <- function(id) {
 
 

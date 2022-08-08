@@ -1,6 +1,6 @@
 # test ----
 # test the flow injection analysis module as a standalone app
-# test the info module as a standalone app
+# test the flow module as a standalone app
 #' @title test_module_isoxl_flow
 #' @description ...
 #' @param port ...
