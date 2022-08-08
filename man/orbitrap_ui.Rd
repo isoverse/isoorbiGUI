@@ -2,7 +2,7 @@
 % Please edit documentation in R/gui_app_isoxl_ui.R
 \name{orbitrap_ui}
 \alias{orbitrap_ui}
-\title{Orbitrap ShinyApp UI}
+\title{orbitrap_ui}
 \usage{
 orbitrap_ui(
   app_title = span(tagList(a(href = "https://www.isoverse.org/", tags$img(src =
@@ -18,6 +18,9 @@ orbitrap_ui(
 \item{app_color}{the dashboard color, see \link[shinydashboard]{dashboardPage} skin for available options}
 
 \item{sidebar_width}{the width of the left-side navigation sidebar}
+}
+\value{
+...
 }
 \description{
 Generates the top-level GUI, rest is generated dynamically by \code{orbitrap_server}.

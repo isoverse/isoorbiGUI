@@ -1,6 +1,10 @@
 # orbitrap reports ui
 #
 # generates the user interface part of the orbitrap reports GUI
+#' @title orbitrap_reports_ui
+#' @description generates the user interface part of the orbitrap reports GUI
+#' @return ...
+#' @export
 orbitrap_reports_ui <- function() {
 
   # Define UI ----

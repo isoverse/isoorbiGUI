@@ -1,10 +1,13 @@
-#' Orbitrap ShinyApp UI
-#'
-#' Generates the top-level GUI, rest is generated dynamically by \code{orbitrap_server}.
-#'
+# Orbitrap ShinyApp UI
+#
+# Generates the top-level GUI, rest is generated dynamically by \code{orbitrap_server}.
+#' @title orbitrap_ui
+#' @description Generates the top-level GUI, rest is generated dynamically by \code{orbitrap_server}.
 #' @param app_title the title of the application
 #' @param app_color the dashboard color, see \link[shinydashboard]{dashboardPage} skin for available options
 #' @param sidebar_width the width of the left-side navigation sidebar
+#' @return ...
+#' @export
 orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://github.com/123caj/123caj.github.io/blob/main/isoorbi-draft.png?raw=true', height=40 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
 
 

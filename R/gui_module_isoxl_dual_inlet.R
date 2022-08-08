@@ -1,6 +1,10 @@
 # test ----
 # test the dual inlet module as a standalone app
-
+#' @title test_module_isoxl_dual_inlet
+#' @description ...
+#' @param port ...
+#' @return ...
+#' @export
 test_module_isoxl_dual_inlet <- function(port = 5000) {
   app <-
     shinyApp(
@@ -17,7 +21,14 @@ test_module_isoxl_dual_inlet <- function(port = 5000) {
   runApp(app, display.mode = "normal", port = 5000)
 }
 
-# server
+# server ----
+#' @title module_isoxl_dual_inlet_server
+#' @description ...
+#' @param input ...
+#' @param output ...
+#' @param session ...
+#' @return ...
+#' @export
 module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
@@ -463,7 +474,12 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   })
 }
 
-# user interface
+# user interface ----
+#' @title module_isoxl_dual_inlet_ui
+#' @description ...
+#' @param id ...
+#' @return ...
+#' @export
 module_isoxl_dual_inlet_ui <- function(id) {
 
 

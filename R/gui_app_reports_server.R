@@ -1,7 +1,9 @@
 # orbitrap reports server
-#
-# generates the server part of the orbitrap reports GUI
-# @param local whether it's running in local mode or on a server
+#' @title orbitrap_reports_server
+#' @description generates the server part of the orbitrap reports GUI
+#' @param local whether it's running in local mode or on a server
+#' @return ...
+#' @export
 orbitrap_reports_server <- function(local) {
 
   if (!local) stop("the orbitrap reports GUI is currently only supported for running on individual computers, not on a server.", call. = FALSE)

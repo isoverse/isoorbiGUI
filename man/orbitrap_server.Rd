@@ -2,7 +2,7 @@
 % Please edit documentation in R/gui_app_isoxl_server.R
 \name{orbitrap_server}
 \alias{orbitrap_server}
-\title{Orbitrap ShinyApp Server}
+\title{orbitrap_server}
 \usage{
 orbitrap_server(local = FALSE, reset = FALSE)
 }
@@ -10,6 +10,9 @@ orbitrap_server(local = FALSE, reset = FALSE)
 \item{local}{whether running locally or as a server application (e.g. on shinyapps.io)}
 
 \item{reset}{whether to reset settings if running in local mode (server mode always resets)}
+}
+\value{
+...
 }
 \description{
 Generates the server part of the shiny app.

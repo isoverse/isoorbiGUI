@@ -1,8 +1,12 @@
-#' Orbitrap ShinyApp Server
-#'
-#' Generates the server part of the shiny app.
+# Orbitrap ShinyApp Server
+#
+# Generates the server part of the shiny app.
+#' @title orbitrap_server
+#' @description Generates the server part of the shiny app.
 #' @param local whether running locally or as a server application (e.g. on shinyapps.io)
 #' @param reset whether to reset settings if running in local mode (server mode always resets)
+#' @return ...
+#' @export
 orbitrap_server <- function(local = FALSE, reset = FALSE) {
 
   shinyServer(function(input, output, session) {
