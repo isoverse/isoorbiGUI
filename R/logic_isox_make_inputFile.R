@@ -26,7 +26,6 @@ run_check <- function(INPUT_formula) {
 
   }
 
-
 }
 
 
