@@ -1,4 +1,6 @@
 #' Scatter plot module user interface
+#' @title scatterplot_mod_ui
+#' @description Creates User Interface for scatter plot module
 #' @param id, character used to specify namespace, see \code{shiny::\link[shiny]{NS}}
 #' @return a \code{shiny::\link[shiny]{tagList}} containing UI elements
 #' @export
@@ -37,7 +39,11 @@ scatterplot_mod_ui <- function(id) {
   )
 }
 
-
+#'@title densityplot_mod_ui
+#'@description Creates User Interface for density plot module
+#'@param id, character used to specify namespace, see \code{shiny::\link[shiny]{NS}}
+#'@return a \code{shiny::\link[shiny]{tagList}} containing UI elements
+#'@export
 densityplot_mod_ui <- function(id) {
 
 
@@ -76,10 +82,11 @@ densityplot_mod_ui <- function(id) {
 }
 
 
-#' Scatterplot module server-side processing
-#'
-#' This module produces a scatterplot with the sales price against a variable selected by the user.
-#'
+# Scatterplot module server-side processing
+#
+# This module produces a scatterplot with the sales price against a variable selected by the user.
+#' @title scatterplot_mod_server
+#' @description This module produces a scatterplot with the sales price against a variable selected by the user.
 #' @param input,output,session standard \code{shiny} boilerplate.
 #' @param dataset data frame (non-reactive) with variables necessary for scatterplot.
 #' @param plot1_vars reactive list of plot 1 x variable, y variable, and grouping variable.
@@ -150,6 +157,22 @@ scatterplot_mod_server <- function(input,
   dat
 }
 
+# This module produces a density plot with the sales price against a variable selected by the user.
+#' @title densityplot_mod_server
+#' @description This module produces a density plot with the sales price against a variable selected by the user.
+#' @param input,output,session standard \code{shiny} boilerplate.
+#' @param dataset data frame (non-reactive) with variables necessary for density plot
+#' @param plot3vars reactive list of plot 1 x variable, y variable, and grouping variable.
+#' @param plot4vars reactive list of plot 2 x variable, y variable, and grouping variable.
+#' @param label boolean indicating whether to perform annotation of data points
+#'   on the plot. Default is \code{FALSE}.
+#'
+#' @return list with following components:
+#' \describe{
+#'   \item{plot_data}{reactive data frame containing only the \code{xvar} and \code{yvar} variables}.
+#'   \item{plot_object}{reactive \code{ggplot2} object for the scatterplot}.
+#' }
+#' @export
 densityplot_mod_server <- function(input,
                                    output,
                                    session,

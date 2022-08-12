@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_modules.R
 \name{scatterplot_mod_server}
 \alias{scatterplot_mod_server}
-\title{Scatterplot module server-side processing}
+\title{scatterplot_mod_server}
 \usage{
 scatterplot_mod_server(
   input,
