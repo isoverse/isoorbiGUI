@@ -8,7 +8,8 @@ context("file loading")
 test_that("test that isox files can be read", {
 
   # test safety checks
-  expect_error(iso_simplify_isox_file(), "no file path")
+  #expect_error(iso_simplify_isox_file(), "no file path")
+  expect_error(iso_simplify_isox_file(), "argument \"dataset\" is missing, with no default")
   expect_error(iso_read_isox_file(c("one", "two")), "can only read.*1")
   expect_error(iso_read_isox_file("DNE"), "does not exist")
   temp_file <- tempfile(fileext = ".wrong")
