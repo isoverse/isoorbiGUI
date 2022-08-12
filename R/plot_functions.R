@@ -1,9 +1,10 @@
 #' Produce scatterplot with sales data and a single continuous variable
-#' @param data data frame with variables necessary for scatterplot.
+#' @param dataset data frame with variables necessary for scatterplot.
 #' @param xvar variable (string format) to be used on x-axis.
 #' @param yvar variable (string format) to be used on y-axis.
 #' @param facetvar optional variable (string format) to use for facetted version of plot.
 #' @param label whether or not to label brushed points.
+#' @param point_colors list of the colors for the plotted points
 #' @return \code{ggplot2} object for the scatterplot.
 #' @export
 scatter_isox <- function(dataset,

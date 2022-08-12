@@ -14,6 +14,8 @@ scatter_isox(
 )
 }
 \arguments{
+\item{dataset}{data frame with variables necessary for scatterplot.}
+
 \item{xvar}{variable (string format) to be used on x-axis.}
 
 \item{yvar}{variable (string format) to be used on y-axis.}
@@ -22,7 +24,7 @@ scatter_isox(
 
 \item{label}{whether or not to label brushed points.}
 
-\item{data}{data frame with variables necessary for scatterplot.}
+\item{point_colors}{list of the colors for the plotted points}
 }
 \value{
 \code{ggplot2} object for the scatterplot.

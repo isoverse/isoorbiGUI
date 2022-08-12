@@ -84,7 +84,7 @@ densityplot_mod_ui <- function(id) {
 #' @param dataset data frame (non-reactive) with variables necessary for scatterplot.
 #' @param plot1_vars reactive list of plot 1 x variable, y variable, and grouping variable.
 #' @param plot2_vars reactive list of plot 2 x variable, y variable, and grouping variable.
-#' @param highlight_ind boolean indicating whether to perform annotation of data points
+#' @param label boolean indicating whether to perform annotation of data points
 #'   on the plot. Default is \code{FALSE}.
 #'
 #' @return list with following components:
@@ -97,8 +97,8 @@ scatterplot_mod_server <- function(input,
                                    output,
                                    session,
                                    dataset,
-                                   plot1vars,
-                                   plot2vars,
+                                   plot1_vars,
+                                   plot2_vars,
                                    label = reactive(FALSE)) {
 
 

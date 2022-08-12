@@ -9,8 +9,8 @@ scatterplot_mod_server(
   output,
   session,
   dataset,
-  plot1vars,
-  plot2vars,
+  plot1_vars,
+  plot2_vars,
   label = reactive(FALSE)
 )
 }
@@ -23,7 +23,7 @@ scatterplot_mod_server(
 
 \item{plot2_vars}{reactive list of plot 2 x variable, y variable, and grouping variable.}
 
-\item{highlight_ind}{boolean indicating whether to perform annotation of data points
+\item{label}{boolean indicating whether to perform annotation of data points
 on the plot. Default is \code{FALSE}.}
 }
 \value{
