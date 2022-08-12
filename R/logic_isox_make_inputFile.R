@@ -17,12 +17,14 @@ run_check <- function(INPUT_formula) {
         get_list = FALSE
       )
 
-    ifelse(check$warning == FALSE,
-           return(check$new_formula),
-           validate("Error in sum formula"))
+    return(check)
+
+    # TEMP: This had caused a merging error end of July 2022
+    # ifelse(check$warning == FALSE,
+    #        return(check$new_formula),
+    #        validate("Error in sum formula"))
 
   }
-
 
 }
 
