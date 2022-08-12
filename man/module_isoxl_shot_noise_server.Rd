@@ -11,7 +11,7 @@ module_isoxl_shot_noise_server(input, output, session)
 
 \item{output}{...}
 
-\item{sesion}{...}
+\item{session}{...}
 }
 \value{
 ...

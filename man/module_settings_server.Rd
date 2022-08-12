@@ -18,6 +18,8 @@ module_settings_server(
 
 \item{output}{...}
 
+\item{session}{...}
+
 \item{save_settings}{whether to save settings to the settings file}
 
 \item{settings_file_path}{reactive function returning the settings file path}

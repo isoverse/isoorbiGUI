@@ -11,7 +11,7 @@ module_isoxl_make_inputFile_server(input, output, session)
 
 \item{output}{...}
 
-\item{sesion}{...}
+\item{session}{...}
 }
 \value{
 ...
