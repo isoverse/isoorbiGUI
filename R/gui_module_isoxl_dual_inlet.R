@@ -436,7 +436,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
               extend = 'pdf',
               pageSize = 'A4',
               orientation = 'landscape',
-              filename = 'soXL_DualInlet_isox'
+              filename = 'IsoXL_DualInlet_isox'
             )),
 
           colReorder = TRUE#, #columns can be reordered

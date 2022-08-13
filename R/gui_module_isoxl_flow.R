@@ -363,7 +363,17 @@ module_isoxl_flow_server <- function(input, output, session) {
           scrollX = TRUE,
           #scroll bar to see entire table
           dom = 'Bfrtip',
-          buttons = c('colvis', 'copy',  'excel', 'pdf'),
+          #buttons = c('colvis', 'copy',  'excel', 'pdf'),
+          buttons =
+            list('colvis', 'copy',   list(
+              extend = 'excel',
+              filename = 'IsoXL_FlowInjection_isox'
+            ), list(
+              extend = 'pdf',
+              pageSize = 'A4',
+              orientation = 'landscape',
+              filename = 'IsoXL_FlowInjection_isox'
+            )),
           colReorder = TRUE #columns can be reordered
         )
       )
@@ -399,7 +409,17 @@ module_isoxl_flow_server <- function(input, output, session) {
                    #   targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
                    # )),
                    dom = 'Bfrtip',
-                   buttons = c('colvis','copy',  'excel', 'pdf' ),
+                   #buttons = c('colvis','copy',  'excel', 'pdf' ),
+                   buttons =
+                     list('colvis', 'copy',  list(
+                       extend = 'excel',
+                       filename = 'IsoXL_FlowInjection_results'
+                     ), list(
+                       extend = 'pdf',
+                       pageSize = 'A4',
+                       orientation = 'landscape',
+                       filename = 'IsoXL_FlowInjection_results'
+                     )),
                    colReorder = TRUE #columns can be reordered
                  )
       )
