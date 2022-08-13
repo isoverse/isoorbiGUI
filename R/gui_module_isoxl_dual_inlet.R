@@ -64,14 +64,15 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     if (input$test_data == FALSE) {
 
+
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
 
-      # module_message(ns,
-      #                "info",
-      #                "test data selected: ", "testfile_DualInlet_small.isox"
-      #)
+      # reset the reactive values that hold the file and data
+      values$upload_file <- NULL
+      values$upload_error <- NULL
+      values$data <- NULL
 
     }
 
