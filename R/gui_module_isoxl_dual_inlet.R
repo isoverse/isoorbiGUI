@@ -426,9 +426,21 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         rownames = FALSE ,
         extensions = c('Buttons', 'ColReorder'),
         options = list(
+          orientation ='landscape',
           scrollX = TRUE,
           dom = 'Bfrtip',
-          buttons = c('colvis', 'copy',  'excel', 'pdf'),
+         # buttons = c('colvis', 'copy',  'excel', 'pdf'),
+          buttons =
+            list('colvis', 'copy',   list(
+              extend = 'excel',
+              filename = 'IsoXL_DualInlet_isox'
+            ), list(
+              extend = 'pdf',
+              pageSize = 'A4',
+              orientation = 'landscape',
+              filename = 'soXL_DualInlet_isox'
+            )),
+
           colReorder = TRUE#, #columns can be reordered
         )
       )
@@ -446,7 +458,17 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         options = list(
           scrollX = TRUE,
           dom = 'Bfrtip',
-          buttons = c('colvis', 'copy',  'excel', 'pdf'),
+         # buttons = c('colvis', 'copy',  'excel', 'pdf'),
+         buttons =
+           list('colvis', 'copy',  list(
+             extend = 'excel',
+             filename = 'IsoXL_DualInlet_results'
+           ), list(
+             extend = 'pdf',
+             pageSize = 'A4',
+             orientation = 'landscape',
+             filename = 'IsoXL_DualInlet_results'
+           )),
           colReorder = TRUE #columns can be reordered
         )
       )
