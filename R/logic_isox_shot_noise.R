@@ -13,13 +13,13 @@ assign_basepeak_shotnoise <- function(data, input) {
 
 #FIXME: what to do when beasepeak and signal are the same? add Input validation
   df.out <- data %>%
-    filter(isotopolog %in% c(input$base_peak, input$isotopolog)) %>% #cross check with core logic filter function
+    dplyr::filter(.data$isotopolog %in% c(input$base_peak, input$isotopolog)) %>% #cross check with core logic filter function
     droplevels() %>%
     pivot_wider(names_from = isotopolog, values_from = ions.incremental) %>% na.omit() %>%
 
     rename(Basepeak.Ions = input$base_peak,
            Isotopolog.Ions = input$isotopolog)%>%
-    mutate(Ratio = Isotopolog.Ions/Basepeak.Ions)
+    dplyr::mutate(Ratio = .data$Isotopolog.Ions/.data$Basepeak.Ions)
 
   return(df.out)
 }
@@ -59,7 +59,7 @@ calc_shotnoise <- function(dataset){
     df.out$rse[l] <- rse
   }
 
-  df.out <- df.out %>% na.omit() %>% select(-shotnoise, -shotnoise.neff)
+  df.out <- df.out %>% na.omit() %>% dplyr::select(-shotnoise, -shotnoise.neff)
 
   df.out <- df.out %>% tidyr::pivot_longer(-c("scans", "neff"), names_to="key", values_to="value") #FIXME: improve nomenclature of columns
 

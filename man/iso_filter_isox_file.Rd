@@ -15,5 +15,5 @@ iso_filter_isox_file(dataset, input)
 Returns a filtered IsoX file
 }
 \description{
-A basic filter (should be generalized for most use cases)
+A basic dplyr::filter(should be generalized for most use cases)
 }

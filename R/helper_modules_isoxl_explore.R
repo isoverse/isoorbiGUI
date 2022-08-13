@@ -135,8 +135,8 @@ dataviewer_mod_server <- function(input, output, session, dataset) {
    #FIXME: get column names as variables for plotting
 
   output$table <- DT::renderDataTable({
-    filter(dataset(), selected_) %>%
-      select(one_of(cols_select))
+    dplyr::filter(dataset(), selected_) %>%
+      dplyr::select(one_of(cols_select))
   },  options = list(scrollX = TRUE, autoWidth = FALSE )) #filter = 'top', selection = 'none',
 }
 

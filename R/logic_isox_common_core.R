@@ -6,7 +6,7 @@
 #' @return Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'.
 #' @export
 iso_simplify_isox_file <- function(dataset) {
-  df.out <- dataset %>% select(filename,
+  df.out <- dataset %>% dplyr::select(filename,
                                scan.no,
                                time.min,
                                compound,
@@ -31,12 +31,12 @@ remove.rare <- function(data, input){ #temp check functions correctly in differe
   # )
 
   remove.df <- data %>%
-    group_by(filename) %>%
-    mutate(n.scans = max(scan.no) - min(scan.no)) %>% #implement a more general solution here
-    group_by(filename, compound, isotopolog) %>%
-    mutate(i.scans = length(scan.no)) %>%
-    filter(i.scans < input$rare/100 * n.scans) %>% # => update selection in GUI?, add message?
-    select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
+    dplyr::group_by(filename) %>%
+    dplyr::mutate(n.scans = max(scan.no) - min(scan.no)) %>% #implement a more general solution here
+    dplyr::group_by(filename, compound, isotopolog) %>%
+    dplyr::mutate(i.scans = length(scan.no)) %>%
+    dplyr::filter(i.scans < input$rare/100 * n.scans) %>% # => update selection in GUI?, add message?
+    dplyr::select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
 
 
   df <- anti_join(data, remove.df, by = c("filename", "scan.no", "time.min", "compound", "isotopolog", "ions.incremental", "tic", "it.ms")) #FIXME:More elegant/robust solution?
@@ -54,8 +54,8 @@ remove.rare <- function(data, input){ #temp check functions correctly in differe
 remove.satellitePeaks <- function(df){
 
   df <- df %>%
-    group_by(filename, compound, scan.no, isotopolog) %>%
-    filter(ions.incremental == max(ions.incremental))
+    dplyr::group_by(filename, compound, scan.no, isotopolog) %>%
+    dplyr::filter(ions.incremental == max(ions.incremental))
 
   return(df)
 
@@ -76,16 +76,16 @@ remove.ticxit <- function(df, input){
   # )
 
 
-  df <- df %>% group_by(filename) %>% mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files
-    filter( TICxIT > quantile(TICxIT, input$extreme/100) & TICxIT < quantile(TICxIT, 1- input$extreme/100)) %>%
-    select(-TICxIT)
+  df <- df %>% dplyr::group_by(filename) %>% dplyr::mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files
+    dplyr::filter( TICxIT > quantile(TICxIT, input$extreme/100) & TICxIT < quantile(TICxIT, 1- input$extreme/100)) %>%
+    dplyr::select(-TICxIT)
 
   return(df)
 }
 
 #FIXME-LEIF: complete and confirm
 #' @title iso_filter_isox_file
-#' @description A basic filter (should be generalized for most use cases)
+#' @description A basic dplyr::filter(should be generalized for most use cases)
 #' @param dataset The file.tsv to be filtered
 #' @param input ???
 #' @return Returns a filtered IsoX file

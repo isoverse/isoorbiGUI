@@ -9,7 +9,6 @@
 #' @import shiny
 #' @import shinyWidgets
 #' @import tidyr
-#' @importFrom magrittr %>%
 #' @import openxlsx
 #' @rawNamespace import(DT, except = c(dataTableOutput, renderDataTable))
 #' @import plotly
@@ -23,8 +22,12 @@
 #' @import shinyvalidate
 NULL
 
+#' @importFrom magrittr %>%
 #' @export
 magrittr::`%>%`
+
+# quiets concenrs of R CMD check about .data in tidyverse functions (to avoid other global variables)
+#' @importFrom rlang .data
 
 # quiets concerns of R CMD check about . that appears in pipelines
 utils::globalVariables(c(".",
@@ -38,7 +41,7 @@ utils::globalVariables(c(".",
                          "n.scans",
                          "ions.incremental",
                          "Basepeak",
-                         "Basepeak.Ions",
+                         #"Basepeak.Ions",
                          "na.omit",
                          "Sample.Name",
                          "Ratio",

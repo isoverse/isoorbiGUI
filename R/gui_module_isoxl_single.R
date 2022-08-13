@@ -277,13 +277,13 @@ module_isoxl_single_server <- function(input, output, session) {
     data.single_filtered <-   values$data %>%
                                           na.omit() %>%
 
-                                          mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
+                                          dplyr::mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
 
                                            remove.ticxit(input = input) %>%
                                            remove.satellitePeaks() %>%
                                            remove.rare(input = input) %>%
                                           #
-                                           filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
+                                           dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
 
 
 

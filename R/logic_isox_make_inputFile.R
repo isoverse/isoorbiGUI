@@ -58,7 +58,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     df.sel$M0 <- 0
     df.sel[which.min(df.sel$'m/z'),]$M0 <- 1 #add M0 info; temp: error when there is no M0, min....! Look for a better way
 
-    df.temp <- df.sel %>% tidyr::pivot_longer( -c("m/z"), names_to= "isotope", values_to= "count",) %>% filter(count>0)
+    df.temp <- df.sel %>% tidyr::pivot_longer( -c("m/z"), names_to= "isotope", values_to= "count",) %>% dplyr::filter(count>0)
 
     df.temp$isotopolog <- NA
     df.temp$temp.string <- NA
@@ -71,7 +71,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
       df.temp$temp.string[j] <- temp.string
     }
 
-    df.temp2 <- df.temp %>% select(-count)%>% tidyr::pivot_wider(names_from = "isotope", values_from="temp.string") #FIXME: improve nomenclature
+    df.temp2 <- df.temp %>% dplyr::select(-count)%>% tidyr::pivot_wider(names_from = "isotope", values_from="temp.string") #FIXME: improve nomenclature
 
     cols <- colnames(df.temp2)[-1] # columns to paste together
 
@@ -80,7 +80,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     df.temp2$Isotopolog <- apply( df.temp2[ , cols ] , 1 , paste , collapse = "" ) # create a new column `x` with the three columns collapsed together
 
     # remove the unnecessary columns
-    data <- df.temp2 %>% select("m/z", "Isotopolog" )
+    data <- df.temp2 %>% dplyr::select("m/z", "Isotopolog" )
 
     # add colums charge and tolerance
 
@@ -89,7 +89,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     data$z <- abs(INPUT_charge[i]) #absolute value of charge #more than 1?
     data$mass <- data$'m/z'
 
-    data <- data %>% select('#Compound', Isotopolog, mass, 'Tolerance [mmu]', z)
+    data <- data %>% dplyr::select('#Compound', Isotopolog, mass, 'Tolerance [mmu]', z)
 
 
     out.list[[i]] <- data

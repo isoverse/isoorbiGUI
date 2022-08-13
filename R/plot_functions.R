@@ -36,7 +36,7 @@ scatter_isox <- function(dataset,
 
   if (label && any(dataset$selected_)) {
     p <- p + geom_label_repel(
-      data = filter(dataset, selected_),
+      data = dplyr::filter(dataset, selected_),
       aes(label = scan.no)
     )
   }

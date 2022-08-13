@@ -24,28 +24,29 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
   # Annotation: Identify 'base peak' for each scan
 
   df.sel <- df  %>%
-    select(filename,
+    dplyr::select(filename,
            #Injection, #not present in single run analysis
            compound,
            scan.no,
            isotopolog,
            ions.incremental) %>%
-    #group_by(filename, Injection, scan.no) %>% filter(isotopolog == INPUT_Basepeak) %>%
-    group_by(filename, scan.no) %>% filter(isotopolog == INPUT_Basepeak) %>%
-    mutate(Basepeak = factor(paste(isotopolog, "is base peak", sep = " ")),
-           Basepeak.Ions = ions.incremental) %>%
-    select(filename,
-           compound,
+    #dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
+    dplyr::group_by(.data$filename, .data$scan.no) %>%
+    dplyr::filter(isotopolog == INPUT_Basepeak) %>%
+    dplyr::mutate(Basepeak = factor(paste(.data$isotopolog, "is base peak", sep = " ")),
+           Basepeak.Ions = .data$ions.incremental) %>%
+    dplyr::select(.data$filename,
+           .data$compound,
            #Injection,
-           scan.no,
-           Basepeak,
-           Basepeak.Ions) %>%
+           .data$scan.no,
+           .data$Basepeak,
+           .data$Basepeak.Ions) %>%
     as.data.frame()
 
   df.out <- merge(df.sel, df, all = TRUE)
 
   df.out <-
-    df.out %>% filter(isotopolog != INPUT_Basepeak) %>% droplevels()
+    df.out %>% dplyr::filter(isotopolog != INPUT_Basepeak) %>% droplevels()
 
   return(df.out)
 }
@@ -62,18 +63,18 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 #' @return Returns table containing 'filename', 'sample.name', 'Basepeak', 'Compound', 'Isotopolog', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
 #' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
-  df.stat <- df  %>%  group_by(filename,
+  df.stat <- df  %>%  dplyr::group_by(filename,
                                #Injection,
                                Sample.Name,
                                compound,
                                Basepeak,
                                isotopolog) %>%
 
-    mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
+    dplyr::mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
 
-    mutate(Ratio.SEM = se(ions.incremental / Basepeak.Ions))      #For simplicity use basic standard error for all options
+    dplyr::mutate(Ratio.SEM = se(ions.incremental / Basepeak.Ions))      #For simplicity use basic standard error for all options
 
-  df.stat <- df.stat %>% mutate(
+  df.stat <- df.stat %>% dplyr::mutate(
     No.of.scans = length(Ratio),
     Mins.to.1mio = (1E6 / sum(ions.incremental)) * (max(time.min) - min(time.min)),
     Shot.Noise.permil = 1000 * (sqrt((
@@ -85,7 +86,7 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
   ) %>%
 
     #Round values for output
-    mutate(
+    dplyr::mutate(
       Ratio = round(Ratio, 8),
       Ratio.SEM = round(Ratio.SEM, 8),
       Shot.Noise.permil = round(Shot.Noise.permil, 3),
@@ -93,7 +94,7 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
       Mins.to.1mio = round(Mins.to.1mio, 2)
     ) %>%
 
-    select(
+    dplyr::select(
       filename,
       # Injection,
       Sample.Name,
@@ -107,7 +108,7 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
       Mins.to.1mio,
       No.of.scans
     ) %>%
-    unique() %>% #mutate(Injection= as.integer(Injection)) %>%
+    unique() %>% #dplyr::mutate(Injection= as.integer(Injection)) %>%
     #arrange(filename, Injection, isotopolog)
     arrange(filename, isotopolog)
 

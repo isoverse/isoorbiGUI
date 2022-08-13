@@ -281,16 +281,16 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 
     data.flow_filtered <-   values$data %>%
-      filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
+      dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
       na.omit() %>%
 
-      mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
+      dplyr::mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
 
       remove.ticxit(input = input) %>%
       remove.satellitePeaks() %>%
       remove.rare(input = input) %>%
       #
-      filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
+      dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
 
       # before IsoXL I had a more sophisticated procedure to find the sample vs solvent. Implement this going forward?
 
