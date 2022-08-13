@@ -80,8 +80,6 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     {shinyjs::hide("parameters-panel")}
 
 
-
-
   })
 
   # upload file ----
@@ -537,7 +535,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       make.xls(df.stat = data.output, params = inputs.dual)
 
 
-    # Download output: Excel file ----------------------------------
+# Download output: Excel file ----------------------------------
 
 
     output$download_xlsx <- downloadHandler(
