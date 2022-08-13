@@ -51,6 +51,9 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     if (input$test_data == TRUE) {
 
+    shinyjs::hide("main-plot")
+    shinyjs::hide("main-rest")
+
     values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
 
 
@@ -60,19 +63,15 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     }
 
     if (input$test_data == FALSE) {
+
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
 
-      module_message(ns,
-                     "info",
-                     "test data selected: ", "testfile_DualInlet_small.isox"
-      )
-
-      # # provide feedback on file upload success
-      # output$upload_info <- renderText({
-      #   paste0("Please upload a new .isox file")
-      # })
-
-
+      # module_message(ns,
+      #                "info",
+      #                "test data selected: ", "testfile_DualInlet_small.isox"
+      #)
 
     }
 
@@ -600,8 +599,10 @@ module_isoxl_dual_inlet_ui <- function(id) {
                color:navy;
          }")),
 
+
       textOutput(ns("upload_info")),
 
+      div(style="margin-bottom:10px")
 
       ),
 
@@ -744,6 +745,14 @@ module_isoxl_dual_inlet_ui <- function(id) {
       div(
         id = ns("main-plot"), #can be shown or hidden
 
+        downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
+
+        div(style="margin-bottom:10px"),
+
+        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+
+        div(style="margin-bottom:10px"),
+
 
        box(
           title = "Overview of Results",
@@ -757,12 +766,11 @@ module_isoxl_dual_inlet_ui <- function(id) {
       #how to save png at higher resolution?
 
       hr(),
+
       div(
         id = ns("main-rest"),
-        downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
 
-        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
-        hr(),
+
 
         box(
           title = "Results Table",
