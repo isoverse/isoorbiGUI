@@ -521,7 +521,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     output$download_xlsx <- downloadHandler(
       filename = function() {
 
-        if (input$test_data == TRUE) {paste("testfile_DualInlet_small", "_IsoXL.xls", sep="")} #FIXME: use a variable for testfile name!
+        if (input$test_data == TRUE) {paste("testfile_DualInlet_small", "_IsoXL.xlsx", sep="")} #FIXME: use a variable for testfile name!
         else{
         paste(tools::file_path_sans_ext(input$upload$name),
               "_IsoXL.xlsx",
