@@ -1,5 +1,22 @@
 #FIXME-LEIF: there is no test function for this module. needed?
 
+test_module_isoxl_explore <- function(port = 5000) {
+  app <-
+    shinyApp(
+      ui = fluidPage(
+        shinyjs::useShinyjs(),
+        h1("Exlore Module Test"),
+        module_isoxl_explore_ui(id = "explore")
+      ),
+      server = function(input, output) {
+        dual_inlet <-
+          callModule(module_isoxl_explore_server, id = "explore")
+      }
+    )
+  runApp(app, display.mode = "normal", port = 5000)
+}
+
+
 # server ----
 
 #' @title module_isoxl_explore_server
