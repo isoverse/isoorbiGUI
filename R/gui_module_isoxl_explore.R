@@ -366,7 +366,7 @@ module_isoxl_explore_ui <- function(id) {
       div( id = ns("explore-input-panel"), #used to hide certain ui elements initially
 
 
-      actionButton(ns("action_explore"), "Explore data"),
+      actionButton(ns("action_explore"), "Start"),
 
 
 
