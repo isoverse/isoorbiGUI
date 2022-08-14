@@ -54,7 +54,18 @@ module_isoxl_single_server <- function(input, output, session) {
 
       values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
 
+      # Download test data: .isox file ----------------------------------
 
+      output$download_test_data <- downloadHandler(
+        filename = function() {
+          "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
+        },
+        content = function(file) {
+          write.table(values$data, file, sep="\t", row.names = F)
+        }
+      )
+
+      shinyjs::show("test_download_button")
 
       {shinyjs::hide("upload_panel")}
 
@@ -62,7 +73,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
     if (input$test_data == FALSE) {
 
-
+      shinyjs::hide("test_download_button")
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
@@ -522,17 +533,6 @@ module_isoxl_single_server <- function(input, output, session) {
       },
       content = function(file) {
         saveWorkbook(data_single.xls, file)
-      }
-    )
-
-    # Download test data: .isox file ----------------------------------
-
-    output$download_test_data <- downloadHandler(
-      filename = function() {
-        "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
-      },
-      content = function(file) {
-        write.table(values$data, file, sep="\t", row.names = F)
       }
     )
 
