@@ -116,7 +116,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         tabItem(
           tabName = "dual",
-          h4("Dual Inlet experiment"),
+          h4("Dual Inlet"),
           module_isoxl_dual_inlet_ui(id = "dual_inlet")
         ),
 
@@ -125,7 +125,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "flow",
 
-          h4("Flow Injection experiments"),
+          h4("Flow Injections"),
 
           module_isoxl_flow_ui(id = "flow")
 
@@ -136,7 +136,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "single",
 
-          h4("Single sample experiment"),
+          h4("Single Analysis"),
 
           module_isoxl_single_ui(id = "single")
         ),
