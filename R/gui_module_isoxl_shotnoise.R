@@ -44,7 +44,41 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     plot = NULL
   )
 
+  # use test data ----
+  observeEvent(input$test_data, {
 
+    if (input$test_data == TRUE) {
+
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
+
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+
+
+
+      {shinyjs::hide("upload_panel")}
+
+    }
+
+    if (input$test_data == FALSE) {
+
+
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
+      {shinyjs::show("upload_panel")}
+
+      # reset the reactive values that hold the file and data
+      values$upload_file <- NULL
+      values$upload_error <- NULL
+      values$data <- NULL
+
+    }
+
+
+    {shinyjs::hide("parameters-panel")}
+
+
+  })
 
   # upload file ----
   observeEvent(input$upload, {
@@ -62,15 +96,32 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     values$upload_file <- input$upload$name
     values$upload_error <- NULL
     values$data <- NULL
+    if (input$test_data == FALSE) {
+      # try to read the uploaded file
+      tryCatch(
 
-    # try to read the uploaded file
-    tryCatch(
-      values$data <- iso_read_isox_file(input$upload$datapath),
-      warning = function(w)
-        values$upload_error <- w$message,
-      error = function(e)
-        values$upload_error <- e$message
-    )
+
+        values$data <- iso_read_isox_file(input$upload$datapath),
+        warning = function(w)
+          values$upload_error <- w$message,
+        error = function(e)
+          values$upload_error <- e$message
+
+      )
+    } else {
+      # try to read the test file
+      tryCatch(
+
+        values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+
+        # ,
+        # warning = function(w)
+        #   values$upload_error <- w$message,
+        # error = function(e)
+        #   values$upload_error <- e$message
+      )
+
+    }
   })
 
   # provide feedback on file upload success
@@ -293,6 +344,24 @@ module_isoxl_shotnoise_ui <- function(id) {
     sidebarPanel(
       width = 3,
 
+      # Use test data instead of uploading data (or any data that has been already uploaded)
+
+      tippy(
+        checkboxInput(ns("test_data"), "Use test data", value = FALSE),
+
+        "For details on test data see Contact tab",
+        animation="scale",
+        #theme="light",
+        placement ="top-start"
+
+      ),
+
+      hr(),
+
+      div(
+        id = ns("upload_panel"), #can be
+
+
       # upload ----
       fileInput(
         ns("upload"),
@@ -310,13 +379,15 @@ module_isoxl_shotnoise_ui <- function(id) {
 
       textOutput(ns("upload_info")),
 
+      div(style="margin-bottom:10px")
+
+      ),
+
 
 
       # parameters ----
       div(
         id = ns("parameters-panel"),
-
-        hr(),
 
         actionButton(ns("render_plot"), label = "Plot", icon = icon("rotate")),
 
