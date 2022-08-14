@@ -72,9 +72,15 @@ module_isoxl_info_ui <- function(id) {
 
       hr(),
 
-      "File a bug report or feature request ",
+      "File a bug report or feature request using the ",
       tags$a(href = "https://github.com/isoverse/isoorbi/issues",
-             "on our GitHub page")
+             "GitHub page"),
+      div(style="margin-bottom:10px"),
+      "Information related to ",
+      tags$a(href = " https://github.com/isoverse/isoorbi/blob/main/inst/extdata/description_testfiles.txt",
+             "test data"),
+
+
 
     ),
 
