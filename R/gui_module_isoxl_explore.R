@@ -38,6 +38,18 @@ module_isoxl_explore_server <- function(input, output, session) {
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 
+  # Download test data: .isox file ----------------------------------
+
+  output$download_test_data <- downloadHandler(
+    filename = function() {
+      "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
+    },
+    content = function(file) {
+      write.table(values$data, file, sep="\t", row.names = F)
+    }
+  )
+
+
   # values
   values <- reactiveValues(
     upload_file = NULL,
@@ -45,6 +57,42 @@ module_isoxl_explore_server <- function(input, output, session) {
     data = NULL,
     plot = NULL #NEED THIS? note: all data will be plotted
   )
+
+  # use test data ----
+  observeEvent(input$test_data, {
+
+    if (input$test_data == TRUE) {
+
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
+
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+
+
+
+      {shinyjs::hide("upload_panel")}
+
+    }
+
+    if (input$test_data == FALSE) {
+
+
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
+      {shinyjs::show("upload_panel")}
+
+      # reset the reactive values that hold the file and data
+      values$upload_file <- NULL
+      values$upload_error <- NULL
+      values$data <- NULL
+
+    }
+
+
+    {shinyjs::hide("explore-input-panel")}
+
+
+  })
 
   # upload file ----
   observeEvent(input$upload, {
@@ -62,14 +110,33 @@ module_isoxl_explore_server <- function(input, output, session) {
     values$upload_error <- NULL
     values$data <- NULL
 
-    # try to read the uploaded file
-    tryCatch(
-      values$data <- iso_read_isox_file(input$upload$datapath),
-      warning = function(w)
-        values$upload_error <- w$message,
-      error = function(e)
-        values$upload_error <- e$message
-    )
+    if (input$test_data == FALSE) {
+      # try to read the uploaded file
+      tryCatch(
+
+
+        values$data <- iso_read_isox_file(input$upload$datapath),
+        warning = function(w)
+          values$upload_error <- w$message,
+        error = function(e)
+          values$upload_error <- e$message
+
+      )
+    } else {
+      # try to read the test file
+      tryCatch(
+
+        values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+
+        # ,
+        # warning = function(w)
+        #   values$upload_error <- w$message,
+        # error = function(e)
+        #   values$upload_error <- e$message
+      )
+
+    }
+
   })
 
   # provide feedback on file upload success
@@ -199,6 +266,9 @@ module_isoxl_explore_server <- function(input, output, session) {
 
 observeEvent(input$action_explore, {
 
+
+
+
     plot1vars <- callModule(varselect_mod_server, "plot1_vars")
     plot2vars <- callModule(varselect_mod_server, "plot2_vars")
 
@@ -254,6 +324,23 @@ module_isoxl_explore_ui <- function(id) {
     sidebarPanel(
       width = 3,
 
+      # Use test data instead of uploading data (or any data that has been already uploaded)
+
+      tippy(
+        checkboxInput(ns("test_data"), "Use test data", value = FALSE),
+
+        "For details on test data see Contact tab",
+        animation="scale",
+        #theme="light",
+        placement ="top-start"
+
+      ),
+
+      hr(),
+
+      div(
+        id = ns("upload_panel"), #can be
+
       # upload ----
       fileInput(
         ns("upload"),
@@ -271,10 +358,13 @@ module_isoxl_explore_ui <- function(id) {
 
       textOutput(ns("upload_info")),
 
+      div(style="margin-bottom:10px")
+
+      ),
+
 
       div( id = ns("explore-input-panel"), #used to hide certain ui elements initially
 
-      hr(),
 
       actionButton(ns("action_explore"), "Explore data"),
 
@@ -312,6 +402,11 @@ module_isoxl_explore_ui <- function(id) {
 
     mainPanel(
       width = 9,
+
+
+      downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+
+      div(style="margin-bottom:10px"),
 
       #titlePanel("Explore IsoX File"),
 
