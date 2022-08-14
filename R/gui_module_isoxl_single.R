@@ -44,6 +44,42 @@ module_isoxl_single_server <- function(input, output, session) {
     plot.single = NULL
   )
 
+  # use test data ----
+  observeEvent(input$test_data, {
+
+    if (input$test_data == TRUE) {
+
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
+
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+
+
+
+      {shinyjs::hide("upload_panel")}
+
+    }
+
+    if (input$test_data == FALSE) {
+
+
+      shinyjs::hide("main-plot")
+      shinyjs::hide("main-rest")
+      {shinyjs::show("upload_panel")}
+
+      # reset the reactive values that hold the file and data
+      values$upload_file <- NULL
+      values$upload_error <- NULL
+      values$data <- NULL
+
+    }
+
+
+    {shinyjs::hide("parameters-panel")}
+
+
+  })
+
   # upload file ----
   observeEvent(input$upload, {
     module_message(
@@ -60,14 +96,34 @@ module_isoxl_single_server <- function(input, output, session) {
     values$upload_error <- NULL
     values$data <- NULL
 
-    # try to read the uploaded file
-    tryCatch(
-      values$data <- iso_read_isox_file(input$upload$datapath),
-      warning = function(w)
-        values$upload_error <- w$message,
-      error = function(e)
-        values$upload_error <- e$message
-    )
+    if (input$test_data == FALSE) {
+      # try to read the uploaded file
+      tryCatch(
+
+
+        values$data <- iso_read_isox_file(input$upload$datapath),
+        warning = function(w)
+          values$upload_error <- w$message,
+        error = function(e)
+          values$upload_error <- e$message
+
+      )
+    } else {
+      # try to read the test file
+      tryCatch(
+
+        values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+
+        # ,
+        # warning = function(w)
+        #   values$upload_error <- w$message,
+        # error = function(e)
+        #   values$upload_error <- e$message
+      )
+
+    }
+
+
   })
 
   # provide feedback on file upload success
@@ -298,7 +354,19 @@ module_isoxl_single_server <- function(input, output, session) {
                  options = list(
                    scrollX = TRUE, #scroll bar to see enture table
                    dom = 'Bfrtip',
-                   buttons = c('colvis','copy',  'excel', 'pdf' ),
+                   #buttons = c('colvis','copy',  'excel', 'pdf' ),
+
+                   buttons =
+                     list('colvis', 'copy',   list(
+                       extend = 'excel',
+                       filename = 'IsoXL_Single_isox'
+                     ), list(
+                       extend = 'pdf',
+                       pageSize = 'A4',
+                       orientation = 'landscape',
+                       filename = 'IsoXL_Single_isox'
+                     )),
+
                    colReorder = TRUE #columns can be reordered
                  )
       )
@@ -334,7 +402,17 @@ module_isoxl_single_server <- function(input, output, session) {
                        targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
                      )),
                      dom = 'Bfrtip',
-                     buttons = c('colvis','copy',  'excel', 'pdf' ),
+                     #buttons = c('colvis','copy',  'excel', 'pdf' ),
+                     buttons =
+                       list('colvis', 'copy',  list(
+                         extend = 'excel',
+                         filename = 'IsoXL_Single_results'
+                       ), list(
+                         extend = 'pdf',
+                         pageSize = 'A4',
+                         orientation = 'landscape',
+                         filename = 'IsoXL_Single_results'
+                       )),
                      colReorder = TRUE #columns can be reordered
                    )
         )
@@ -430,13 +508,31 @@ module_isoxl_single_server <- function(input, output, session) {
       data_single.xls <- make.xls.onetab(df.stat = data.single_output, params = inputs.single)
 
 
-    # Download output: Single Analysis Excel file ----------------------------------
+    # Download output: Excel file ----------------------------------
 
 
     output$download_xlsx <- downloadHandler(
-      filename = function(){  paste(tools::file_path_sans_ext(input$upload$name), "_IsoXL.xlsx", sep="")},
+      filename = function() {
+
+        if (input$test_data == TRUE) {paste("testfile_DualInlet_small", "_IsoXL.xlsx", sep="")} #FIXME: use a variable for testfile name!
+        else{
+          paste(tools::file_path_sans_ext(input$upload$name),
+                "_IsoXL.xlsx",
+                sep = "")}
+      },
       content = function(file) {
         saveWorkbook(data_single.xls, file)
+      }
+    )
+
+    # Download test data: .isox file ----------------------------------
+
+    output$download_test_data <- downloadHandler(
+      filename = function() {
+        "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
+      },
+      content = function(file) {
+        write.table(values$data, file, sep="\t", row.names = F)
       }
     )
 
@@ -465,6 +561,25 @@ module_isoxl_single_ui <- function(id) {
     sidebarPanel(
       width = 3,
 
+      # Use test data instead of uploading data (or any data that has been already uploaded)
+
+      tippy(
+        checkboxInput(ns("test_data"), "Use test data", value = FALSE),
+
+        "For details on test data see Contact tab",
+        animation="scale",
+        #theme="light",
+        placement ="top-start"
+
+      ),
+
+      hr(),
+
+      div(
+        id = ns("upload_panel"), #can be
+
+
+
       # upload ----
       fileInput(
         ns("upload"),
@@ -482,13 +597,16 @@ module_isoxl_single_ui <- function(id) {
 
       textOutput(ns("upload_info")),
 
+      div(style="margin-bottom:10px")
+
+      ),
+
 
 
       # parameters ----
       div(
         id = ns("parameters-panel"),
 
-        hr(),
         actionButton(ns("start"), label = "Start", icon = icon("rotate")),
 
         tags$hr(style = "border-color: grey;"),
@@ -562,6 +680,14 @@ module_isoxl_single_ui <- function(id) {
       div(
         id = ns("main-plot"),
 
+        downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
+
+        div(style="margin-bottom:10px"),
+
+        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+
+        div(style="margin-bottom:10px"),
+
       box(
         title = "Overview of Results",
         width = "auto" ,
@@ -570,15 +696,14 @@ module_isoxl_single_ui <- function(id) {
         solidHeader = T,
         withSpinner(plotlyOutput(ns("plot.single")))
       )
-      ),
+      )%>% shinyjs::hidden(),
       #how to save png at higher resolution?
 
       hr(),
+
       div(
         id = ns("main-rest"),
-      downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
 
-      hr(),
 
 
       box(
