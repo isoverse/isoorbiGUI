@@ -58,6 +58,19 @@ module_isoxl_flow_server <- function(input, output, session) {
       values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbi"))
 
 
+      # Download test data: .isox file ----------------------------------
+
+      output$download_test_data <- downloadHandler(
+        filename = function() {
+          "testfile_FlowInjection_DataExploration_small.isox" #FIXME: provide name as a variable
+        },
+        content = function(file) {
+          write.table(values$data, file, sep="\t", row.names = F)
+        }
+      )
+
+      shinyjs::show("test_download_button")
+
 
       {shinyjs::hide("upload_panel")}
 
@@ -65,7 +78,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     if (input$test_data == FALSE) {
 
-
+      shinyjs::hide("test_download_button")
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
@@ -495,16 +508,7 @@ output$download_xlsx <- downloadHandler(
   }
 )
 
-# Download test data: .isox file ----------------------------------
 
-output$download_test_data <- downloadHandler(
-  filename = function() {
-    "testfile_FlowInjection_DataExploration_small.isox" #FIXME: provide name as a variable
-  },
-  content = function(file) {
-    write.table(values$data, file, sep="\t", row.names = F)
-  }
-)
 
 
     shinyjs::show("main-rest")
@@ -542,7 +546,14 @@ module_isoxl_flow_ui <- function(id) {
 
       ),
 
+      div(
+        id = ns("test_download_button"),
+        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+        div(style="margin-bottom:10px")
+      ) %>% shinyjs::hidden(),
+
       hr(),
+
 
       div(
         id = ns("upload_panel"), #can be
@@ -638,10 +649,6 @@ module_isoxl_flow_ui <- function(id) {
       id = ns("main-plot"),
 
       downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
-
-      div(style="margin-bottom:10px"),
-
-      downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
 
       div(style="margin-bottom:10px"),
 
