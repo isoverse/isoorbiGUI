@@ -56,7 +56,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
 
-
+    shinyjs::show("test_download_button")
 
     {shinyjs::hide("upload_panel")}
 
@@ -64,7 +64,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     if (input$test_data == FALSE) {
 
-
+      shinyjs::hide("test_download_button")
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
@@ -598,6 +598,12 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
       ),
 
+      div(
+        id = ns("test_download_button"),
+        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+        div(style="margin-bottom:10px")
+      ) %>% shinyjs::hidden(),
+
       hr(),
 
       div(
@@ -762,6 +768,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
     mainPanel(
       width = 9,
 
+
+
       # parameters ----
       div(
         id = ns("main-plot"), #can be shown or hidden
@@ -769,8 +777,6 @@ module_isoxl_dual_inlet_ui <- function(id) {
         downloadButton(ns("download_xlsx"), "Download Results (.xlsx)"),
 
         div(style="margin-bottom:10px"),
-
-        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
 
         div(style="margin-bottom:10px"),
 
