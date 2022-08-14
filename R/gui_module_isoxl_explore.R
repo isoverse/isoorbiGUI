@@ -1,5 +1,10 @@
-#FIXME-LEIF: there is no test function for this module. needed?
-
+# test ----
+# test the dual inlet module as a standalone app
+#' @title test_module_isoxl_explore
+#' @description ...
+#' @param port ...
+#' @return ...
+#' @export
 test_module_isoxl_explore <- function(port = 5000) {
   app <-
     shinyApp(
