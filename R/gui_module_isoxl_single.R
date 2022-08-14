@@ -573,6 +573,12 @@ module_isoxl_single_ui <- function(id) {
 
       ),
 
+      div(
+        id = ns("test_download_button"),
+        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+        div(style="margin-bottom:10px")
+      ) %>% shinyjs::hidden(),
+
       hr(),
 
       div(
@@ -684,9 +690,6 @@ module_isoxl_single_ui <- function(id) {
 
         div(style="margin-bottom:10px"),
 
-        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
-
-        div(style="margin-bottom:10px"),
 
       box(
         title = "Overview of Results",
