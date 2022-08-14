@@ -340,7 +340,7 @@ module_isoxl_explore_ui <- function(id) {
 
       div(
         id = ns("test_download_button"),
-        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+        downloadButton(ns("download_test_data"), "Download (.isox)"),
         div(style="margin-bottom:10px")
       ) %>% shinyjs::hidden(),
 
@@ -374,8 +374,7 @@ module_isoxl_explore_ui <- function(id) {
       div( id = ns("explore-input-panel"), #used to hide certain ui elements initially
 
 
-      actionButton(ns("action_explore"), "Start"),
-
+      actionButton(ns("action_explore"), "Start", icon = icon("rotate")),
 
 
       tags$hr(style = "border-color: grey;"),

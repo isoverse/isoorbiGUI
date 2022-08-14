@@ -575,7 +575,7 @@ module_isoxl_single_ui <- function(id) {
 
       div(
         id = ns("test_download_button"),
-        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+        downloadButton(ns("download_test_data"), "Download (.isox)"),
         div(style="margin-bottom:10px")
       ) %>% shinyjs::hidden(),
 
