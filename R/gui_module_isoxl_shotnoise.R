@@ -389,7 +389,7 @@ module_isoxl_shotnoise_ui <- function(id) {
       div(
         id = ns("parameters-panel"),
 
-        actionButton(ns("render_plot"), label = "Plot", icon = icon("rotate")),
+        actionButton(ns("render_plot"), label = "Start", icon = icon("rotate")),
 
         tags$hr(style = "border-color: grey;"),
         selectInput(
