@@ -54,6 +54,18 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
       values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
 
+      # Download test data: .isox file ----------------------------------
+
+      output$download_test_data <- downloadHandler(
+        filename = function() {
+          "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
+        },
+        content = function(file) {
+          write.table(values$data, file, sep="\t", row.names = F)
+        }
+      )
+
+      shinyjs::show("test_download_button")
 
 
       {shinyjs::hide("upload_panel")}
@@ -62,7 +74,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
     if (input$test_data == FALSE) {
 
-
+      shinyjs::hide("test_download_button")
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
@@ -201,6 +213,8 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
   # generate plot ----
   observeEvent(input$render_plot, {
 
+    shinyjs::hide("main-plot")
+
     req(values$data)
 
     # special safety checks for shinywidget that does not work with shinyvalidate
@@ -222,8 +236,8 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     req((input$timerange[2] - input$timerange[1]) > 0.3)
 
 
-    shinyjs::hide("main-plot")
 
+    shinyjs::show("main-plot")
 
 
 
@@ -290,7 +304,6 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
     #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
 
-    shinyjs::show("main-plot")
   })
 
   # render plot ----
@@ -355,6 +368,12 @@ module_isoxl_shotnoise_ui <- function(id) {
         placement ="top-start"
 
       ),
+
+      div(
+        id = ns("test_download_button"),
+        downloadButton(ns("download_test_data"), "Download Test Data (.isox)", color="red"),
+        div(style="margin-bottom:10px")
+      ) %>% shinyjs::hidden(),
 
       hr(),
 
