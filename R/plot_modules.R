@@ -89,8 +89,8 @@ densityplot_mod_ui <- function(id) {
 #' @description This module produces a scatterplot with the sales price against a variable selected by the user.
 #' @param input,output,session standard \code{shiny} boilerplate.
 #' @param dataset data frame (non-reactive) with variables necessary for scatterplot.
-#' @param plot1_vars reactive list of plot 1 x variable, y variable, and grouping variable.
-#' @param plot2_vars reactive list of plot 2 x variable, y variable, and grouping variable.
+#' @param plot1vars plot1vars reactive list of plot 1 x variable, y variable, and grouping variable.
+#' @param plot2vars reactive list of plot 2 x variable, y variable, and grouping variable.
 #' @param label boolean indicating whether to perform annotation of data points
 #'   on the plot. Default is \code{FALSE}.
 #'
@@ -104,8 +104,8 @@ scatterplot_mod_server <- function(input,
                                    output,
                                    session,
                                    dataset,
-                                   plot1_vars,
-                                   plot2_vars,
+                                   plot1vars,
+                                   plot2vars,
                                    label = reactive(FALSE)) {
 
 
