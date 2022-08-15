@@ -30,7 +30,6 @@ test_that("se tests", {
   expect_error(se(), "argument \"x\" is missing, with no default")
 })
 
-
   # gmean
 test_that("gmean tests", {
   #success
@@ -39,7 +38,6 @@ test_that("gmean tests", {
   #failure
   expect_error(gmean(), "argument \"x\" is missing, with no default")
 })
-
 
   # gsd
 test_that("gsd tests", {
@@ -71,13 +69,14 @@ test_that("slope tests", {
   #...
 })
 
-
   # weighted.vector.sum
 test_that("weighted.vector.sum tests", {
   #success
-  expected_type(weighted.vector.sum(), "double")
+  x<- c(2,4,6)
+  y<- c(3,5,7)
+  expect_type(weighted.vector.sum(x,y), "double")
   #failure
-  #...
+  expect_error(weighted.vector.sum(), "argument \"x\" is missing, with no default")
 })
 
   # calc.ratio
@@ -85,7 +84,7 @@ test_that("calc.ratio tests", {
   #success
   #...
   #failure
-  #...
+  expect_error(calc.ratio(), "the condition has length > 1")
 })
 
   # make.xls
@@ -93,7 +92,7 @@ test_that("make.xls tests", {
   #success
   #...
   #failure
-  #...
+  expect_error(make.xls(), "")
 })
 
   # make.xls.onetab
@@ -101,5 +100,5 @@ test_that("make.xls.onetab", {
   #success
   #expect_type(make.xls.onetab(), "xls")
   #failure
-  #...
+  expect_error(make.xls.onetab(), "")
 })
