@@ -47,10 +47,15 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
   # use test data ----
   observeEvent(input$test_data, {
 
+    # values
+    values$plot = NULL
+
+    shinyjs::hide("main-plot")
+
+
+
     if (input$test_data == TRUE) {
 
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
 
       values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
 
@@ -75,8 +80,6 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     if (input$test_data == FALSE) {
 
       shinyjs::hide("test_download_button")
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
 
       # reset the reactive values that hold the file and data
@@ -95,6 +98,8 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
   # upload file ----
   observeEvent(input$upload, {
 
+    shinyjs::hide("main-plot")
+
     module_message(
       ns,
       "info",
@@ -108,6 +113,8 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     values$upload_file <- input$upload$name
     values$upload_error <- NULL
     values$data <- NULL
+    values$plot <- NULL
+
     if (input$test_data == FALSE) {
       # try to read the uploaded file
       tryCatch(
@@ -213,7 +220,11 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
   # generate plot ----
   observeEvent(input$render_plot, {
 
+    # values
+    values$plot = NULL
+
     shinyjs::hide("main-plot")
+
 
     req(values$data)
 
@@ -237,7 +248,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
 
 
-    shinyjs::show("main-plot")
+
 
 
 
@@ -299,10 +310,11 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       "\n - extreme: ", input$extreme %then% ""#)#edit
     )
 
-
+    shinyjs::show("main-plot")
 
     values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
     #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
+
 
   })
 
