@@ -5,7 +5,7 @@ base_dir <- if (interactive()) file.path("tests", "testthat") else "."
 
 context("core")
 
-test_that("test the function iso_simplify_isox_file()", {
+test_that("iso_simplify_isox_file() tests", {
   # iso_simplify_isox_file
 
   # test safety checks
@@ -13,14 +13,14 @@ test_that("test the function iso_simplify_isox_file()", {
 })
 
   # remove.rare
-test_that("test the function remove.rare", {
+test_that("remove.rare() tests", {
   #success
   #failure
   expect_error(remove.rare(), "argument \"data\" is missing, with no default")
 })
 
   # remove.satellitePeaks
-test_that("test the function remove.satellitePeaks", {
+test_that("remove.satellitePeaks() tests", {
   #succcess
   #...
   #failure
@@ -28,7 +28,7 @@ test_that("test the function remove.satellitePeaks", {
 })
 
   # remove.ticxit
-test_that("test the function remove.ticxit", {
+test_that("remove.ticxit() tests", {
   #success
   #failure
   expect_error(remove.ticxit(), "argument \"df\" is missing, with no default")
@@ -37,7 +37,7 @@ test_that("test the function remove.ticxit", {
   # iso_filter_isox_file
 
   # se
-test_that("se tests", {
+test_that("se() tests", {
   #success
   #expect_equal(se(c(1,2,3)), 0.5773503)
   expect_type(se(c(1,2,3)), "double")
@@ -47,7 +47,7 @@ test_that("se tests", {
 })
 
   # gmean
-test_that("gmean tests", {
+test_that("gmean() tests", {
   #success
   expect_type(gmean(c(4,5,6)), "double")
 
@@ -56,7 +56,7 @@ test_that("gmean tests", {
 })
 
   # gsd
-test_that("gsd tests", {
+test_that("gsd() tests", {
   #success
   expect_type(gsd(c(1,2,3)), "double")
 
@@ -65,7 +65,7 @@ test_that("gsd tests", {
 })
 
   # gse
-test_that("gse tests", {
+test_that("gse() tests", {
   #success
   expect_type(gse(c(4,5,6)), "double")
 
@@ -74,7 +74,7 @@ test_that("gse tests", {
 })
 
   # slope
-test_that("slope tests", {
+test_that("slope() tests", {
   #success
   x <- c(0,1,2,3)
   y <- c(0,1,2,3)
@@ -86,7 +86,7 @@ test_that("slope tests", {
 })
 
   # weighted.vector.sum
-test_that("weighted.vector.sum tests", {
+test_that("weighted.vector.sum() tests", {
   #success
   x<- c(2,4,6)
   y<- c(3,5,7)
@@ -96,7 +96,7 @@ test_that("weighted.vector.sum tests", {
 })
 
   # calc.ratio
-test_that("calc.ratio tests", {
+test_that("calc.ratio() tests", {
   #success
   #...
   #failure
@@ -104,7 +104,7 @@ test_that("calc.ratio tests", {
 })
 
   # make.xls
-test_that("make.xls tests", {
+test_that("make.xls() tests", {
   #success
   #...
   #failure
@@ -112,7 +112,7 @@ test_that("make.xls tests", {
 })
 
   # make.xls.onetab
-test_that("make.xls.onetab", {
+test_that("make.xls.onetab() tests", {
   #success
   #...
   #failure
