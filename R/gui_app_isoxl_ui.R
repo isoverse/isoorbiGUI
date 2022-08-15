@@ -12,8 +12,6 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
   box_default <- "#2c3b41" # lighter
 
-
-
   # set spinner color
   options(spinner.color = app_color)
 
