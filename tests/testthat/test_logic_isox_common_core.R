@@ -49,7 +49,9 @@ test_that("se() tests", {
   # gmean
 test_that("gmean() tests", {
   #success
-  expect_type(gmean(c(4,5,6)), "double")
+  list<- c(4,5,6)
+  expect_type(gmean(list), "double")
+  expect_equal(gmean(list), 4.9324241486609)
 
   #failure
   expect_error(gmean(), "argument \"x\" is missing, with no default")
@@ -98,9 +100,18 @@ test_that("weighted.vector.sum() tests", {
   # calc.ratio
 test_that("calc.ratio() tests", {
   #success
-  #...
+  a<- c(1)
+  b<- c(4)
+  expect_equal(calc.ratio(a,b,"mean"), 0.25)
+  expect_equal(calc.ratio(a,b,"sum"), 0.25)
+  #slope
+  #gmean
+  #weighted.vector.sum
+  #median
+
   #failure
   expect_error(calc.ratio(), "the condition has length > 1")
+
 })
 
   # make.xls

@@ -145,7 +145,7 @@ gsd <-
     exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
 
 #' @title gse
-#' @description  Define 'gmean' to calculate geometic standard error
+#' @description  Define 'gse' to calculate geometic standard error
 #' @param x value to compute geometric standard error from
 #' @return The calculated geometric standard error
 #' @export
