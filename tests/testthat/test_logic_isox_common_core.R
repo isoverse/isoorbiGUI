@@ -62,7 +62,10 @@ test_that("gse tests", {
   # slope
 test_that("slope tests", {
   #success
-  expect_type(slope(input), "double")
+  x <- c(0,1,2,3)
+  y <- c(0,1,2,3)
+  expect_type(slope(x,y), "double")
+  expect_equal(slope(x,y), 1)
 
   #failure
   #...
@@ -70,9 +73,9 @@ test_that("slope tests", {
 
 
   # weighted.vector.sum
-test_that("weighted.vecotr.sum tests", {
+test_that("weighted.vector.sum tests", {
   #success
-  #...
+  expected_type(weighted.vector.sum(), "double")
   #failure
   #...
 })
