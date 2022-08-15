@@ -13,10 +13,26 @@ test_that("test the function iso_simplify_isox_file()", {
 })
 
   # remove.rare
+test_that("test the function remove.rare", {
+  #success
+  #failure
+  expect_error(remove.rare(), "argument \"data\" is missing, with no default")
+})
 
   # remove.satellitePeaks
+test_that("test the function remove.satellitePeaks", {
+  #succcess
+  #...
+  #failure
+  expect_error(remove.satellitePeaks(), "argument \"df\" is missing, with no default")
+})
 
   # remove.ticxit
+test_that("test the function remove.ticxit", {
+  #success
+  #failure
+  expect_error(remove.ticxit(), "argument \"df\" is missing, with no default")
+})
 
   # iso_filter_isox_file
 
@@ -98,7 +114,7 @@ test_that("make.xls tests", {
   # make.xls.onetab
 test_that("make.xls.onetab", {
   #success
-  #expect_type(make.xls.onetab(), "xls")
+  #...
   #failure
   expect_error(make.xls.onetab(), "")
 })
