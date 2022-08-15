@@ -23,22 +23,21 @@ test_that("test the function iso_simplify_isox_file()", {
   # se
 test_that("se tests", {
   #success
-  expect_equal(se(c(1,2,3)), 0.5773503)
+  #expect_equal(se(c(1,2,3)), 0.5773503)
   expect_type(se(c(1,2,3)), "double")
 
   #failure
-  #...
+  expect_error(se(), "argument 'input' is missing")
 })
 
 
   # gmean
 test_that("gmean tests", {
   #success
-  expect_equal(gmean(c(1,2,3)), 1.817121)
   expect_type(gmean(c(4,5,6)), "double")
 
   #failure
-  #...
+  expect_error(gmean(), "argument 'input' is missing")
 })
 
 
@@ -61,12 +60,43 @@ test_that("gse tests", {
 })
 
   # slope
+test_that("slope tests", {
+  #success
+  expect_type(slope(x,y), "double")
+
+  #failure
+  #...
+})
 
 
   # weighted.vector.sum
+test_that("weighted.vecotr.sum tests", {
+  #success
+  #...
+  #failure
+  #...
+})
 
-  #calc.ratio
+  # calc.ratio
+test_that("calc.ratio tests", {
+  #success
+  #...
+  #failure
+  #...
+})
 
   # make.xls
+test_that("make.xls tests", {
+  #success
+  #...
+  #failure
+  #...
+})
 
-  #make.xls.onetab
+  # make.xls.onetab
+test_that("make.xls.onetab", {
+  #success
+  expect_type(make.xls.onetab(), "xls")
+  #failure
+  #...
+})
