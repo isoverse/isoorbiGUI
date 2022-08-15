@@ -23,25 +23,41 @@ test_that("test the function iso_simplify_isox_file()", {
   # se
 test_that("se tests", {
   #success
+  expect_equal(se(c(1,2,3)), 0.5773503)
   expect_type(se(c(1,2,3)), "double")
+
   #failure
+  #...
 })
 
 
   # gmean
 test_that("gmean tests", {
+  #success
+  expect_equal(gmean(c(1,2,3)), 1.817121)
   expect_type(gmean(c(4,5,6)), "double")
+
+  #failure
+  #...
 })
 
 
   # gsd
 test_that("gsd tests", {
+  #success
   expect_type(gsd(c(1,2,3)), "double")
+
+  #failure
+  #...
 })
 
   # gse
 test_that("gse tests", {
+  #success
   expect_type(gse(c(4,5,6)), "double")
+
+  #failure
+  #...
 })
 
   # slope
