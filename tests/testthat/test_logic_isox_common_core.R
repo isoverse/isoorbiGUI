@@ -27,7 +27,7 @@ test_that("se tests", {
   expect_type(se(c(1,2,3)), "double")
 
   #failure
-  expect_error(se(), "argument 'input' is missing")
+  expect_error(se(), "argument \"x\" is missing, with no default")
 })
 
 
@@ -37,7 +37,7 @@ test_that("gmean tests", {
   expect_type(gmean(c(4,5,6)), "double")
 
   #failure
-  expect_error(gmean(), "argument 'input' is missing")
+  expect_error(gmean(), "argument \"x\" is missing, with no default")
 })
 
 
@@ -62,7 +62,7 @@ test_that("gse tests", {
   # slope
 test_that("slope tests", {
   #success
-  expect_type(slope(x,y), "double")
+  expect_type(slope(input), "double")
 
   #failure
   #...
@@ -96,7 +96,7 @@ test_that("make.xls tests", {
   # make.xls.onetab
 test_that("make.xls.onetab", {
   #success
-  expect_type(make.xls.onetab(), "xls")
+  #expect_type(make.xls.onetab(), "xls")
   #failure
   #...
 })
