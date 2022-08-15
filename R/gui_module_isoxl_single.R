@@ -47,6 +47,19 @@ module_isoxl_single_server <- function(input, output, session) {
   # use test data ----
   observeEvent(input$test_data, {
 
+    shinyjs::hide("main-plot")
+    shinyjs::hide("main-rest")
+
+    # reset the reactive values that hold the file and data
+    values$upload_file <- NULL
+    values$upload_error <- NULL
+    values$data <- NULL
+
+    #reset the outputs
+    # output$mytable.single <- NULL
+    # output$summary.single <- NULL
+    # output$plot <- NULL
+
     if (input$test_data == TRUE) {
 
       shinyjs::hide("main-plot")
@@ -93,6 +106,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
   # upload file ----
   observeEvent(input$upload, {
+
     module_message(
       ns,
       "info",
@@ -101,6 +115,7 @@ module_isoxl_single_server <- function(input, output, session) {
       "' into temporary path ",
       input$upload$datapath
     )
+
 
     # reset the reactive values that hold the file and data
     values$upload_file <- input$upload$name
@@ -231,6 +246,9 @@ module_isoxl_single_server <- function(input, output, session) {
   # Table of processing parameters
 
   observeEvent(input$start, {
+
+    shinyjs::hide("main-plot")
+    shinyjs::hide("main-rest")
 
 
     # special safety checks for shinywidget that does not work with shinyvalidate

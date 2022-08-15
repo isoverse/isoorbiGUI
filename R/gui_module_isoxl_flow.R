@@ -50,10 +50,22 @@ module_isoxl_flow_server <- function(input, output, session) {
   # use test data ----
   observeEvent(input$test_data, {
 
+    shinyjs::hide("main-plot")
+    shinyjs::hide("main-rest")
+
+    # reset the reactive values that hold the file and data
+    values$upload_file <- NULL
+    values$upload_error <- NULL
+    values$data <- NULL
+
+    #reset the outputs
+    output$mytable.flow <- NULL
+    output$summary.flow <- NULL
+    output$plot <- NULL
+
     if (input$test_data == TRUE) {
 
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
+
 
       values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbi"))
 
@@ -79,8 +91,7 @@ module_isoxl_flow_server <- function(input, output, session) {
     if (input$test_data == FALSE) {
 
       shinyjs::hide("test_download_button")
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
+
       {shinyjs::show("upload_panel")}
 
       # reset the reactive values that hold the file and data
@@ -218,6 +229,9 @@ module_isoxl_flow_server <- function(input, output, session) {
   # Table of processing parameters
 
   observeEvent(input$start, {
+
+    shinyjs::hide("main-plot")
+    shinyjs::hide("main-rest")
 
     # special safety checks for shinywidget that does not work with shinyvalidate
     if (input$timerange[2] <= input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",type="error")
