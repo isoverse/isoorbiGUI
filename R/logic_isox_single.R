@@ -25,22 +25,22 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 
   df.sel <- df  %>%
     dplyr::select(filename,
-           #Injection, #not present in single run analysis
-           compound,
-           scan.no,
-           isotopolog,
-           ions.incremental) %>%
+                  #Injection, #not present in single run analysis
+                  compound,
+                  scan.no,
+                  isotopolog,
+                  ions.incremental) %>%
     #dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
     dplyr::group_by(.data$filename, .data$scan.no) %>%
     dplyr::filter(isotopolog == INPUT_Basepeak) %>%
     dplyr::mutate(Basepeak = factor(paste(.data$isotopolog, "is base peak", sep = " ")),
-           Basepeak.Ions = .data$ions.incremental) %>%
+                  Basepeak.Ions = .data$ions.incremental) %>%
     dplyr::select(.data$filename,
-           .data$compound,
-           #Injection,
-           .data$scan.no,
-           .data$Basepeak,
-           .data$Basepeak.Ions) %>%
+                  .data$compound,
+                  #Injection,
+                  .data$scan.no,
+                  .data$Basepeak,
+                  .data$Basepeak.Ions) %>%
     as.data.frame()
 
   df.out <- merge(df.sel, df, all = TRUE)
@@ -64,11 +64,11 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 #' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  dplyr::group_by(filename,
-                               #Injection,
-                               Sample.Name,
-                               compound,
-                               Basepeak,
-                               isotopolog) %>%
+                                      #Injection,
+                                      Sample.Name,
+                                      compound,
+                                      Basepeak,
+                                      isotopolog) %>%
 
     dplyr::mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
 

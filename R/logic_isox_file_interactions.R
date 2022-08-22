@@ -26,7 +26,7 @@ iso_read_isox_file <- function(filepath) {
         tic = readr::col_double(),
         it.ms = readr::col_double()
       )
-     ),
+    ),
     warning = function(w) {
       stop("file format error: ", w$message, call. = FALSE)
     }
