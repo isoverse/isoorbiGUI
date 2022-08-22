@@ -12,7 +12,7 @@ test_that("iso_simplify_isox_file() tests", {
   expect_error(iso_simplify_isox_file(), "argument \"dataset\" is missing, with no default")
 })
 
-  # remove.rare
+# remove.rare
 test_that("remove.rare() tests", {
   #success
   # ...
@@ -20,7 +20,7 @@ test_that("remove.rare() tests", {
   expect_error(remove.rare(), "argument \"data\" is missing, with no default")
 })
 
-  # remove.satellitePeaks
+# remove.satellitePeaks
 test_that("remove.satellitePeaks() tests", {
   #succcess
   #...
@@ -28,26 +28,26 @@ test_that("remove.satellitePeaks() tests", {
   expect_error(remove.satellitePeaks(), "argument \"df\" is missing, with no default")
 })
 
-  # remove.ticxit
+# remove.ticxit
 test_that("remove.ticxit() tests", {
   #success
   #failure
   expect_error(remove.ticxit(), "argument \"df\" is missing, with no default")
 })
 
-  # iso_filter_isox_file
+# iso_filter_isox_file
 
-  # se
+# se
 test_that("se() tests", {
   #success
-  #expect_equal(se(c(1,2,3)), 0.5773503)
+  expect_equal(se(c(1,2,3)), 0.57735026919)
   expect_type(se(c(1,2,3)), "double")
 
   #failure
   expect_error(se(), "argument \"x\" is missing, with no default")
 })
 
-  # gmean
+# gmean
 test_that("gmean() tests", {
   #success
   list<- c(4,5,6)
@@ -58,7 +58,7 @@ test_that("gmean() tests", {
   expect_error(gmean(), "argument \"x\" is missing, with no default")
 })
 
-  # gsd
+# gsd
 test_that("gsd() tests", {
   #success
   expect_type(gsd(c(1,2,3)), "double")
@@ -67,7 +67,7 @@ test_that("gsd() tests", {
   #...
 })
 
-  # gse
+# gse
 test_that("gse() tests", {
   #success
   expect_type(gse(c(4,5,6)), "double")
@@ -76,7 +76,7 @@ test_that("gse() tests", {
   #...
 })
 
-  # slope
+# slope
 test_that("slope() tests", {
   #success
   x <- c(0,1,2,3)
@@ -88,7 +88,7 @@ test_that("slope() tests", {
   #...
 })
 
-  # weighted.vector.sum
+# weighted.vector.sum
 test_that("weighted.vector.sum() tests", {
   #success
   x<- c(2,4,6)
@@ -98,7 +98,7 @@ test_that("weighted.vector.sum() tests", {
   expect_error(weighted.vector.sum(), "argument \"x\" is missing, with no default")
 })
 
-  # calc.ratio
+# calc.ratio
 test_that("calc.ratio() tests", {
   #success
   a<- c(1)
@@ -115,7 +115,7 @@ test_that("calc.ratio() tests", {
 
 })
 
-  # make.xls
+# make.xls
 test_that("make.xls() tests", {
   #success
   #...
@@ -123,7 +123,7 @@ test_that("make.xls() tests", {
   expect_error(make.xls(), "")
 })
 
-  # make.xls.onetab
+# make.xls.onetab
 test_that("make.xls.onetab() tests", {
   #success
   #...
