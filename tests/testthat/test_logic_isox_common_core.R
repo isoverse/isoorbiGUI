@@ -64,7 +64,7 @@ test_that("gsd() tests", {
   expect_type(gsd(c(1,2,3)), "double")
 
   #failure
-  #...
+  expect_error(gsd(), "argument \"x\" is missing, with no default")
 })
 
   # gse
@@ -73,7 +73,7 @@ test_that("gse() tests", {
   expect_type(gse(c(4,5,6)), "double")
 
   #failure
-  #...
+  expect_error(gse(), "argument \"x\" is missing, with no default")
 })
 
   # slope
@@ -85,7 +85,8 @@ test_that("slope() tests", {
   expect_equal(slope(x,y), 1)
 
   #failure
-  #...
+  expect_error(slope(), "argument \"x\" is missing, with no default")
+
 })
 
   # weighted.vector.sum
