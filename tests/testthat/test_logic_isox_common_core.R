@@ -125,7 +125,7 @@ test_that("calc.ratio() tests", {
   # make.xls
 test_that("make.xls() tests", {
   #success
-  #...
+  expect_true(make.xls())
   #failure
   expect_error(make.xls(), "")
 })
