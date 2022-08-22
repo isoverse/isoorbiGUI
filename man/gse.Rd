@@ -13,5 +13,5 @@ gse(x)
 The calculated geometric standard error
 }
 \description{
-Define 'gmean' to calculate geometic standard error
+Define 'gse' to calculate geometic standard error
 }
