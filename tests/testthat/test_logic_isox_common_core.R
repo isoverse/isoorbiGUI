@@ -15,7 +15,7 @@ test_that("iso_simplify_isox_file() tests", {
   # remove.rare
 test_that("remove.rare() tests", {
   #success
-  expect_true(is.data.frame(remove.rare(data)))
+
   #failure
   expect_error(remove.rare(), "argument \"data\" is missing, with no default")
 })
