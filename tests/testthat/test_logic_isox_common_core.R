@@ -15,7 +15,7 @@ test_that("iso_simplify_isox_file() tests", {
   # remove.rare
 test_that("remove.rare() tests", {
   #success
-  expect_true(is.data.frame(data))
+  expect_true(is.data.frame(data,input))
   #failure
   expect_error(remove.rare(), "argument \"data\" is missing, with no default")
 })
@@ -112,7 +112,7 @@ test_that("calc.ratio() tests", {
     #geometric.mean
   expect_equal(calc.ratio(a,b,"geometric.mean"), 0.25)
     #weighted.vector.sum
-  expect_equal(calc.ratio(a,b,"wieghted.vector.sum"), 0.25)
+  expect_equal(calc.ratio(a,b,"weighted.vector.sum"), 0.25)
     #median
   expect_equal(calc.ratio(a,b,"median"), 0.25)
 
