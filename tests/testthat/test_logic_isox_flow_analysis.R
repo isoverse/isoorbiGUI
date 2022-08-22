@@ -7,5 +7,5 @@ test_that("calc.output.flow() tests",{
   #succes
   #...
   #failure
-  expect_error(calc.output.flow(), "error")
+  expect_error(calc.output.flow(), "argument \"df\" is missing, with no default")
 })
