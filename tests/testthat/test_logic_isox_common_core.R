@@ -102,12 +102,18 @@ test_that("calc.ratio() tests", {
   #success
   a<- c(1)
   b<- c(4)
+    #mean
   expect_equal(calc.ratio(a,b,"mean"), 0.25)
+    #sum
   expect_equal(calc.ratio(a,b,"sum"), 0.25)
-  #slope
-  #gmean
-  #weighted.vector.sum
-  #median
+    #slope
+  expect_equal(calc.ratio(a,b,"slope"), 0.25)
+    #geometric.mean
+  expect_equal(calc.ratio(a,b,"geometric.mean"), 0.25)
+    #weighted.vector.sum
+  expect_equal(calc.ratio(a,b,"wieghted.vector.sum"), 0.25)
+    #median
+  expect_equal(calc.ratio(a,b,"median"), 0.25)
 
   #failure
   expect_error(calc.ratio(), "the condition has length > 1")
