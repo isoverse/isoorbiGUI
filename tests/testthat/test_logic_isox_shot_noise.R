@@ -7,19 +7,19 @@ test_that("assign_basepeak_shotnoise tests",{
   #succes
   #...
   #failure
-  expect_error(assign_basepeak_shotnoise(), "missing parameters")
+  expect_error(assign_basepeak_shotnoise(), "argument \"data\" is missing, with no default")
 })
 
 test_that("calc_shotnoise tests",{
   #succes
   #...
   #failure
-  expect_error(calc_shotnoise(), "missing parameters")
+  expect_error(calc_shotnoise(), "argument \"dataset\" is missing, with no default")
 })
 
 test_that("plot_shot_noise tests",{
   #succes
   #...
   #failure
-  expect_error(plot_shot_noise(), "missing parameters")
+  expect_error(plot_shot_noise(), "argument \"dataset\" is missing, with no default")
 })
