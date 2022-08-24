@@ -7,19 +7,19 @@ test_that("scatter_isox test",{
   #success
   #...
   #failure
-  expect_error(scatter_isox(), "argument \"INPUT_Basepeak\" is missing, with no default")
+  expect_error(scatter_isox(), "argument \"xvar\" is missing, with no default")
 })
 
 test_that("plot_labeller test",{
   #success
   #...
   #failure
-  expect_error(plot_labeller(), "argument \"INPUT_Basepeak\" is missing, with no default")
+  expect_error(plot_labeller(), "argument \"varname\" is missing, with no default")
 })
 
 test_that("density_isox test",{
   #success
   #...
   #failure
-  expect_error(density_isox(), "argument \"INPUT_Basepeak\" is missing, with no default")
+  expect_error(density_isox(), "argument \"xvar\" is missing, with no default")
 })
