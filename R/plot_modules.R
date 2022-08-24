@@ -14,12 +14,12 @@ scatterplot_mod_ui <- function(id) {
         width = 6,
         withSpinner(
           plotOutput(
-          ns("plot1"),
-          brush = brushOpts(
-            id = ns("brush"),
-            resetOnNew = FALSE
+            ns("plot1"),
+            brush = brushOpts(
+              id = ns("brush"),
+              resetOnNew = FALSE
+            )
           )
-        )
         )
       ),
       column(
@@ -27,12 +27,12 @@ scatterplot_mod_ui <- function(id) {
         width = 6,
         withSpinner(
           plotOutput(
-          ns("plot2"),
-          brush = brushOpts(
-            id = ns("brush"),
-            resetOnNew = FALSE
+            ns("plot2"),
+            brush = brushOpts(
+              id = ns("brush"),
+              resetOnNew = FALSE
+            )
           )
-        )
         )
       )
     )
@@ -118,8 +118,8 @@ scatterplot_mod_server <- function(input,
   output$plot1 <- renderPlot({
 
     validate(
-    need(plot1vars$xvar() %in% colnames(dat()), "Variable x not in data set. Was file processed as simple output in IsoX?"), #add more validation later
-    need(plot1vars$yvar() %in% colnames(dat()), "Variable y not in data set. Was file processed as simple output in IsoX?"),
+      need(plot1vars$xvar() %in% colnames(dat()), "Variable x not in data set. Was file processed as simple output in IsoX?"), #add more validation later
+      need(plot1vars$yvar() %in% colnames(dat()), "Variable y not in data set. Was file processed as simple output in IsoX?"),
     )
 
 
@@ -182,7 +182,7 @@ densityplot_mod_server <- function(input,
                                    label = reactive(FALSE)) {
 
 
-dat2 <- reactive({
+  dat2 <- reactive({
 
 
     brushedPoints(dataset, input$brush, allRows = TRUE)
@@ -198,13 +198,13 @@ dat2 <- reactive({
     ggplotly(
 
 
-    density_isox(
-      dat2(),
-      xvar = plot3vars$xvar(),
-      facetvar = plot3vars$facetvar(),
-      label = label()
+      density_isox(
+        dat2(),
+        xvar = plot3vars$xvar(),
+        facetvar = plot3vars$facetvar(),
+        label = label()
 
-    )
+      )
     )%>% plotly::config(
 
       displaylogo = FALSE,
@@ -235,13 +235,13 @@ dat2 <- reactive({
     )
 
     ggplotly(
-    density_isox(
-      dat2(),
-      xvar = plot4vars$xvar(),
-      facetvar = plot4vars$facetvar(),
-      label = label()
+      density_isox(
+        dat2(),
+        xvar = plot4vars$xvar(),
+        facetvar = plot4vars$facetvar(),
+        label = label()
 
-    )
+      )
     ) %>% plotly::config(
 
       displaylogo = FALSE,
