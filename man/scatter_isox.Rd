@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_functions.R
 \name{scatter_isox}
 \alias{scatter_isox}
-\title{Produce scatterplot with sales data and a single continuous variable}
+\title{scatter_isox}
 \usage{
 scatter_isox(
   dataset,

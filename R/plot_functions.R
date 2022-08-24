@@ -1,4 +1,5 @@
-#' Produce scatterplot with sales data and a single continuous variable
+#' @title scatter_isox
+#' @description Produce scatterplot with sales data and a single continuous variable
 #' @param dataset data frame with variables necessary for scatterplot.
 #' @param xvar variable (string format) to be used on x-axis.
 #' @param yvar variable (string format) to be used on y-axis.
@@ -8,11 +9,11 @@
 #' @return \code{ggplot2} object for the scatterplot.
 #' @export
 scatter_isox <- function(dataset,
-                          xvar,
-                          yvar,
-                          facetvar = NULL,
-                          label = FALSE,
-                          point_colors = c("darkblue", "#66D65C")) {
+                         xvar,
+                         yvar,
+                         facetvar = NULL,
+                         label = FALSE,
+                         point_colors = c("darkblue", "#66D65C")) {
 
   x <- rlang::sym(xvar)
   y <- rlang::sym(yvar)
@@ -45,7 +46,12 @@ scatter_isox <- function(dataset,
 }
 
 
-
+#' @title plot_labeller
+#' @description labels the plots with appropriate labels
+#' @param l ...
+#' @param varname ...
+#' @return ...
+#' @export
 plot_labeller <- function(l, varname) {
   if (varname == "scan.no") {
     comma(l) #could use for permil
@@ -57,12 +63,20 @@ plot_labeller <- function(l, varname) {
 
 # Density plot ------------------------------------------------------------
 
+#' @title density_isox
+#' @description ...
+#' @param dataset ...
+#' @param xvar ...
+#' @param facetvar ...
+#' @param label ...
+#' @return ...
+#' @export
 density_isox <- function(dataset,
                          xvar,
                          facetvar = NULL,
                          label = FALSE#,
                          #point_colors = c("darkblue", "#66D65C")
-                         ) {
+) {
 
   x <- rlang::sym(xvar)
 
