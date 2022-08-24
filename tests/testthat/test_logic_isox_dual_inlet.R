@@ -14,7 +14,7 @@ test_that("assign.basepeak tests",{
   #success
   #...
   #failure
-  expect_error(assign.basepeak(), "argument \"df\" is missing, with no default")
+  expect_error(assign.basepeak(), "argument \"INPUT_Basepeak\" is missing, with no default")
 })
 
 test_that("calc.output tests",{
@@ -24,9 +24,9 @@ test_that("calc.output tests",{
   expect_error(calc.output(), "argument \"df\" is missing, with no default")
 })
 
-test_that("merge.di.annotations",{
+test_that("merge.di.annotations tests",{
   #success
   #...
   #failure
-  expect_error(calc.output(), "argument \"df.in\" is missing, with no default")
+  expect_error(calc.output(), "argument \"df\" is missing, with no default")
 })
