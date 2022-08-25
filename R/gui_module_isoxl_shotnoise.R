@@ -382,7 +382,8 @@ module_isoxl_shotnoise_ui <- function(id) {
       tippy(
         checkboxInput(ns("test_data"), "Use test data", value = FALSE),
 
-        "For details on test data see Contact tab",
+        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
+        # "For details on test data see Contact tab",
         animation="scale",
         #theme="light",
         placement ="top-start"
@@ -391,7 +392,7 @@ module_isoxl_shotnoise_ui <- function(id) {
 
       div(
         id = ns("test_download_button"),
-        downloadButton(ns("download_test_data"), "Download (.isox)"),
+        downloadButton(ns("download_test_data"), "Download test data"),
         div(style="margin-bottom:10px")
       ) %>% shinyjs::hidden(),
 
@@ -438,11 +439,6 @@ module_isoxl_shotnoise_ui <- function(id) {
           multiple = FALSE
         ),
 
-        # tippy(
-        #   "test text",
-        #   placement = "right"),
-
-
         selectInput(
           inputId = ns("compound"),
           label = "Compound",
@@ -467,10 +463,14 @@ module_isoxl_shotnoise_ui <- function(id) {
         #Use shinyBS::bsTooltip instead of tippy?
         tippy(
           numericInput(ns("rare"), "Remove weak signals", value = c(), width=NULL),
-          "Processing option: Isotopocule must have been detected > x % of scans", placement = "right"),
+          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected > x % of scans<span>", allowHTML = TRUE,
+          # "Processing option: Isotopocule must have been detected > x % of scans",
+          placement = "right"),
         tippy(
           numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
-          "Processing option: Truncate data based on TICxIT", placement = "right")
+          tooltip = "<span style='font-size:15px;'>Truncate data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
+          # "Processing option: Truncate data based on TICxIT",
+          placement = "right")
 
       ) %>% shinyjs::hidden()
 

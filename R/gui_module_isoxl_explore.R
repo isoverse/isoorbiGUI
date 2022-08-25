@@ -331,7 +331,8 @@ module_isoxl_explore_ui <- function(id) {
       tippy(
         checkboxInput(ns("test_data"), "Use test data", value = FALSE),
 
-        "For details on test data see Contact tab",
+        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
+        # "For details on test data see Contact tab",
         animation="scale",
         #theme="light",
         placement ="top-start"
@@ -340,7 +341,7 @@ module_isoxl_explore_ui <- function(id) {
 
       div(
         id = ns("test_download_button"),
-        downloadButton(ns("download_test_data"), "Download (.isox)"),
+        downloadButton(ns("download_test_data"), "Download test data"),
         div(style="margin-bottom:10px")
       ) %>% shinyjs::hidden(),
 
