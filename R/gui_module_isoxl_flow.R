@@ -234,14 +234,14 @@ module_isoxl_flow_server <- function(input, output, session) {
     shinyjs::hide("main-rest")
 
     # special safety checks for shinywidget that does not work with shinyvalidate
-    if (input$timerange[2] <= input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",type="error")
-    if (input$timerange[1] < 0) showNotification("Input Time [min]: Check first input value",type="error")
-    if (input$timerange[2] <= 0) showNotification("Input Time [min]: Check second input value",type="error")
+    if (input$timerange[2] <= input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",type="error", duration=20)
+    if (input$timerange[1] < 0) showNotification("Input Time [min]: Check first input value",type="error", duration=20)
+    if (input$timerange[2] <= 0) showNotification("Input Time [min]: Check second input value",type="error", duration=20)
 
-    if (input$timerange[1] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",type="error") #give a bit leeway
-    if (input$timerange[2] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",type="error") #give a bit leeway
+    if (input$timerange[1] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",type="error", duration=20) #give a bit leeway
+    if (input$timerange[2] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",type="error", duration=20) #give a bit leeway
 
-    if ((input$timerange[2] - input$timerange[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",type="error")
+    if ((input$timerange[2] - input$timerange[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",type="error", duration=20)
 
 
     req(input$timerange[2] > input$timerange[1])
@@ -350,30 +350,17 @@ module_isoxl_flow_server <- function(input, output, session) {
       )
 
 
-    #     validate(
-    #
-    #
-    #       ####  need(length(levels(data.flow()$filename)) <2, paste("Warning: There is more than one 'filename' in data. May want to use Flow Injection tab? These filenames have been observed",levels(data.flow()$filename ))),
-    #       need(input$INPUT_Flow_timerange[2] <= max(data.flow()$time.min), paste("Warning: Time selection exceeds time range of data. Maximum time in data is ", max(data.flow()$time.min) , " min.") ),
-    #       need(input$INPUT_Flow_timerange[2] > input$INPUT_Flow_timerange[1], paste("Warning: Time selection minimun is greater than maximum") )
-    #
-    #     )
 
+
+    # FIXME: before IsoXL I had a more sophisticated procedure to find the sample vs solvent. Implement this going forward?
 
     data.flow_filtered <-   values$data %>%
       dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
       na.omit() %>%
-
-      dplyr::mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
-
-      remove.ticxit(input = input) %>%
+      dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
       remove.satellitePeaks() %>%
       remove.rare(input = input) %>%
-      #
-      dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
-
-      # before IsoXL I had a more sophisticated procedure to find the sample vs solvent. Implement this going forward?
-
+      remove.ticxit(input = input)
 
 
 
