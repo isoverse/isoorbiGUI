@@ -296,7 +296,7 @@ module_isoxl_make_inputFile_ui <- function(id) {
              hr(),
 
              box(
-               title = "Preview of isotoplogs.tsv",
+               title = "Preview of isotopologs.tsv",
                width = "auto" ,
                status = "primary",
                solidHeader = T,
