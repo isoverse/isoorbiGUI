@@ -627,7 +627,7 @@ module_isoxl_flow_ui <- function(id) {
             width = NULL
           ),
           tooltip = "<span style='font-size:15px;'>Truncate data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
-          "Processing option: Truncate data based on TICxIT",
+          # "Processing option: Truncate data based on TICxIT",
           placement = "right"
         ),
 
