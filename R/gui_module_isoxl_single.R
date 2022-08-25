@@ -361,16 +361,11 @@ module_isoxl_single_server <- function(input, output, session) {
 
     data.single_filtered <-   values$data %>%
                                           na.omit() %>%
-
-                                          dplyr::mutate(Sample.Name = input$sample) %>% #temp: implemented as factor?
-
-                                           remove.ticxit(input = input) %>%
-                                           remove.satellitePeaks() %>%
-                                           remove.rare(input = input) %>%
-                                          #
-                                           dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2])
-
-
+                                          dplyr::mutate(Sample.Name = input$sample) %>%
+                                          dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
+                                          remove.satellitePeaks() %>%
+                                          remove.rare(input = input) %>%
+                                          remove.ticxit(input = input)
 
 # Table output: Single Analysis show rows of isox file------------------------------------------------
 
