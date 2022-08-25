@@ -312,9 +312,17 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
     shinyjs::show("main-plot")
 
-    values$plot <- values$data  %>% remove.satellitePeaks() %>% remove.ticxit(input=input) %>% iso_simplify_isox_file() %>% remove.rare(input=input)  %>% iso_filter_isox_file(input=input) %>% assign_basepeak_shotnoise(input=input)  %>% calc_shotnoise() %>% plot_shot_noise(input=input)
-    #definitely need to seriously check again the sequence of how to chain filters most appropriately, eg. remove.rare???
+    #ACTUAL DATA PROCESSING STEP
 
+    values$plot <- values$data  %>%
+                        iso_simplify_isox_file() %>%
+                        iso_filter_isox_file(input=input) %>%
+                        remove.satellitePeaks() %>%
+                        remove.rare(input=input)  %>%
+                        remove.ticxit(input=input) %>%
+                        assign_basepeak_shotnoise(input=input)  %>%
+                        calc_shotnoise() %>%
+                        plot_shot_noise(input=input)
 
   })
 
