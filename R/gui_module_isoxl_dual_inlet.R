@@ -390,10 +390,11 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     #req(input$INPUT_Rare)
     data.dual_inlet_filtered <- values$data %>%
       iso_simplify_isox_file() %>%
-      na.omit() %>%
-      remove.ticxit(input = input) %>% #temp: validate correct functioning
+      na.omit() %>% #FIXME: really necessary?
       remove.satellitePeaks() %>%
-      remove.rare(input = input)
+      remove.rare(input = input) %>%
+      remove.ticxit(input = input)  #temp: validate correct functioning
+
 
 
     #  Dual Inlet annotation table --------------------------------------------
@@ -423,17 +424,13 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
     data.basepeak <-
-      assign.basepeak(data.annotated, input$base_peak)  #needs validation; e.g. is basepeak present in data?
+      assign.basepeak(data.annotated, input$base_peak)
 
 
     # Dual Inlet: Calculate output table for results file ---------------
 
     data.output <-
       calc.output(df = data.basepeak, INPUT_RatioMethod = input$ratio.method)
-
-    # Dual Inlet: Make Excel file ---------------------------------------------
-
-    data.xls <- make.xls(data.output, params = inputs.dual)
 
 
     # Table output: Show rows of .isox file------------------------------------------------
