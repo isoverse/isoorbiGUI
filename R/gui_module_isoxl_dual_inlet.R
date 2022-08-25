@@ -610,7 +610,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
       div(
         id = ns("test_download_button"),
-        downloadButton(ns("download_test_data"), "Download (.isox)"),
+        downloadButton(ns("download_test_data"), "Download test data"),
         div(style="margin-bottom:10px")
       ) %>% shinyjs::hidden(),
 
