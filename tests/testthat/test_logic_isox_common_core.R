@@ -10,6 +10,8 @@ test_that("iso_simplify_isox_file() tests", {
 
   # test safety checks
   expect_error(iso_simplify_isox_file(), "argument \"dataset\" is missing, with no default")
+
+  #add 10 more tests
 })
 
   # remove.rare

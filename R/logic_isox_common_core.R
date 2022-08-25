@@ -32,7 +32,7 @@ remove.rare <- function(data, input){ #temp check functions correctly in differe
 
   remove.df <- data %>%
     dplyr::group_by(filename) %>%
-    dplyr::mutate(n.scans = max(scan.no) - min(scan.no)) %>% #implement a more general solution here
+    dplyr::mutate(n.scans = max(scan.no) - min(scan.no)) %>% #FIXME: implement a more general solution here
     dplyr::group_by(filename, compound, isotopolog) %>%
     dplyr::mutate(i.scans = length(scan.no)) %>%
     dplyr::filter(i.scans < input$rare/100 * n.scans) %>% # => update selection in GUI?, add message?
