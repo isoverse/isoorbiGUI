@@ -735,7 +735,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
             step = 1,
             width = NULL
           ),
-          "Split each block into segments",
+          tooltip = "<span style='font-size:15px;'>Split each block into segments<span>", allowHTML = TRUE,
+          # "Split each block into segments",
           placement = "right"
         ),
 
@@ -747,7 +748,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          "Isotopocule must have been detected in more than x % of scans",
+          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected in more than x % of scans<span>", allowHTML = TRUE,
+          # "Isotopocule must have been detected in more than x % of scans",
           placement = "right"
         ),
         tippy(
@@ -757,7 +759,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          "Truncate data based on ions in Orbitrap (ITxTIC)",
+          tooltip = "<span style='font-size:15px;'>Truncate data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
+          # "Truncate data based on ions in Orbitrap (ITxTIC)",
           placement = "right"
         ),
 
