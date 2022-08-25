@@ -595,11 +595,14 @@ module_isoxl_dual_inlet_ui <- function(id) {
       # Use test data instead of uploading data (or any data that has been already uploaded)
 
       tippy(
-        checkboxInput(ns("test_data"), "Use test data", value = FALSE),
+        text = checkboxInput(ns("test_data"), "Use test data", value = FALSE),
 
-        "For details on test data see Contact tab",
+        #"For details on test data see Contact tab",
         animation="scale",
-        #theme="light",
+
+        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
+
+       # theme="light",
         placement ="top-start"
 
       ),
@@ -712,8 +715,8 @@ module_isoxl_dual_inlet_ui <- function(id) {
           step = 0.1,
           width = NULL
         ),
-
-        "Initial time to stabilize the spray ",
+        tooltip = "<span style='font-size:15px;'>Initial time to stabilize the spray <span>", allowHTML = TRUE,
+        #"Initial time to stabilize the spray ",
         placement = "right"
         ),
 
