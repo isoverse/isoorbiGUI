@@ -239,13 +239,17 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     shinyjs::hide("main-rest")
 
     #basic checks
-    if (input$idle.time >= input$block.time) showNotification("Error: Input Switch time [min] exceeds Block time [min]",type="error")
+    if (input$idle.time >= input$block.time) showNotification("Error: Input Switch time [min] exceeds Block time [min]",
+                                                              type="error",
+                                                              duration = 5)
 
 
     #FIXME: add more and better validations
     #basic checks that input to define dual inlet matches the data
 
-    if ( max(values$data$time.min) < ((input$blocks * input$block.time) + input$startup.time) ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data", type="error")
+    if ( max(values$data$time.min) < ((input$blocks * input$block.time) + input$startup.time) ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data",
+                                                                                                                 type="error",
+                                                                                                                 duration = 5)
 
 
     #FIME: learn how to correctly implement shinyvalidate
@@ -282,14 +286,14 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       showNotification(
         "Inputs look ok",
         type = "warning",
-        duration = 1,
+        duration = 5,
       )
       # use inputs...
     } else {
       showNotification(
         "Check for invalid input",
         type = "error",
-        duration = 10,
+        duration = 20,
       )
     }
 

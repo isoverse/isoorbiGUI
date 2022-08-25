@@ -20,7 +20,7 @@ define.dual.inlet <-
         input$idle.time < input$block.time,
         'Idle Time is longer than Block Time!'
       ),
-      need(input$startup.time < 100, 'Startup time seems too long!'),
+      need(input$startup.time < 100, 'Startup time seems too long!'), #FIXME: obsolete with shinyvalidate?
       need(input$blocks < 100, 'Looks like too many blocks!'),
       need(input$blocks > 0, 'Need at lewast one block'),
       need(input$block.time < 100, 'Block Time appears too long'),
