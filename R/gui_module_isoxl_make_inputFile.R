@@ -65,9 +65,15 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
       run_check(INPUT_formula = input$INPUT_IsoX_sumformula)
 
 
-    if (INPUT_formula.check$warning == TRUE) showNotification("Sum formula not accepted by enviPat",type="error")
-    if (INPUT_formula.check$warning == FALSE) showNotification(paste0("Sum formula: ", INPUT_formula.check$new_formula), type="default")
-    if (INPUT_formula.check$monoisotopic_mass > 2000) showNotification("Sum formula not accepted: >2,000Da",type="error")
+    if (INPUT_formula.check$warning == TRUE) showNotification("Sum formula not accepted by enviPat",
+                                                              type="error",
+                                                              duration = 20)
+    if (INPUT_formula.check$warning == FALSE) showNotification(paste0("Sum formula: ", INPUT_formula.check$new_formula),
+                                                               type="default",
+                                                               duration = 5)
+    if (INPUT_formula.check$monoisotopic_mass > 2000) showNotification("Sum formula not accepted: >2,000Da",
+                                                                       type="error",
+                                                                       duration = 20)
     req(INPUT_formula.check$warning == FALSE)
     req(INPUT_formula.check$monoisotopic_mass < 2000)
 
@@ -97,14 +103,14 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
       showNotification(
         "Inputs look ok",
         type = "warning",
-        duration = 1,
+        duration = 5,
       )
       # use inputs...
     } else {
       showNotification(
         "Check for invalid input",
         type = "error",
-        duration = 10,
+        duration = 20,
       )
     }
 

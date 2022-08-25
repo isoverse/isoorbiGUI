@@ -234,14 +234,26 @@ module_isoxl_flow_server <- function(input, output, session) {
     shinyjs::hide("main-rest")
 
     # special safety checks for shinywidget that does not work with shinyvalidate
-    if (input$timerange[2] <= input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",type="error", duration=20)
-    if (input$timerange[1] < 0) showNotification("Input Time [min]: Check first input value",type="error", duration=20)
-    if (input$timerange[2] <= 0) showNotification("Input Time [min]: Check second input value",type="error", duration=20)
+    if (input$timerange[2] <= input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",
+                                                                   type="error",
+                                                                   duration=20)
+    if (input$timerange[1] < 0) showNotification("Input Time [min]: Check first input value",
+                                                 type="error",
+                                                 duration=20)
+    if (input$timerange[2] <= 0) showNotification("Input Time [min]: Check second input value",
+                                                  type="error",
+                                                  duration=20)
 
-    if (input$timerange[1] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",type="error", duration=20) #give a bit leeway
-    if (input$timerange[2] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",type="error", duration=20) #give a bit leeway
+    if (input$timerange[1] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",
+                                                                               type="error",
+                                                                               duration=20) #give a bit leeway
+    if (input$timerange[2] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",
+                                                                               type="error",
+                                                                               duration=20) #give a bit leeway
 
-    if ((input$timerange[2] - input$timerange[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",type="error", duration=20)
+    if ((input$timerange[2] - input$timerange[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",
+                                                                          type="error",
+                                                                          duration=20)
 
 
     req(input$timerange[2] > input$timerange[1])
@@ -280,14 +292,14 @@ module_isoxl_flow_server <- function(input, output, session) {
       showNotification(
         "Inputs look ok",
         type = "warning",
-        duration = 1,
+        duration = 5
       )
       # use inputs...
     } else {
       showNotification(
         "Check for invalid input",
         type = "error",
-        duration = 10,
+        duration = 20
       )
     }
 

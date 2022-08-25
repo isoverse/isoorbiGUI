@@ -241,7 +241,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     #basic checks
     if (input$idle.time >= input$block.time) showNotification("Error: Input Switch time [min] exceeds Block time [min]",
                                                               type="error",
-                                                              duration = 5)
+                                                              duration = 20)
 
 
     #FIXME: add more and better validations
@@ -249,7 +249,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     if ( max(values$data$time.min) < ((input$blocks * input$block.time) + input$startup.time) ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data",
                                                                                                                  type="error",
-                                                                                                                 duration = 5)
+                                                                                                                 duration = 20)
 
 
     #FIME: learn how to correctly implement shinyvalidate
