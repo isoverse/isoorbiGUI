@@ -413,7 +413,7 @@ module_isoxl_explore_ui <- function(id) {
 
 
       box(
-        title = "Interactive plots of MS data (select points and update display to show in table)",
+        title = "Interactive plots of MS data (select points in plots)",
         width = "auto" ,
         height = "auto",
         status = "primary",
