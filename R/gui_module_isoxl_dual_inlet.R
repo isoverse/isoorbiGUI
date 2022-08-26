@@ -659,7 +659,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h6("Define Dual Inlet"),
+        h5("Define Dual Inlet:"),
 
         textInput(
           inputId = ns("sample"),
@@ -677,7 +677,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h6("Parameters:"),
+        h5("Parameters:"),
 
         numericInput(
           inputId = ns("blocks"),
@@ -727,7 +727,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h6("Processing options:"),
+        h5("Processing options:"),
 
         tippy(
           numericInput(

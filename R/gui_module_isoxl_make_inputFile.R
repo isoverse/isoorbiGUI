@@ -239,7 +239,7 @@ module_isoxl_make_inputFile_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h4("Options for fine tuning:"),
+        h5("Options for fine tuning:"),
 
         textInput(
           inputId = ns("INPUT_IsoX_compound"),

@@ -606,7 +606,7 @@ module_isoxl_flow_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h6("Define Parameters"),
+        h5("Define Parameters"),
 
         selectInput(
           inputId = ns("filename.sel"),
@@ -620,7 +620,7 @@ module_isoxl_flow_ui <- function(id) {
         shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0),
         tags$hr(style = "border-color: grey;"),
 
-        h6("Processing options:"),
+        h5("Processing options:"),
 
         #Use shinyBS::bsTooltip instead of tippy?
         tippy(

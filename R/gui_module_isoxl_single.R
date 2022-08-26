@@ -647,7 +647,7 @@ module_isoxl_single_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h6("Define Single Analysis"),
+        h5("Define Single Analysis:"),
 
         selectInput(
           inputId = ns("filename"),
@@ -680,7 +680,7 @@ module_isoxl_single_ui <- function(id) {
         tags$hr(style = "border-color: grey;"),
 
 
-        h6("Processing options:"),
+        h5("Processing options:"),
 
         #currently not used in data processing!
 
