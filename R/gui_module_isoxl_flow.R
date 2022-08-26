@@ -606,7 +606,7 @@ module_isoxl_flow_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h5("Define Parameters"),
+        h5("Define Flow Injection Analysis:"),
 
         selectInput(
           inputId = ns("filename.sel"),
