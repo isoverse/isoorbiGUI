@@ -66,7 +66,7 @@ module_isoxl_explore_server <- function(input, output, session) {
           "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
         },
         content = function(file) {
-          write.table(values$data, file, sep="\t", row.names = F)
+          write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
         }
       )
 
