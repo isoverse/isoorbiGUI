@@ -748,8 +748,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected in more than x % of scans<span>", allowHTML = TRUE,
-          # "Isotopocule must have been detected in more than x % of scans",
+          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected > x % of scans<span>", allowHTML = TRUE,
           placement = "right"
         ),
         tippy(
