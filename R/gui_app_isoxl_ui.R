@@ -8,7 +8,7 @@
 #' @param sidebar_width the width of the left-side navigation sidebar
 #' @return ...
 #' @export
-orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://github.com/123caj/123caj.github.io/blob/main/isoorbi-draft.png?raw=true', height=40 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
+orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://github.com/123caj/123caj.github.io/blob/main/isoorbi-logo-round.png?raw=true', height=37 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
 
   box_default <- "#2c3b41" # lighter
 
