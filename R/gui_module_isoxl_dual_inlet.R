@@ -538,7 +538,11 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
               width = 900,
               height = 600,
               scale = 4,
-              filename = paste("dual_inlet",tools::file_path_sans_ext(input$upload$name), sep = "_") #FIX
+
+              filename = if (input$test_data == TRUE) {paste("dual_inlet_testfile_DualInlet_small", sep="")} #FIXME: use a variable for testfile name!
+              else{
+                paste("dual_inlet",tools::file_path_sans_ext(input$upload$name),sep = "_")}
+              #filename = paste("dual_inlet",tools::file_path_sans_ext(input$upload$name), sep = "_") #FIX
             )
           )
 
