@@ -206,7 +206,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min))
+                                            value = 0:floor(max(values$data$time.min))
       # Fix: How to avoid negative numbers?
       # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
       )
@@ -529,9 +529,13 @@ module_isoxl_single_server <- function(input, output, session) {
                 width = 900,
                 height = 600,
                 scale = 4,
-                filename = paste("single_analysis",
-                                 tools::file_path_sans_ext(ns(input$upload$name)),
-                                 sep = "_")
+                filename = if (input$test_data == TRUE) {paste("testfile_DualInlet_small", sep="")} #FIXME: use a variable for testfile name!
+                else{
+                  paste("single_analysis",
+                        tools::file_path_sans_ext(input$upload$name),
+                        sep="_")}
+
+
               )
             )
 
