@@ -814,7 +814,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
 
         box(
-          title = "Results Table",
+          title = "Summary of Results",
           width = "auto" ,
           status = "primary",
           solidHeader = T,
