@@ -825,7 +825,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
 
 
         box(
-          title = "Filtered .isox File",
+          title = "Filtered Data",
           width = "auto" ,
           status = "primary",
           solidHeader = T,
