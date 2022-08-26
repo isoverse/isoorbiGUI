@@ -474,13 +474,13 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         #Use shinyBS::bsTooltip instead of tippy?
         tippy(
-          numericInput(ns("rare"), "Remove weak signals", value = c(), width=NULL),
-          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected > x % of scans<span>", allowHTML = TRUE,
+          numericInput(ns("rare"), "Remove weak signals (in %)", value = c(), width=NULL),
+          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected in more than x % of scans<span>", allowHTML = TRUE,
           # "Processing option: Isotopocule must have been detected > x % of scans",
           placement = "right"),
         tippy(
-          numericInput(ns("extreme"), "Remove extreme scans", value = c(), width=NULL),
-          tooltip = "<span style='font-size:15px;'>Truncate data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
+          numericInput(ns("extreme"), "Remove extreme scans (in %)", value = c(), width=NULL),
+          tooltip = "<span style='font-size:15px;'>Truncate outlying data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
           # "Processing option: Truncate data based on TICxIT",
           placement = "right")
 
