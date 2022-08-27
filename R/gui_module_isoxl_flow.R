@@ -626,11 +626,11 @@ module_isoxl_flow_ui <- function(id) {
         tippy(
           numericInput(
             ns("rare"),
-            "Remove weak signals",
+            "Remove weak signals (in %)",
             value = c(),
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected > x % of scans<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected in more than x % of scans<span>", allowHTML = TRUE,
 
           # "Processing option: Isotopocule must have been detected > x % of scans",
           placement = "right"
@@ -638,11 +638,11 @@ module_isoxl_flow_ui <- function(id) {
         tippy(
           numericInput(
             ns("extreme"),
-            "Remove extreme scans",
+            "Remove extreme scans (in %)",
             value = c(),
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Truncate data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Truncate outlying data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
           # "Processing option: Truncate data based on TICxIT",
           placement = "right"
         ),
