@@ -67,13 +67,13 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
 
-    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbi"))
 
     # Download test data: .isox file ----------------------------------
 
     output$download_test_data <- downloadHandler(
       filename = function() {
-        "testfile_DualInlet_small.isox" #FIXME: provide name as a variable
+        "testfile_DualInlet.isox" #FIXME: provide name as a variable
       },
       content = function(file) {
         write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
@@ -132,7 +132,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbi"))
 
       # ,
       # warning = function(w)
