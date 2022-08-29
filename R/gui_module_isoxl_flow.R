@@ -168,6 +168,8 @@ module_isoxl_flow_server <- function(input, output, session) {
       updateSelectInput(inputId = "filename.sel", choices = c())
       updateSelectInput(inputId = "base_peak", choices = c())
       shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
+
+      updateNumericInput(inputId = "segments", value = c())
       updateNumericInput(inputId = "rare", value = c())
       updateNumericInput(inputId = "extreme", value = c())
       updateRadioButtons(inputId = "ratio.method", choices =c())
@@ -194,6 +196,9 @@ module_isoxl_flow_server <- function(input, output, session) {
                                             # Fix: How to avoid negative numbers?
                                             # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
       )
+
+
+      # FIXME: add segments,
 
       updateNumericInput(
         inputId = "rare",
@@ -277,6 +282,9 @@ module_isoxl_flow_server <- function(input, output, session) {
     iv$add_rule("base_peak", shinyvalidate::sv_required())
     iv$add_rule("timerange", shinyvalidate::sv_required())
     #timerange input requires special attention
+
+    iv$add_rule("segments", shinyvalidate::sv_required())
+
     iv$add_rule("rare", shinyvalidate::sv_required())
     iv$add_rule("extreme", shinyvalidate::sv_required())
     iv$add_rule("ratio.method", shinyvalidate::sv_required())
@@ -284,6 +292,8 @@ module_isoxl_flow_server <- function(input, output, session) {
     #Input values
     iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
     iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+    iv$add_rule("segments", shinyvalidate::sv_between(1,10))
+
 
     # FIXME: Bug if I delete rare or extreme input after clicking plot button
 
@@ -319,6 +329,8 @@ module_isoxl_flow_server <- function(input, output, session) {
       "\n - files selected: ", paste(input$filename.sel %then% "", collapse = ", "),
       "\n - basepeak: ", input$base_peak %then% "",
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
+      "\n - segments: ",
+      input$segments %then% "",
       "\n - rare: ", input$rare %then% "",
       "\n - extreme: ", input$extreme %then% "", #)#edit
       "\n - ratio method: ", input$ratio.method %then% "" #)#edit
@@ -339,6 +351,7 @@ module_isoxl_flow_server <- function(input, output, session) {
           "INPUT_Flow_Basepeak",
           "INPUT_Flow_timerange[1]",
           "INPUT_Flow_timerange[2]" ,
+          "Segments",
           "INPUT_Flow_Rare",
           "INPUT_Flow_TICxIT",
           "INPUT_Flow_RatioMethod"
@@ -353,6 +366,7 @@ module_isoxl_flow_server <- function(input, output, session) {
           input$base_peak,
           input$timerange[1],
           input$timerange[2],
+          input$segments,
           input$rare,
           input$extreme,
           input$ratio.method
@@ -372,7 +386,19 @@ module_isoxl_flow_server <- function(input, output, session) {
       dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
       remove.satellitePeaks() %>%
       remove.rare(input = input) %>%
-      remove.ticxit(input = input)
+      remove.ticxit(input = input) %>%
+      group_by(filename) %>%
+      dplyr::mutate(segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
+
+
+    #SEGMENTATION
+    if (input$segments > 1) {
+
+      data.flow_filtered <- data.flow_filtered            %>%
+        dplyr::mutate(filename=as.factor(paste(filename, segment, sep="_")))
+
+    }
+
 
 
 
@@ -625,6 +651,21 @@ module_isoxl_flow_ui <- function(id) {
         tags$hr(style = "border-color: grey;"),
 
         h5("Processing options:"),
+
+        tippy(
+          numericInput(
+            inputId = ns("segments"),
+            label = "Segments",
+            1,
+            min = 1,
+            max = 10,
+            step = 1,
+            width = NULL
+          ),
+          tooltip = "<span style='font-size:15px;'>Split each block into segments<span>", allowHTML = TRUE,
+          # "Split each block into segments",
+          placement = "right"
+        ),
 
         #Use shinyBS::bsTooltip instead of tippy?
         tippy(

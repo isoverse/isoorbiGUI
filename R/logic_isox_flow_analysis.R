@@ -12,7 +12,7 @@
 calc.output.flow <- function(df, INPUT_RatioMethod){
 
   df.stat <- df  %>%  dplyr::group_by(filename,
-                               #Injection,
+                               segment,
                                #Sample.Name,
                                compound,
                                Basepeak,
@@ -35,7 +35,7 @@ calc.output.flow <- function(df, INPUT_RatioMethod){
            Mins.to.1mio = round(Mins.to.1mio, 2)) %>%
 
     dplyr::select(filename,
-           # Injection,
+           segment,
            #Sample.Name,
            Basepeak,
            compound,
