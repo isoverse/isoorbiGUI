@@ -17,7 +17,7 @@ test_that("iso_simplify_isox_file() tests", {
   # remove.rare
 test_that("remove.rare() tests", {
   #success
-
+  # ...
   #failure
   expect_error(remove.rare(), "argument \"data\" is missing, with no default")
 })
@@ -38,6 +38,11 @@ test_that("remove.ticxit() tests", {
 })
 
   # iso_filter_isox_file
+test_that("iso_filter_isox_file() tests",{
+  #success
+  #failure
+  expect_error(iso_filter_isox_file(), "argument \"dataset\" is missing, with no default")
+})
 
   # se
 test_that("se() tests", {
