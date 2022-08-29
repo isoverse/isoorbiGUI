@@ -5,9 +5,8 @@ base_dir <- if (interactive()) file.path("tests", "testthat") else "."
 
 context("core")
 
-test_that("iso_simplify_isox_file() tests", {
   # iso_simplify_isox_file
-
+test_that("iso_simplify_isox_file() tests", {
   # test safety checks
   expect_error(iso_simplify_isox_file(), "argument \"dataset\" is missing, with no default")
 
