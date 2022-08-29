@@ -12,7 +12,8 @@ test_that("assign_basepeak_shotnoise tests",{
 
 test_that("calc_shotnoise tests",{
   #succes
-  #...
+  df <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbi"))
+  expect_true(is.tbl(calc_shotnoise(iso_simplify_isox_file(df))))
   #failure
   expect_error(calc_shotnoise(), "argument \"dataset\" is missing, with no default")
 })
