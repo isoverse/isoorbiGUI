@@ -462,6 +462,10 @@ module_isoxl_flow_server <- function(input, output, session) {
         plotly::ggplotly(
 
           ggplot(data = data.flow_output, aes(x = filename, y = Ratio, color = isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+            xlab("Filename") +
+
+            theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
+
 
             geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
                               ymax=(Ratio+Ratio.SEM)),

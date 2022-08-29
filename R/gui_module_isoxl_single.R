@@ -508,7 +508,7 @@ module_isoxl_single_server <- function(input, output, session) {
             #               position=position_dodge(.9))       +
             ggplot2::geom_point(size=3, shape=10) +
             ggplot2::geom_abline(slope=1) +
-            ggplot2::ylab(paste("relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("shot noise limit", "[\u2030]")),
+            ggplot2::ylab(paste("Relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("Shot Noise Limit", "[\u2030]")),
 
           dynamicTicks = TRUE #change ticks on zoom
         ) %>%

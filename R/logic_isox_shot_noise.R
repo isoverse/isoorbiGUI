@@ -86,15 +86,15 @@ plot_shot_noise <- function(dataset, input) {
     geom_abline(intercept = 0,
                 slope = -0.5,
                 col = "blue") +
-    labs(y = "RSE",
-         x = "effective number of ions")  +
+    labs(y = "Relative SEM",
+         x = "Effective Number of Ions")  +
     theme(legend.position = "none") +
 
     annotate(
       geom = 'text',
       label = 'shot noise \nlimit',
       color = "blue",
-      x = min(dataset$neff),
+      x = min(dataset$neff) + 10000,
       y = 0.2*max(dataset$value)
     ) +
 

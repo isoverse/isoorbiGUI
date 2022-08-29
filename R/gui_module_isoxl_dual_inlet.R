@@ -505,6 +505,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
             x = Injection, y = Ratio, color = isotopolog
           )) + scale_color_brewer(palette = "Dark2") +
 
+            theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
+
             geom_errorbar(
               aes(
                 ymin = (Ratio - Ratio.SEM),
