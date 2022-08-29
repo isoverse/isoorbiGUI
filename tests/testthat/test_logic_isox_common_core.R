@@ -19,7 +19,8 @@ test_that("iso_simplify_isox_file() tests", {
   # remove.rare
 test_that("remove.rare() tests", {
   #success
-  # ...
+  df <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbi"))
+  expect_true(is.tbl(remove.rare(iso_simplify_isox_file(df))))
   #failure
   expect_error(remove.rare(), "argument \"data\" is missing, with no default")
 })
