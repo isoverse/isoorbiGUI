@@ -168,11 +168,13 @@ module_isoxl_single_server <- function(input, output, session) {
       shinyjs::hide("parameters-panel")
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
-      updateSelectInput(inputId = "filename", choices = c())
+      updateSelectInput(inputId = "filename.sel", choices = c())
       updateSelectInput(inputId = "compound", choices = c())
       updateTextInput(inputId = "sample", value = c())
       updateSelectInput(inputId = "base_peak", choices = c())
       shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
+
+      updateNumericInput(inputId = "segments", value = c())
       updateNumericInput(inputId = "rare", value = c())
       updateNumericInput(inputId = "extreme", value = c())
       updateRadioButtons(inputId = "ratio.method", choices =c())
@@ -182,7 +184,7 @@ module_isoxl_single_server <- function(input, output, session) {
     } else {
       # yes data --> update parameters and show
       updateSelectInput(
-        inputId = "filename",
+        inputId = "filename.sel",
         choices = c(levels(values$data$filename)),
         selected = values$data$filename[1]
       )
@@ -211,6 +213,7 @@ module_isoxl_single_server <- function(input, output, session) {
       # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
       )
 
+      # FIXME: add segments,
 
       updateNumericInput(
         inputId = "rare",
@@ -291,18 +294,21 @@ module_isoxl_single_server <- function(input, output, session) {
 
 
     #Required inputs
-    iv$add_rule("filename", shinyvalidate::sv_required())
+    iv$add_rule("filename.sel", shinyvalidate::sv_required())
     iv$add_rule("compound", shinyvalidate::sv_required())
     iv$add_rule("sample", shinyvalidate::sv_required())
     iv$add_rule("timerange", shinyvalidate::sv_required())
     #timerange input requires special attention
     iv$add_rule("rare", shinyvalidate::sv_required())
+
+    iv$add_rule("segments", shinyvalidate::sv_required())
     iv$add_rule("extreme", shinyvalidate::sv_required())
     iv$add_rule("ratio.method", shinyvalidate::sv_required())
     #
     # #Input values
     iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
     iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
+    iv$add_rule("segments", shinyvalidate::sv_between(1,5))
 
     # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
 
@@ -335,11 +341,12 @@ module_isoxl_single_server <- function(input, output, session) {
     module_message(
       ns, "info",
       "Processing data with selected parameters:",
-      "\n - files: ", paste(input$filename %then% "", collapse = ", "),
+      "\n - files: ", paste(input$filename.sel %then% "", collapse = ", "),
       "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
       "\n - sample: ", paste(input$sample %then% ""),
       "\n - basepeak: ", input$base_peak %then% "",
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
+      "\n - segments: ",
       "\n - rare: ", input$rare %then% "",
       "\n - extreme: ", input$extreme %then% "", #)#edit
       "\n - ratio.method: ", input$ratio.method %then% "" #)#edit
@@ -355,6 +362,7 @@ module_isoxl_single_server <- function(input, output, session) {
         "INPUT_Single_Basepeak",
         "INPUT_Single_timerange[1]",
         "INPUT_Single_timerange[2]" ,
+        "Segments",
         "INPUT_Single_Rare",
         "INPUT_Single_TICxIT",
         "INPUT_Single_RatioMethod"),
@@ -365,6 +373,7 @@ module_isoxl_single_server <- function(input, output, session) {
                   input$base_peak,
                   input$timerange[1],
                   input$timerange[2],
+                  input$segments,
                   input$rare,
                   input$extreme,
                   input$ratio.method)
@@ -372,12 +381,24 @@ module_isoxl_single_server <- function(input, output, session) {
       )
 
     data.single_filtered <-   values$data %>%
+                                          dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
                                           na.omit() %>%
                                           dplyr::mutate(Sample.Name = input$sample) %>%
                                           dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
                                           remove.satellitePeaks() %>%
                                           remove.rare(input = input) %>%
-                                          remove.ticxit(input = input)
+                                          remove.ticxit(input = input)%>%
+                                          group_by(filename) %>%
+                                          dplyr::mutate(segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
+
+
+    #SEGMENTATION
+    # if (input$segments > 1) {
+    #
+    #   data.single_filtered <- data.single_filtered   %>%
+    #     dplyr::mutate(filename=as.factor(paste(filename, segment, sep="_")))
+    #
+    # }
 
 # Table output: Single Analysis show rows of isox file------------------------------------------------
 
@@ -508,6 +529,8 @@ module_isoxl_single_server <- function(input, output, session) {
             #               position=position_dodge(.9))       +
             ggplot2::geom_point(size=3, shape=10) +
             ggplot2::geom_abline(slope=1) +
+            ggplot2::facet_grid(filename~segment) +
+            ggplot2::theme(legend.position="right") +
             ggplot2::ylab(paste("Relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("Shot Noise Limit", "[\u2030]")),
 
           dynamicTicks = TRUE #change ticks on zoom
@@ -529,7 +552,7 @@ module_isoxl_single_server <- function(input, output, session) {
                 width = 900,
                 height = 600,
                 scale = 4,
-                filename = if (input$test_data == TRUE) {paste("testfile_DualInlet_small", sep="")} #FIXME: use a variable for testfile name!
+                filename = if (input$test_data == TRUE) {paste("testfile_Single", sep="")} #FIXME: use a variable for testfile name!
                 else{
                   paste("single_analysis",
                         tools::file_path_sans_ext(input$upload$name),
@@ -650,10 +673,10 @@ module_isoxl_single_ui <- function(id) {
         h5("Define Single Analysis:"),
 
         selectInput(
-          inputId = ns("filename"),
+          inputId = ns("filename.sel"),
           label = "File",
           c(),
-          multiple = FALSE
+          multiple = TRUE
         ),
 
         # tippy(
@@ -683,7 +706,20 @@ module_isoxl_single_ui <- function(id) {
         h5("Processing options:"),
 
         #currently not used in data processing!
-
+        tippy(
+          numericInput(
+            inputId = ns("segments"),
+            label = "Segments",
+            1,
+            min = 1,
+            max = 5,
+            step = 1,
+            width = NULL
+          ),
+          tooltip = "<span style='font-size:15px;'>Split each block into segments<span>", allowHTML = TRUE,
+          # "Split each block into segments",
+          placement = "right"
+        ),
 
         #Use shinyBS::bsTooltip instead of tippy?
         tippy(
@@ -728,7 +764,7 @@ module_isoxl_single_ui <- function(id) {
       box(
         title = "Overview of Results",
         width = "auto" ,
-        height = "auto",
+      #  height = "auto",
         status = "primary",
         solidHeader = T,
         withSpinner(plotlyOutput(ns("plot.single")))

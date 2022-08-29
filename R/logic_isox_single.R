@@ -64,7 +64,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 #' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  dplyr::group_by(filename,
-                                      #Injection,
+                                      segment,
                                       Sample.Name,
                                       compound,
                                       Basepeak,
