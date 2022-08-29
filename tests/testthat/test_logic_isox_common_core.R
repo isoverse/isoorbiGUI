@@ -50,7 +50,7 @@ test_that("iso_filter_isox_file() tests",{
   # se
 test_that("se() tests", {
   #success
-  #expect_equal(se(c(1,2,3)), 0.5773503)
+  expect_equal(se(c(1,2,3)), 0.57735026919)
   expect_type(se(c(1,2,3)), "double")
 
   #failure
