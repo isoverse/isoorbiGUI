@@ -5,7 +5,7 @@ context("dual inlet")
 
 test_that("define.dual.inlet test",{
   #success
-  #...
+  # ...
   #failure
   expect_error(define.dual.inlet(), "argument \"input\" is missing, with no default")
 })
