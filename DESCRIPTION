@@ -1,6 +1,6 @@
 Package: isoorbi
 Type: Package
-Title: Process Orbitrap Isotope Data
+Title: Process Orbitrap Isotopocule Data
 Version: 0.4.1
 Authors@R: 
     c(person(
