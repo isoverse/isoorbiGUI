@@ -94,7 +94,7 @@ plot_shot_noise <- function(dataset, input) {
       geom = 'text',
       label = 'shot noise \nlimit',
       color = "blue",
-      x = min(dataset$neff) + 10000,
+      x = min(dataset$neff) + 1000,
       y = 0.2*max(dataset$value)
     ) +
 
