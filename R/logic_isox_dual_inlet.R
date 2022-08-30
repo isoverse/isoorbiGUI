@@ -88,7 +88,7 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
            ions.incremental) %>%
     dplyr::group_by(filename, Block, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
 
-    dplyr::mutate(Basepeak = factor(paste(.data$isotopolog, "is base peak", sep = " ")),
+    dplyr::mutate(Basepeak = factor(.data$isotopolog),
            Basepeak.Ions = .data$ions.incremental) %>%
     dplyr::select(.data$filename,
            .data$compound,

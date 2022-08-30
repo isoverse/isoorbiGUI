@@ -432,6 +432,20 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     data.output <-
       calc.output(df = data.basepeak, INPUT_RatioMethod = input$ratio.method)
 
+    data.output.renamed <- data.output %>% as_tibble() %>% rename(
+                                                          `Filename` = filename,
+                                                          `Sample` = Sample.Name,
+                                                          `BasePeak` = Basepeak,
+                                                          `Isotopocule` = isotopolog,
+                                                           Compound = compound,
+                                                          `SEM` = Ratio.SEM,
+                                                          `SEM (permil)` = relSE.permil,
+                                                          `Shot Noise (permil)` = Shot.Noise.permil,
+                                                          `Minutes to 1E6 ions` = Mins.to.1mio,
+                                                          `Scans` = No.of.scans
+
+                                                        )
+
 
     # Table output: Show rows of .isox file------------------------------------------------
 
@@ -468,7 +482,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     output$summary <- DT::renderDataTable({
       datatable(
-        data.output,
+        data.output.renamed,
         rownames = FALSE ,
         extensions = c('Buttons', 'ColReorder'),
         options = list(
@@ -516,13 +530,16 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
               size = 0.3,
               color = "black",
               position = position_dodge(.9)
-            )       +        geom_point(size = 3, shape = 10) + facet_wrap(~ filename, ncol = 1),
+            )       +
+            theme(legend.title= element_blank())+
+            geom_point(size = 3, shape = 10) + facet_wrap(~ filename, ncol = 1),
+
           # +
           #   scale_x_continuous(breaks=1:100), #temp
           # temp: could be interesting option: + facet_grid(isotopolog~.),
 
           dynamicTicks = TRUE #change ticks on zoom
-        ) %>%
+        ) %>% layout(legend=list(title=list(text='Isotopocule'))) %>%
 
           plotly::config(
             displaylogo = FALSE,

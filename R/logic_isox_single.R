@@ -33,7 +33,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
     #dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
     dplyr::group_by(.data$filename, .data$scan.no) %>%
     dplyr::filter(isotopolog == INPUT_Basepeak) %>%
-    dplyr::mutate(Basepeak = factor(paste(.data$isotopolog, "is base peak", sep = " ")),
+    dplyr::mutate(Basepeak = factor(.data$isotopolog),
                   Basepeak.Ions = .data$ions.incremental) %>%
     dplyr::select(.data$filename,
                   .data$compound,
