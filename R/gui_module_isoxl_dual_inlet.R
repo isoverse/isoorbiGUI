@@ -754,7 +754,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected in more than x % of scans<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected <br> in more than  x % of scans<span>", allowHTML = TRUE,
           placement = "right"
         ),
         tippy(
@@ -764,7 +764,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Truncate outlying data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Truncate outlying data based on <br> ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
           # "Truncate data based on ions in Orbitrap (ITxTIC)",
           placement = "right"
         ),

@@ -675,7 +675,7 @@ module_isoxl_flow_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected in more than x % of scans<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Isotopocule must have been detected <br> in more than x % of scans<span>", allowHTML = TRUE,
 
           # "Processing option: Isotopocule must have been detected > x % of scans",
           placement = "right"
@@ -687,7 +687,7 @@ module_isoxl_flow_ui <- function(id) {
             value = c(),
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Truncate outlying data based on ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Truncate outlying data based on <br> ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
           # "Processing option: Truncate data based on TICxIT",
           placement = "right"
         ),

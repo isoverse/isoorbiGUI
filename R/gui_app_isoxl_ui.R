@@ -91,7 +91,8 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
             # body top padding
             ".box-body {padding-top: 5px; padding-bottom: 0px}",
             # pads on shiny items
-            ".form-group, .selectize-control {margin-bottom: 0px;}",
+            ".form-group, .selectize-control {margin-bottom: 7px;}", #Padding in input widgets
+            ".form-group, .selectize-control {margin-top: 2px;}",
             # custom background box
             sprintf(".box.box-solid.box-info>.box-header{color:#fff; background: %s; background-color: %s;}", box_default, box_default),
             sprintf(".box.box-solid.box-info{border:1px solid %s;}", box_default),
