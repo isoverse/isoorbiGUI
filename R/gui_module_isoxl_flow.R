@@ -662,7 +662,7 @@ module_isoxl_flow_ui <- function(id) {
             step = 1,
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Split each block into segments<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Split each sample run into segments<span>", allowHTML = TRUE,
           # "Split each block into segments",
           placement = "right"
         ),
