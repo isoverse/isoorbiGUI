@@ -124,7 +124,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "flow",
 
-          h4("Flow Injections (autosampler)"),
+          h4("Autosample (flow injections)"),
 
           module_isoxl_flow_ui(id = "flow")
 
@@ -135,7 +135,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "single",
 
-          h4("Single Analysis (syringe)"),
+          h4("Single Analysis (syringe infusion)"),
 
           module_isoxl_single_ui(id = "single")
         ),
