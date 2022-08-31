@@ -459,7 +459,7 @@ module_isoxl_flow_server <- function(input, output, session) {
       `Scans` = No.of.scans
 
     ) %>%
-      dplyr::select(Filename,  Compound, Isotopocule, Ratio, `SEM (permil)`,
+      dplyr::select(Filename,  Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
              `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
 
 
@@ -473,9 +473,9 @@ module_isoxl_flow_server <- function(input, output, session) {
                  options = list(
                    # autoWidth = TRUE, #scroll bar to see enture table
                    scrollX = TRUE, #scrollbar when table is not visible
-                   # columnDefs = list(list(
-                   #   targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
-                   # )),
+                   columnDefs = list(list(
+                     targets = c(4L, 7L), visible = FALSE #hide some columns; results in an empty table if column number not available!
+                   )),
                    dom = 'Bfrtip',
                    #buttons = c('colvis','copy',  'excel', 'pdf' ),
                    buttons =
