@@ -388,7 +388,7 @@ module_isoxl_single_server <- function(input, output, session) {
                                           remove.rare(input = input) %>%
                                           remove.ticxit(input = input)%>%
                                           group_by(filename) %>%
-                                          dplyr::mutate(segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
+                                          dplyr::mutate(Segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
 
 
     #SEGMENTATION
@@ -445,33 +445,21 @@ module_isoxl_single_server <- function(input, output, session) {
 
     #FIXME
     data.single_output.renamed <-
-      data.single_output %>% as_tibble()  %>% dplyr::rename(
+      data.single_output  %>% dplyr::rename(
         `Filename` = .data$filename,
         `Sample` = .data$Sample.Name,
-        `Segment` = .data$segment,
         `Compound` = .data$compound,
         `BasePeak` = .data$Basepeak,
         `Isotopocule` = .data$isotopolog,
         # `SEM` = Ratio.SEM,
         `SEM (permil)` = .data$relSE.permil,
         `Shot Noise (permil)` = .data$Shot.Noise.permil,
+        `Scans`= No.of.scans,
         `Minutes to 1E6 ions` = .data$Mins.to.1mio
       )
 
     #FIXME: column reordering did not work for some reason...
-    ##FIXME
-  #   #data.single_output.renamed <- data.single_output.renamed%>% dplyr::select(
-  #   .data$filename,
-  #   .data$Sample.Name,
-  #   .data$segment,
-  #   .data$compound,
-  #   .data$Basepeak,
-  #   .data$isotopolog,
-  #   .data$Ratio,
-  #   .data$relSE.permil,
-  #   .data$Shot.Noise.permil,
-  #   .data$Mins.to.1mio
-  # )
+
 
       # Table output: Single Analysis, summary statistics ----------------------------
 
@@ -484,7 +472,7 @@ module_isoxl_single_server <- function(input, output, session) {
                      # autoWidth = TRUE, #scroll bar to see enture table
                      scrollX = TRUE, #scrollbar when table is not visible
                      columnDefs = list(list(
-                       targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                       targets = c(7L, 11L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
                      )),
                      dom = 'Bfrtip',
                      #buttons = c('colvis','copy',  'excel', 'pdf' ),
@@ -557,7 +545,7 @@ module_isoxl_single_server <- function(input, output, session) {
             #               position=position_dodge(.9))       +
             ggplot2::geom_point(size=3, shape=10) +
             ggplot2::geom_abline(slope=1) +
-            ggplot2::facet_grid(filename~segment) +
+            ggplot2::facet_grid(filename~Segment) +
             ggplot2::theme(legend.position="right") +
             ggplot2::ylab(paste("Relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("Shot Noise Limit", "[\u2030]")),
 

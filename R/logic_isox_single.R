@@ -64,7 +64,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 #' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  dplyr::group_by(filename,
-                                      segment,
+                                      Segment,
                                       Sample.Name,
                                       compound,
                                       Basepeak,
@@ -96,8 +96,8 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
 
     dplyr::select(
       filename,
-      # Injection,
       Sample.Name,
+      Segment,
       compound,
       Basepeak,
       isotopolog,
@@ -105,8 +105,8 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
       Ratio.SEM,
       relSE.permil,
       Shot.Noise.permil,
-      Mins.to.1mio,
-      No.of.scans
+      No.of.scans,
+      Mins.to.1mio
     ) %>%
     unique() %>% #dplyr::mutate(Injection= as.integer(Injection)) %>%
     #arrange(filename, Injection, isotopolog)
