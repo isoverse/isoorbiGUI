@@ -95,7 +95,7 @@ plot_shot_noise <- function(dataset, input) {
       label = 'shot noise \nlimit',
       color = "blue",
       x = min(dataset$neff) + 1000,
-      y = 0.2*max(dataset$value)
+      y = 0.1*max(dataset$value)
     ) +
 
     scale_x_continuous(
