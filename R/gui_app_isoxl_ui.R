@@ -64,7 +64,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
         menuItem("Make IsoX Input File", tabName = "make_inputFile", icon = icon("wand-magic-sparkles")),
-        menuItem("Contact", tabName = "info", icon = icon("circle-info")),
+        menuItem("Info", tabName = "info", icon = icon("circle-info")),
         tags$li(a(uiOutput("help", inline = TRUE)))
       ),
 
@@ -171,12 +171,12 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         ),
 
-        # UI: Contact and info -------------------------------------------------
+        # UI: Info and Contact -------------------------------------------------
 
         tabItem(
           tabName = "info",
 
-          h4("Contact"),
+          h4("Contact infotmation"),
 
           module_isoxl_info_ui(id = "info")
         )

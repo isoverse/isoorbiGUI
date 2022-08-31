@@ -51,7 +51,7 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     # Server: Create an IsoX Input File ----------------------------------------------
     make_inputFile <- callModule(module_isoxl_make_inputFile_server, id = "make_inputFile")
 
-    # Server: Contact and info -------------------------------------------------
+    # Server: Info and Contact -------------------------------------------------
     info <- callModule(module_isoxl_info_server, id = "info")
 
 

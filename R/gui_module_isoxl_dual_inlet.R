@@ -623,10 +623,10 @@ module_isoxl_dual_inlet_ui <- function(id) {
       tippy(
         text = checkboxInput(ns("test_data"), "Use test data", value = FALSE),
 
-        #"For details on test data see Contact tab",
+        #"For details on test data see Info tab",
         animation="scale",
 
-        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
+        tooltip = "<span style='font-size:15px;'>For details on test data see Info tab<span>", allowHTML = TRUE,
 
        # theme="light",
         placement ="top-start"
