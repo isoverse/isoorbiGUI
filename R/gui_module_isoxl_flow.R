@@ -446,13 +446,29 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     data.flow_output <- calc.output.flow(df = data.flow_basepeak, INPUT_RatioMethod = input$ratio.method)
 
+    data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% rename(
+      `Filename` = filename,
+      #`Sample` = Sample.Name,
+      `BasePeak` = Basepeak,
+      `Isotopocule` = isotopolog,
+      Compound = compound,
+      `SEM` = Ratio.SEM,
+      `SEM (permil)` = relSE.permil,
+      `Shot Noise (permil)` = Shot.Noise.permil,
+      `Minutes to 1E6 ions` = Mins.to.1mio,
+      `Scans` = No.of.scans
+
+    ) %>%
+      select(Filename,  Compound, Isotopocule, Ratio, `SEM (permil)`,
+             `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
+
 
     # Table output: Flow Analysis, summary statistics ----------------------------
 
 
     output$summary.flow <- DT::renderDataTable({
 
-      datatable( data.flow_output, rownames= FALSE ,
+      datatable( data.flow_output.renamed, rownames= FALSE ,
                  extensions = c('Buttons','ColReorder'),
                  options = list(
                    # autoWidth = TRUE, #scroll bar to see enture table
@@ -502,7 +518,7 @@ module_isoxl_flow_server <- function(input, output, session) {
             geom_point(size=3, shape=10) ,
 
           dynamicTicks = TRUE #change ticks on zoom
-        ) %>% plotly::config(
+        ) %>% layout(legend=list(title=list(text='Isotopocule'))) %>% plotly::config(
 
             displaylogo = FALSE,
             modeBarButtonsToRemove = c(

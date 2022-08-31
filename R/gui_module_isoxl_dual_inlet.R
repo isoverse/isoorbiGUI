@@ -444,7 +444,9 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
                                                           `Minutes to 1E6 ions` = Mins.to.1mio,
                                                           `Scans` = No.of.scans
 
-                                                        )
+                                                        ) %>%
+                                                            select(Filename, Sample, Block, Compound, Isotopocule, Ratio, `SEM (permil)`,
+                                                                   `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
 
 
     # Table output: Show rows of .isox file------------------------------------------------
