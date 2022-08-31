@@ -646,8 +646,8 @@ module_isoxl_single_ui <- function(id) {
       tippy(
         checkboxInput(ns("test_data"), "Use test data", value = FALSE),
 
-        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
-        # "For details on test data see Info tab",
+        tooltip = "<span style='font-size:15px;'>For details see Info<span>", allowHTML = TRUE,
+        # "For details on test data see Info",
         animation="scale",
         #theme="light",
         placement ="top-start"
