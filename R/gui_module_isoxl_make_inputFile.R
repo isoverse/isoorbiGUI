@@ -10,7 +10,7 @@ test_module_isoxl_make_inputFile <- function(port = 5000) {
     shinyApp(
       ui = fluidPage(
         shinyjs::useShinyjs(),
-        h1("Make IsoX input file Module Test"),
+        h1("IsoX input file Module Test"),
         module_isoxl_make_inputFile_ui(id = "make_inputFile")
       ),
       server = function(input, output) {
