@@ -6,7 +6,6 @@
 #'@return ...
 #'@export
 test_module_isoxl_single <- function(port = 5000) {
-  app <-
     shinyApp(
       ui = fluidPage(
         shinyjs::useShinyjs(),
@@ -444,13 +443,41 @@ module_isoxl_single_server <- function(input, output, session) {
 
       data.single_output <- calc.output.single(df = data.single_basepeak, INPUT_RatioMethod = input$ratio.method)
 
+    #FIXME
+    data.single_output.renamed <-
+      data.single_output %>% as_tibble()  %>% dplyr::rename(
+        `Filename` = .data$filename,
+        `Sample` = .data$Sample.Name,
+        `Segment` = .data$segment,
+        `Compound` = .data$compound,
+        `BasePeak` = .data$Basepeak,
+        `Isotopocule` = .data$isotopolog,
+        # `SEM` = Ratio.SEM,
+        `SEM (permil)` = .data$relSE.permil,
+        `Shot Noise (permil)` = .data$Shot.Noise.permil,
+        `Minutes to 1E6 ions` = .data$Mins.to.1mio
+      )
+
+    ##FIXME
+  #   #data.single_output.renamed <- data.single_output.renamed%>% dplyr::select(
+  #   .data$filename,
+  #   .data$Sample.Name,
+  #   .data$segment,
+  #   .data$compound,
+  #   .data$Basepeak,
+  #   .data$isotopolog,
+  #   .data$Ratio,
+  #   .data$relSE.permil,
+  #   .data$Shot.Noise.permil,
+  #   .data$Mins.to.1mio
+  # )
 
       # Table output: Single Analysis, summary statistics ----------------------------
 
 
       output$summary.single <- DT::renderDataTable({
 
-        datatable( data.single_output, rownames= FALSE ,
+        datatable( data.single_output.renamed, rownames= FALSE ,
                    extensions = c('Buttons','ColReorder'),
                    options = list(
                      # autoWidth = TRUE, #scroll bar to see enture table

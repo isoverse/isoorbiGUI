@@ -446,7 +446,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     data.flow_output <- calc.output.flow(df = data.flow_basepeak, INPUT_RatioMethod = input$ratio.method)
 
-    data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% rename(
+    data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% dplyr::rename(
       `Filename` = filename,
       #`Sample` = Sample.Name,
       `BasePeak` = Basepeak,
@@ -459,7 +459,7 @@ module_isoxl_flow_server <- function(input, output, session) {
       `Scans` = No.of.scans
 
     ) %>%
-      select(Filename,  Compound, Isotopocule, Ratio, `SEM (permil)`,
+      dplyr::select(Filename,  Compound, Isotopocule, Ratio, `SEM (permil)`,
              `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
 
 
