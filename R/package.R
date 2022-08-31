@@ -26,7 +26,7 @@ NULL
 #' @export
 magrittr::`%>%`
 
-#' @importFrom mailtoR mailtoR
+#' @importFrom mailtoR use_mailtoR
 
 
 # quiets concerns of R CMD check about .data in tidyverse functions (to avoid other global variables)
