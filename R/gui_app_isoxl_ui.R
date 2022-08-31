@@ -176,7 +176,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "info",
 
-          h4("Contact infotmation"),
+          h4("Contact information"),
 
           module_isoxl_info_ui(id = "info")
         )
