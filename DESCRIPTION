@@ -1,7 +1,7 @@
 Package: isoorbi
 Type: Package
-Title: Process Orbitrap Isotopocule Data
-Version: 0.4.1
+Title: Process Orbitrap Isotope Data
+Version: 0.4.2
 Authors@R: 
     c(person(
         given = "Sebastian", family = "Kopf", 
@@ -24,36 +24,36 @@ BugReports: https://github.com/isoverse/isoorbi/issues
 Depends:
     R (>= 4.0.0)
 Imports:
-    methods,
-    R.utils,
-    rlang,
-    magrittr,
-    readr,
-    openxlsx,
     dplyr,
-    tidyr,
+    DT,
+    enviPat,
     ggplot2,
-    scales,
+    ggrepel,
+    magrittr,
+    mailtoR,
+    methods,
+    openxlsx,
     plotly,
+    RColorBrewer,
+    readr,
+    rlang,
+    R.utils,
+    scales,
     shiny,
     shinyWidgets,
     shinyjs,
     shinyBS,
     shinydashboard,
     shinycssloaders,
+    shinyvalidate,
+    tidyr,
     tippy,
-    DT,
-    enviPat,
-    RColorBrewer,
-    ggrepel,
-    mailtoR,
-    tidyverse,
-    shinyvalidate
+    tidyverse
 Suggests:
-    testthat,
-    rmarkdown,
+    devtools,
     knitr,
-    devtools
+    rmarkdown,
+    testthat
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?

@@ -3,30 +3,30 @@
 
 # import functions/packages used so frequently we don't want to always refer to the namespace explicitly
 #' @import dplyr
+#' @import enviPat
+#' @rawNamespace import(DT, except = c(dataTableOutput, renderDataTable))
 #' @import scales
+#' @rawNamespace import(ggplot2, except = last_plot)
 #' @import ggrepel
-#' @import shinydashboard
+#' @import mailtoR
+#' @import openxlsx
+#' @import plotly
+#' @import RColorBrewer
 #' @import shiny
+#' @import shinyBS
+#' @import shinycssloaders
+#' @import shinydashboard
+#' @import shinyvalidate
 #' @import shinyWidgets
 #' @import tidyr
-#' @import openxlsx
-#' @rawNamespace import(DT, except = c(dataTableOutput, renderDataTable))
-#' @import plotly
-#' @import shinycssloaders
-#' @rawNamespace import(ggplot2, except = last_plot)
-#' @import RColorBrewer
 #' @import tippy
-#' @import mailtoR
-#' @import enviPat
-#' @import shinyBS
-#' @import shinyvalidate
 NULL
 
 #' @importFrom magrittr %>%
 #' @export
 magrittr::`%>%`
 
-# quiets concenrs of R CMD check about .data in tidyverse functions (to avoid other global variables)
+# quiets concerns of R CMD check about .data in tidyverse functions (to avoid other global variables)
 #' @importFrom rlang .data
 
 # quiets concerns of R CMD check about . that appears in pipelines

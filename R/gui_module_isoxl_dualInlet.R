@@ -307,6 +307,16 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     #req(values$upload_file)
 
+    #RESET main plot
+    output$plot <- renderPlotly({
+      # isolate to avoid triggers on other input parameter selections
+
+      isolate({
+        plotly::ggplotly(
+          )
+      })
+    })
+
     shinyjs::show("main-plot")
 
 
@@ -427,10 +437,38 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       assign.basepeak(data.annotated, input$base_peak)
 
 
+
     # Dual Inlet: Calculate output table for results file ---------------
 
     data.output <-
       calc.output(df = data.basepeak, INPUT_RatioMethod = input$ratio.method)
+
+    data.output.renamed <- data.output  %>% rename(
+      `Filename` = filename,
+      `Sample` = Sample.Name,
+      `BasePeak` = Basepeak,
+      `Isotopocule` = isotopolog,
+      Compound = compound,
+      `SEM` = Ratio.SEM,
+      `SEM (permil)` = relSE.permil,
+      `Shot Noise (permil)` = Shot.Noise.permil,
+      `Minutes to 1E6 ions` = Mins.to.1mio,
+      `Scans` = No.of.scans
+
+    ) %>%
+      select(
+        Filename,
+        Sample,
+        Block,
+        Compound,
+        Isotopocule,
+        Ratio,
+        SEM,
+        `SEM (permil)`,
+        `Shot Noise (permil)`,
+        `Minutes to 1E6 ions`,
+        Scans
+      )
 
 
     # Table output: Show rows of .isox file------------------------------------------------
@@ -468,11 +506,14 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     output$summary <- DT::renderDataTable({
       datatable(
-        data.output,
+        data.output.renamed,
         rownames = FALSE ,
         extensions = c('Buttons', 'ColReorder'),
         options = list(
           scrollX = TRUE,
+          columnDefs = list(list(
+            targets = c(6L, 9L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+          )),
           dom = 'Bfrtip',
          # buttons = c('colvis', 'copy',  'excel', 'pdf'),
          buttons =
@@ -499,10 +540,11 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       # isolate to avoid triggers on other input parameter selections
 
 
+
       isolate({
         plotly::ggplotly(
           ggplot(data = data.output, aes(
-            x = Injection, y = Ratio, color = isotopolog
+            x = Block, y = Ratio, color = isotopolog
           )) + scale_color_brewer(palette = "Dark2") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
@@ -516,13 +558,16 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
               size = 0.3,
               color = "black",
               position = position_dodge(.9)
-            )       +        geom_point(size = 3, shape = 10) + facet_wrap(~ filename, ncol = 1),
+            )       +
+            theme(legend.title= element_blank())+
+            geom_point(size = 3, shape = 10) + facet_wrap(~ filename, ncol = 1),
+
           # +
           #   scale_x_continuous(breaks=1:100), #temp
           # temp: could be interesting option: + facet_grid(isotopolog~.),
 
           dynamicTicks = TRUE #change ticks on zoom
-        ) %>%
+        ) %>% layout(legend=list(title=list(text='Isotopocule'))) %>%
 
           plotly::config(
             displaylogo = FALSE,
@@ -604,10 +649,9 @@ module_isoxl_dual_inlet_ui <- function(id) {
       tippy(
         text = checkboxInput(ns("test_data"), "Use test data", value = FALSE),
 
-        #"For details on test data see Contact tab",
         animation="scale",
 
-        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
+        tooltip = "<span style='font-size:15px;'>See Info for details<span>", allowHTML = TRUE,
 
        # theme="light",
         placement ="top-start"

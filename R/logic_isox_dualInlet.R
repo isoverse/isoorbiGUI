@@ -28,9 +28,9 @@ define.dual.inlet <-
     )
 
 
-    injections <-
+    blocks <-
       rep(c(input$reference, input$sample), 1E3)[1:input$blocks] #limited to maximum 1,000 blocks
-    injections <- rep(injections, each = input$segments)
+    blocks <- rep(blocks, each = input$segments)
     segment.time <-
       (input$block.time - input$idle.time) / input$segments
     start.time <-
@@ -48,10 +48,10 @@ define.dual.inlet <-
     end.time <- start.time + segment.time
 
     #combine all information
-    injection.number <- 1:length(injections)
+    block.number <- 1:length(blocks)
     dual.inlet.annot <- data.frame(
-      Injection.Number = injection.number,
-      Injection = injections,
+      Block.Number = block.number,
+      Block = blocks,
       Start.Time = start.time,
       End.Time = end.time
     )
@@ -81,18 +81,18 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
 
   df.sel <- df  %>%
     dplyr::select(filename,
-           Injection,
+           Block,
            compound,
            scan.no,
            isotopolog,
            ions.incremental) %>%
-    dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
+    dplyr::group_by(filename, Block, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
 
-    dplyr::mutate(Basepeak = factor(paste(.data$isotopolog, "is base peak", sep = " ")),
+    dplyr::mutate(Basepeak = factor(.data$isotopolog),
            Basepeak.Ions = .data$ions.incremental) %>%
     dplyr::select(.data$filename,
            .data$compound,
-           .data$Injection,
+           .data$Block,
            .data$scan.no,
            .data$Basepeak,
            .data$Basepeak.Ions) %>%
@@ -116,7 +116,7 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
 #' @export
 calc.output <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  dplyr::group_by(filename,
-                               Injection,
+                               Block,
                                Sample.Name,
                                compound,
                                Basepeak,
@@ -148,7 +148,7 @@ calc.output <- function(df, INPUT_RatioMethod) {
 
     dplyr::select(
       filename,
-      Injection,
+      Block,
       Sample.Name,
       Basepeak,
       compound,
@@ -160,8 +160,8 @@ calc.output <- function(df, INPUT_RatioMethod) {
       Mins.to.1mio,
       No.of.scans
     ) %>%
-    unique() %>% dplyr::mutate(Injection = as.factor(Injection)) %>%
-    arrange(filename, Injection, isotopolog)
+    unique() %>% dplyr::mutate(Block = as.factor(Block)) %>%
+    arrange(filename, Block, isotopolog)
 
   df.stat <- as.data.frame(df.stat)
   return(df.stat)
@@ -182,24 +182,24 @@ merge.di.annotations <- function(df.in, dual.inlet.anno){
 
   df.data <- df.in
   df.data$Sample.Name <- "NA" #normal NA caused issues!
-  df.data$Injection <- 0L  #normal NA caused issues! L makes the zero an integer, not double
+  df.data$Block <- 0L  #normal NA caused issues! L makes the zero an integer, not double
   #
   for (i in 1:nrow(dual.inlet.anno)) {
 
-    sample <- dual.inlet.anno$Injection[i]
-    injection.no <- dual.inlet.anno$Injection.Number[i]
+    sample <- dual.inlet.anno$Block[i]
+    block.no <- dual.inlet.anno$Block.Number[i]
     #
     time.start <- dual.inlet.anno$Start.Time[i]
     time.end <- dual.inlet.anno$End.Time[i]
     #
     df.data[(df.data$time.min > time.start) & (df.data$time.min < time.end), ]$Sample.Name <- sample
-    df.data[(df.data$time.min > time.start) & (df.data$time.min < time.end), ]$Injection <- injection.no
+    df.data[(df.data$time.min > time.start) & (df.data$time.min < time.end), ]$Block <- block.no
 
     #return(df.data) #would be returned for function!
   }
   #
 
-  df<- df.data  %>% dplyr::filter(Injection >0) %>% dplyr::filter(Sample.Name != "NA")
+  df<- df.data  %>% dplyr::filter(Block >0) %>% dplyr::filter(Sample.Name != "NA")
 
   df$Sample.Name <- as.factor(df$Sample.Name)
   df$compound <- as.factor(df$compound)

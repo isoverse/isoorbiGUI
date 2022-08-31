@@ -319,6 +319,16 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 
 
+    #RESET main plot
+    output$plot <- renderPlotly({
+      # isolate to avoid triggers on other input parameter selections
+
+      isolate({
+        plotly::ggplotly(
+        )
+      })
+    })
+
     shinyjs::show("main-plot")
 
     # Message with processing parameters
@@ -446,20 +456,36 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     data.flow_output <- calc.output.flow(df = data.flow_basepeak, INPUT_RatioMethod = input$ratio.method)
 
+    data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% dplyr::rename(
+      `Filename` = filename,
+      #`Sample` = Sample.Name,
+      `BasePeak` = Basepeak,
+      `Isotopocule` = isotopolog,
+      Compound = compound,
+      `SEM` = Ratio.SEM,
+      `SEM (permil)` = relSE.permil,
+      `Shot Noise (permil)` = Shot.Noise.permil,
+      `Minutes to 1E6 ions` = Mins.to.1mio,
+      `Scans` = No.of.scans
+
+    ) %>%
+      dplyr::select(Filename,  Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
+             `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
+
 
     # Table output: Flow Analysis, summary statistics ----------------------------
 
 
     output$summary.flow <- DT::renderDataTable({
 
-      datatable( data.flow_output, rownames= FALSE ,
+      datatable( data.flow_output.renamed, rownames= FALSE ,
                  extensions = c('Buttons','ColReorder'),
                  options = list(
                    # autoWidth = TRUE, #scroll bar to see enture table
                    scrollX = TRUE, #scrollbar when table is not visible
-                   # columnDefs = list(list(
-                   #   targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
-                   # )),
+                   columnDefs = list(list(
+                     targets = c(4L, 7L), visible = FALSE #hide some columns; results in an empty table if column number not available!
+                   )),
                    dom = 'Bfrtip',
                    #buttons = c('colvis','copy',  'excel', 'pdf' ),
                    buttons =
@@ -502,7 +528,7 @@ module_isoxl_flow_server <- function(input, output, session) {
             geom_point(size=3, shape=10) ,
 
           dynamicTicks = TRUE #change ticks on zoom
-        ) %>% plotly::config(
+        ) %>% layout(legend=list(title=list(text='Isotopocule'))) %>% plotly::config(
 
             displaylogo = FALSE,
             modeBarButtonsToRemove = c(
@@ -585,9 +611,9 @@ module_isoxl_flow_ui <- function(id) {
 
       tippy(
         checkboxInput(ns("test_data"), "Use test data", value = FALSE),
-        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
+        tooltip = "<span style='font-size:15px;'>See Info for details<span>", allowHTML = TRUE,
 
-        # "For details on test data see Contact tab",
+        # "For details on test data see Info",
         animation="scale",
         #theme="light",
         placement ="top-start"
@@ -662,7 +688,7 @@ module_isoxl_flow_ui <- function(id) {
             step = 1,
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Split each block into segments<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Split each sample run into segments<span>", allowHTML = TRUE,
           # "Split each block into segments",
           placement = "right"
         ),

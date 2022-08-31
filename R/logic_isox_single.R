@@ -33,7 +33,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
     #dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
     dplyr::group_by(.data$filename, .data$scan.no) %>%
     dplyr::filter(isotopolog == INPUT_Basepeak) %>%
-    dplyr::mutate(Basepeak = factor(paste(.data$isotopolog, "is base peak", sep = " ")),
+    dplyr::mutate(Basepeak = factor(.data$isotopolog),
                   Basepeak.Ions = .data$ions.incremental) %>%
     dplyr::select(.data$filename,
                   .data$compound,
@@ -64,7 +64,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 #' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  dplyr::group_by(filename,
-                                      segment,
+                                      Segment,
                                       Sample.Name,
                                       compound,
                                       Basepeak,
@@ -96,17 +96,17 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
 
     dplyr::select(
       filename,
-      # Injection,
       Sample.Name,
-      Basepeak,
+      Segment,
       compound,
+      Basepeak,
       isotopolog,
       Ratio,
       Ratio.SEM,
       relSE.permil,
       Shot.Noise.permil,
-      Mins.to.1mio,
-      No.of.scans
+      No.of.scans,
+      Mins.to.1mio
     ) %>%
     unique() %>% #dplyr::mutate(Injection= as.integer(Injection)) %>%
     #arrange(filename, Injection, isotopolog)

@@ -58,13 +58,13 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
           href = "https://github.com/isoverse/isoorbi", target = "_blank"),
           align = "center"),
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
-        menuItem("Flow Injection", tabName = "flow", icon = icon("syringe")),
-        menuItem("Single Analysis", tabName = "single", icon = icon("vial")),
+        menuItem("Autosampler", tabName = "flow", icon = icon("braille")),
+        menuItem("Single Analysis", tabName = "single", icon = icon("syringe")),
         menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
-        menuItem("Make IsoX Input File", tabName = "make_inputFile", icon = icon("wand-magic-sparkles")),
-        menuItem("Contact", tabName = "info", icon = icon("circle-info")),
+        menuItem("IsoX Input File", tabName = "make_inputFile", icon = icon("wand-magic-sparkles")),
+        menuItem("Info", tabName = "info", icon = icon("circle-info")),
         tags$li(a(uiOutput("help", inline = TRUE)))
       ),
 
@@ -171,12 +171,12 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         ),
 
-        # UI: Contact and info -------------------------------------------------
+        # UI: Info and Contact -------------------------------------------------
 
         tabItem(
           tabName = "info",
 
-          h4("Contact"),
+          h4("Contact information"),
 
           module_isoxl_info_ui(id = "info")
         )

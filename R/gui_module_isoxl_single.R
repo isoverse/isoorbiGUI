@@ -6,7 +6,6 @@
 #'@return ...
 #'@export
 test_module_isoxl_single <- function(port = 5000) {
-  app <-
     shinyApp(
       ui = fluidPage(
         shinyjs::useShinyjs(),
@@ -333,6 +332,16 @@ module_isoxl_single_server <- function(input, output, session) {
     req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
 
 
+    #RESET main plot
+    output$plot <- renderPlotly({
+      # isolate to avoid triggers on other input parameter selections
+
+      isolate({
+        plotly::ggplotly(
+        )
+      })
+    })
+
     shinyjs::show("main-plot")
 
 
@@ -389,7 +398,7 @@ module_isoxl_single_server <- function(input, output, session) {
                                           remove.rare(input = input) %>%
                                           remove.ticxit(input = input)%>%
                                           group_by(filename) %>%
-                                          dplyr::mutate(segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
+                                          dplyr::mutate(Segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
 
 
     #SEGMENTATION
@@ -445,18 +454,39 @@ module_isoxl_single_server <- function(input, output, session) {
       data.single_output <- calc.output.single(df = data.single_basepeak, INPUT_RatioMethod = input$ratio.method)
 
 
+    data.single_output.renamed <- data.single_output  %>% rename(
+      `Filename` = filename,
+      `Sample` = Sample.Name,
+      `BasePeak` = Basepeak,
+      `Isotopocule` = isotopolog,
+      Compound = compound,
+      `SEM` = Ratio.SEM,
+      `SEM (permil)` = relSE.permil,
+      `Shot Noise (permil)` = Shot.Noise.permil,
+      `Minutes to 1E6 ions` = Mins.to.1mio,
+      `Scans` = No.of.scans
+
+    ) %>%
+      select(Filename, Sample, Segment, Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
+             `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
+
+
+
+    #FIXME: with select() column reordering did not work for some reason...
+
+
       # Table output: Single Analysis, summary statistics ----------------------------
 
 
       output$summary.single <- DT::renderDataTable({
 
-        datatable( data.single_output, rownames= FALSE ,
+        datatable( data.single_output.renamed, rownames= FALSE,
                    extensions = c('Buttons','ColReorder'),
                    options = list(
                      # autoWidth = TRUE, #scroll bar to see enture table
                      scrollX = TRUE, #scrollbar when table is not visible
                      columnDefs = list(list(
-                       targets = c(6L, 10L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                       targets = c(6L, 9L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
                      )),
                      dom = 'Bfrtip',
                      #buttons = c('colvis','copy',  'excel', 'pdf' ),
@@ -529,7 +559,7 @@ module_isoxl_single_server <- function(input, output, session) {
             #               position=position_dodge(.9))       +
             ggplot2::geom_point(size=3, shape=10) +
             ggplot2::geom_abline(slope=1) +
-            ggplot2::facet_grid(filename~segment) +
+            ggplot2::facet_grid(filename~Segment) +
             ggplot2::theme(legend.position="right") +
             ggplot2::ylab(paste("Relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("Shot Noise Limit", "[\u2030]")),
 
@@ -618,8 +648,7 @@ module_isoxl_single_ui <- function(id) {
       tippy(
         checkboxInput(ns("test_data"), "Use test data", value = FALSE),
 
-        tooltip = "<span style='font-size:15px;'>For details on test data see Contact tab<span>", allowHTML = TRUE,
-        # "For details on test data see Contact tab",
+        tooltip = "<span style='font-size:15px;'>For details see Info<span>", allowHTML = TRUE,
         animation="scale",
         #theme="light",
         placement ="top-start"
@@ -713,7 +742,7 @@ module_isoxl_single_ui <- function(id) {
             step = 1,
             width = NULL
           ),
-          tooltip = "<span style='font-size:15px;'>Split each block into segments<span>", allowHTML = TRUE,
+          tooltip = "<span style='font-size:15px;'>Split each sample run into segments<span>", allowHTML = TRUE,
           # "Split each block into segments",
           placement = "right"
         ),
