@@ -8,7 +8,7 @@
 #' @import scales
 #' @rawNamespace import(ggplot2, except = last_plot)
 #' @import ggrepel
-#' @import mailtoR
+
 #' @import openxlsx
 #' @import plotly
 #' @import RColorBrewer
@@ -25,6 +25,9 @@ NULL
 #' @importFrom magrittr %>%
 #' @export
 magrittr::`%>%`
+
+#' @importFrom mailtoR mailtor
+mailtoR::mailtoR()
 
 # quiets concerns of R CMD check about .data in tidyverse functions (to avoid other global variables)
 #' @importFrom rlang .data
