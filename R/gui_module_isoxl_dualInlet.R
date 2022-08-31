@@ -307,6 +307,16 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     #req(values$upload_file)
 
+    #RESET main plot
+    output$plot <- renderPlotly({
+      # isolate to avoid triggers on other input parameter selections
+
+      isolate({
+        plotly::ggplotly(
+          )
+      })
+    })
+
     shinyjs::show("main-plot")
 
 
@@ -427,6 +437,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       assign.basepeak(data.annotated, input$base_peak)
 
 
+
     # Dual Inlet: Calculate output table for results file ---------------
 
     data.output <-
@@ -527,6 +538,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     output$plot <- renderPlotly({
       # isolate to avoid triggers on other input parameter selections
+
 
 
       isolate({
