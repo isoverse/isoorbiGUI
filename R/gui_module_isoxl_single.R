@@ -332,6 +332,16 @@ module_isoxl_single_server <- function(input, output, session) {
     req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
 
 
+    #RESET main plot
+    output$plot <- renderPlotly({
+      # isolate to avoid triggers on other input parameter selections
+
+      isolate({
+        plotly::ggplotly(
+        )
+      })
+    })
+
     shinyjs::show("main-plot")
 
 

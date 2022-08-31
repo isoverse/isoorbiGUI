@@ -319,6 +319,16 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 
 
+    #RESET main plot
+    output$plot <- renderPlotly({
+      # isolate to avoid triggers on other input parameter selections
+
+      isolate({
+        plotly::ggplotly(
+        )
+      })
+    })
+
     shinyjs::show("main-plot")
 
     # Message with processing parameters
