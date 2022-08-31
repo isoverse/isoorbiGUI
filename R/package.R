@@ -26,8 +26,8 @@ NULL
 #' @export
 magrittr::`%>%`
 
-#' @importFrom mailtoR mailtor
-mailtoR::mailtoR()
+#' @importFrom mailtoR mailtoR
+
 
 # quiets concerns of R CMD check about .data in tidyverse functions (to avoid other global variables)
 #' @importFrom rlang .data
