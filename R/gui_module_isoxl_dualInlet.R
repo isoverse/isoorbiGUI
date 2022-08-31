@@ -432,21 +432,32 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     data.output <-
       calc.output(df = data.basepeak, INPUT_RatioMethod = input$ratio.method)
 
-    data.output.renamed <- data.output %>% as_tibble() %>% rename(
-                                                          `Filename` = filename,
-                                                          `Sample` = Sample.Name,
-                                                          `BasePeak` = Basepeak,
-                                                          `Isotopocule` = isotopolog,
-                                                           Compound = compound,
-                                                          `SEM` = Ratio.SEM,
-                                                          `SEM (permil)` = relSE.permil,
-                                                          `Shot Noise (permil)` = Shot.Noise.permil,
-                                                          `Minutes to 1E6 ions` = Mins.to.1mio,
-                                                          `Scans` = No.of.scans
+    data.output.renamed <- data.output  %>% rename(
+      `Filename` = filename,
+      `Sample` = Sample.Name,
+      `BasePeak` = Basepeak,
+      `Isotopocule` = isotopolog,
+      Compound = compound,
+      `SEM` = Ratio.SEM,
+      `SEM (permil)` = relSE.permil,
+      `Shot Noise (permil)` = Shot.Noise.permil,
+      `Minutes to 1E6 ions` = Mins.to.1mio,
+      `Scans` = No.of.scans
 
-                                                        ) %>%
-                                                            select(Filename, Sample, Block, Compound, Isotopocule, Ratio, `SEM (permil)`,
-                                                                   `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
+    ) %>%
+      select(
+        Filename,
+        Sample,
+        Block,
+        Compound,
+        Isotopocule,
+        Ratio,
+        SEM,
+        `SEM (permil)`,
+        `Shot Noise (permil)`,
+        `Minutes to 1E6 ions`,
+        Scans
+      )
 
 
     # Table output: Show rows of .isox file------------------------------------------------
@@ -489,6 +500,9 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         extensions = c('Buttons', 'ColReorder'),
         options = list(
           scrollX = TRUE,
+          columnDefs = list(list(
+            targets = c(6L, 9L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+          )),
           dom = 'Bfrtip',
          # buttons = c('colvis', 'copy',  'excel', 'pdf'),
          buttons =

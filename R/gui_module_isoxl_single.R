@@ -443,22 +443,26 @@ module_isoxl_single_server <- function(input, output, session) {
 
       data.single_output <- calc.output.single(df = data.single_basepeak, INPUT_RatioMethod = input$ratio.method)
 
-    #FIXME
-    data.single_output.renamed <-
-      data.single_output  %>% dplyr::rename(
-        `Filename` = .data$filename,
-        `Sample` = .data$Sample.Name,
-        `Compound` = .data$compound,
-        `BasePeak` = .data$Basepeak,
-        `Isotopocule` = .data$isotopolog,
-        # `SEM` = Ratio.SEM,
-        `SEM (permil)` = .data$relSE.permil,
-        `Shot Noise (permil)` = .data$Shot.Noise.permil,
-        `Scans`= No.of.scans,
-        `Minutes to 1E6 ions` = .data$Mins.to.1mio
-      )
 
-    #FIXME: column reordering did not work for some reason...
+    data.single_output.renamed <- data.single_output  %>% rename(
+      `Filename` = filename,
+      `Sample` = Sample.Name,
+      `BasePeak` = Basepeak,
+      `Isotopocule` = isotopolog,
+      Compound = compound,
+      `SEM` = Ratio.SEM,
+      `SEM (permil)` = relSE.permil,
+      `Shot Noise (permil)` = Shot.Noise.permil,
+      `Minutes to 1E6 ions` = Mins.to.1mio,
+      `Scans` = No.of.scans
+
+    ) %>%
+      select(Filename, Sample, Segment, Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
+             `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
+
+
+
+    #FIXME: with select() column reordering did not work for some reason...
 
 
       # Table output: Single Analysis, summary statistics ----------------------------
@@ -466,13 +470,13 @@ module_isoxl_single_server <- function(input, output, session) {
 
       output$summary.single <- DT::renderDataTable({
 
-        datatable( data.single_output.renamed, rownames= FALSE ,
+        datatable( data.single_output.renamed, rownames= FALSE,
                    extensions = c('Buttons','ColReorder'),
                    options = list(
                      # autoWidth = TRUE, #scroll bar to see enture table
                      scrollX = TRUE, #scrollbar when table is not visible
                      columnDefs = list(list(
-                       targets = c(7L, 11L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                       targets = c(6L, 9L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
                      )),
                      dom = 'Bfrtip',
                      #buttons = c('colvis','copy',  'excel', 'pdf' ),
