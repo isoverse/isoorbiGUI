@@ -124,7 +124,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "flow",
 
-          h4("Autosample (flow injections)"),
+          h4("Autosampler (flow injections)"),
 
           module_isoxl_flow_ui(id = "flow")
 
