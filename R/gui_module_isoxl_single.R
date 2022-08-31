@@ -458,6 +458,7 @@ module_isoxl_single_server <- function(input, output, session) {
         `Minutes to 1E6 ions` = .data$Mins.to.1mio
       )
 
+    #FIXME: column reordering did not work for some reason...
     ##FIXME
   #   #data.single_output.renamed <- data.single_output.renamed%>% dplyr::select(
   #   .data$filename,
