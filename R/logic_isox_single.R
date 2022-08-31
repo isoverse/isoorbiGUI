@@ -6,7 +6,7 @@
 
 #' @title Assign a base peak
 #' @description `assign.basepeak.single` assigns one isotopocule in the data frame as the base peak
-#' @details This is a function specific to the analysis of data from a single analysis experiment.
+#' @details This is a function specific to the analysis of data from a single analysis direct infusion experiment.
 #' @param df A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopolog, ions.incremental.
 #' @param INPUT_Basepeak The isotopolog used as base peak in the ratio calculation by calc.ratio() function.
 #' @returns Outputs the input dataframe plus two columns called `Basepeak` and `Basepeak.Ions`

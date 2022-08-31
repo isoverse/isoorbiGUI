@@ -699,7 +699,7 @@ module_isoxl_single_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h5("Define Single Analysis:"),
+        h5("Define Direct Infusion:"),
         selectInput(
           inputId = ns("filename.sel"),
           label = "File",
@@ -831,7 +831,7 @@ module_isoxl_single_ui <- function(id) {
     # # plot -----
     # mainPanel(
     #   box(
-    #     title = "Single Analysis Plot",
+    #     title = "Direct Infusion Plot",
     #     width = "auto" ,
     #     height = "auto",
     #     status = "primary",

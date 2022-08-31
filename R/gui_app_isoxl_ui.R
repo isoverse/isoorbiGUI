@@ -59,7 +59,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
           align = "center"),
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
         menuItem("Autosampler", tabName = "flow", icon = icon("braille")),
-        menuItem("Single Analysis", tabName = "single", icon = icon("syringe")),
+        menuItem("Direct Infusion", tabName = "single", icon = icon("syringe")),
         menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
@@ -115,7 +115,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         tabItem(
           tabName = "dual",
-          h4("Dual Inlet"),
+          h4("Dual Inlet (two syringes)"),
           module_isoxl_dual_inlet_ui(id = "dual_inlet")
         ),
 
@@ -135,7 +135,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "single",
 
-          h4("Single Analysis (syringe infusion)"),
+          h4("Direct Infusion (single syringe)"),
 
           module_isoxl_single_ui(id = "single")
         ),
@@ -145,7 +145,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "shot",
 
-          h4("Compare data to shot noise limits"),
+          h4("Compare Measured Precision to Shot Noise Limit"),
 
           module_isoxl_shotnoise_ui(id = "shot_noise")
         ),
@@ -155,7 +155,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         tabItem(tabName = "explore",
 
-                h4("Explore MS data in more detail"),
+                h4("Explore Orbitrap Iso Data"),
 
                 module_isoxl_explore_ui(id = "explore")
 
