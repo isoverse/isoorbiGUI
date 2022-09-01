@@ -307,7 +307,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     #req(values$upload_file)
 
-    #RESET main plot
+    #RESET main plot and FIXME: tables
     output$plot <- renderPlotly({
       # isolate to avoid triggers on other input parameter selections
 
@@ -317,8 +317,11 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       })
     })
 
-    shinyjs::show("main-plot")
+    output$mytable <- c()
+    output$summary <- c()
 
+    shinyjs::show("main-plot")
+    shinyjs::show("main-rest")
 
     # Message with processing parameters
 
@@ -595,6 +598,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
       })
+
     })
 
 
@@ -622,7 +626,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     )
 
 
-    shinyjs::show("main-rest")
+
 
   })
 }
