@@ -64,9 +64,12 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
         menuItem("IsoX Input File", tabName = "make_inputFile", icon = icon("wand-magic-sparkles")),
+        #menuItem("Info", tabName = "info", icon = icon("fa-solid fa-circle-info fa-beat-fade")),
         menuItem("Info", tabName = "info", icon = icon("circle-info")),
         tags$li(a(uiOutput("help", inline = TRUE)))
       ),
+
+
 
       # shinjs and shinydashboard extensions
       # Caj: Do we need to add dependencies here again, in addition to DESCRIPTION?
