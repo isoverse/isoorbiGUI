@@ -50,7 +50,9 @@ module_isoxl_info_ui <- function(id) {
     sidebarPanel(
 
 
-      #h4("Contact and Infos"),
+      h4("Contact Information"),
+
+      hr(),
 
       h5("Caj Neubauer, Sebastian Kopf & Kristyna Kantnerova"), #FIXME: supply ascii codes for Czech characters
       tags$h1(""),
@@ -70,6 +72,15 @@ module_isoxl_info_ui <- function(id) {
 
       use_mailtoR(),
 
+
+    ),
+
+
+    # UI: Empty Main Panel ----------------------------------------
+    sidebarPanel(
+
+      h4("Additional resources"),
+
       hr(),
 
       "File a bug report or feature request using the ",
@@ -82,11 +93,16 @@ module_isoxl_info_ui <- function(id) {
 
 
 
-    ),
+      h5("Link to ",
+      tags$a(target="_blank", href = "https://cajneubauer.weebly.com/uploads/1/0/3/7/103737032/isox_howto.pdf",
+                             "IsoX how-to")),
 
+      h5("Link to other ",
+      tags$a(target="_blank", href = "https://isoorbi.shinyapps.io/gmis/",
+             "small isotopocule apps")),
 
-    # UI: Empty Main Panel ----------------------------------------
-    mainPanel()
-  ))
+    )
+  ),
+  mainPanel())
 }
 

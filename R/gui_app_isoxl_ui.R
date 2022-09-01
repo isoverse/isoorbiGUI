@@ -118,7 +118,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         tabItem(
           tabName = "dual",
-          h4("Dual Inlet (two syringes)"),
+          h4(icon("grip-lines"), "Dual Inlet (two syringes)"),
           module_isoxl_dual_inlet_ui(id = "dual_inlet")
         ),
 
@@ -127,7 +127,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "flow",
 
-          h4("Autosampler (flow injections)"),
+          h4(icon("braille"), "Autosampler (flow injections)"),
 
           module_isoxl_flow_ui(id = "flow")
 
@@ -138,7 +138,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "single",
 
-          h4("Direct Infusion (single syringe)"),
+          h4(icon("syringe"), "Direct Infusion (single syringe)"), #add blinking:  fa-beat-fade
 
           module_isoxl_single_ui(id = "single")
         ),
@@ -148,7 +148,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "shot",
 
-          h4("Compare Measured Precision to Shot Noise Limit"),
+          h4(icon("bullseye"), "Compare Measured Precision to Shot Noise Limit"),
 
           module_isoxl_shotnoise_ui(id = "shot_noise")
         ),
@@ -158,7 +158,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         tabItem(tabName = "explore",
 
-                h4("Explore Orbitrap Iso Data"),
+                h4(icon("eye"), "Explore Orbitrap Iso Data"),
 
                 module_isoxl_explore_ui(id = "explore")
 
@@ -168,7 +168,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "make_inputFile",
 
-          h4("Create an input file for IsoX"),
+          h4(icon("wand-magic-sparkles"), "Create an input file for IsoX"),
 
           module_isoxl_make_inputFile_ui(id = "make_inputFile")
 
@@ -179,7 +179,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "info",
 
-          h4("Contact information"),
+          h4(icon("circle-info"), "Info"),
 
           module_isoxl_info_ui(id = "info")
         )
