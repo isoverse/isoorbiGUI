@@ -18,5 +18,5 @@ Outputs the input dataframe plus two columns called `Basepeak` and `Basepeak.Ion
 `assign.basepeak.single` assigns one isotopocule in the data frame as the base peak
 }
 \details{
-This is a function specific to the analysis of data from a single analysis experiment.
+This is a function specific to the analysis of data from a single analysis direct infusion experiment.
 }
