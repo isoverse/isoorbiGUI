@@ -63,14 +63,14 @@ module_isoxl_info_ui <- function(id) {
       #FIX: remove dependency of mailtoR
       #enable custom email alias, e.g. "123caj+IsoXL@gmail.com"
 
-      mailtoR(
+      mailtoR::mailtoR(
         email = "123caj@gmail.com",
         text = "click here to send us an email",
         subject = "IsoXL",
         body = "Hi there, I have a question about IsoXL."
       ),
 
-      use_mailtoR(),
+      mailtoR::use_mailtoR(),
 
 
     ),
