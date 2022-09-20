@@ -4,7 +4,7 @@
 \name{isoorbi-package}
 \alias{isoorbi}
 \alias{isoorbi-package}
-\title{isoorbi: Process Orbitrap Isotope Data}
+\title{isoorbi: Process Orbitrap Isotopocule Data}
 \description{
 More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
 }

@@ -1,7 +1,7 @@
 Package: isoorbi
 Type: Package
-Title: Process Orbitrap Isotope Data
-Version: 0.4.4
+Title: Process Orbitrap Isotopocule Data
+Version: 1.0.0
 Authors@R: 
     c(person(
         given = "Sebastian", family = "Kopf", 
@@ -24,31 +24,11 @@ BugReports: https://github.com/isoverse/isoorbi/issues
 Depends:
     R (>= 4.0.0)
 Imports:
-    dplyr,
-    DT,
-    enviPat,
-    ggplot2,
-    ggrepel,
-    magrittr,
-    mailtoR,
-    methods,
-    openxlsx,
-    plotly,
-    RColorBrewer,
-    readr,
-    rlang,
-    R.utils,
-    scales,
-    shiny,
-    shinyWidgets,
-    shinyjs,
-    shinyBS,
-    shinydashboard,
-    shinycssloaders,
-    shinyvalidate,
+    tidyverse,
     tidyr,
-    tippy,
-    tidyverse
+    dplyr,
+    magrittr,
+    rlang
 Suggests:
     devtools,
     knitr,
