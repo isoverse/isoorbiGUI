@@ -4,4 +4,3 @@ Makefile
 ^LICENSE\.md$
 ^cran-comments\.md$
 ^\.Rproj\.user$
-foo.isox
