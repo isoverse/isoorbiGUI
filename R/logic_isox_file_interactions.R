@@ -4,6 +4,7 @@
 #' @description Read an IsoX output file into a tibble
 #' @param filepath Path to the .isox file
 #' @return Return error, else read TSV file as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
+#'
 #' @export
 iso_read_isox_file <- function(filepath) {
   # safety checks
