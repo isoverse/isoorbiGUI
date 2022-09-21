@@ -10,7 +10,7 @@ iso_read_isox_file(filepath)
 \item{filepath}{Path to the .isox file}
 }
 \value{
-Return error, else read TSV file as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
+A dataframe containing at minimum named 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
 }
 \description{
 Read an IsoX output file into a tibble

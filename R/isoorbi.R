@@ -14,4 +14,3 @@ magrittr::`%>%`
 
 # quiets concerns of R CMD check about . that appears in pipelines
 utils::globalVariables(c("."))
-
