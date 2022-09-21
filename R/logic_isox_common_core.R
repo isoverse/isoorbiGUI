@@ -7,13 +7,13 @@
 #' @export
 iso_simplify_isox_file <- function(dataset) {
   df.out <- dataset %>% dplyr::select(filename,
-                               scan.no,
-                               time.min,
-                               compound,
-                               isotopolog,
-                               ions.incremental,
-                               tic, #ok to keep always?
-                               it.ms) #ok to keep always?
+                                      scan.no,
+                                      time.min,
+                                      compound,
+                                      isotopolog,
+                                      ions.incremental,
+                                      tic, #ok to keep always?
+                                      it.ms) #ok to keep always?
 }
 
 #FIXME-LEIF: complete @param input
@@ -25,27 +25,39 @@ iso_simplify_isox_file <- function(dataset) {
 #'
 #' @return Returns data frame with inconsistent isotopologs removed
 #' @export
-remove.rare <- function(data, input){ #temp check functions correctly in different tabs
-
-  # validate(
-  #   need(input$rare, 'Missing input input$rare'),
-  #   need(input$rare <=100, 'Check input input$rare is smaller than 100%')
-  # )
-
-  remove.df <- data %>%
-    dplyr::group_by(filename) %>%
-    dplyr::mutate(n.scans = max(scan.no) - min(scan.no)) %>% #FIXME: implement a more general solution here
-    dplyr::group_by(filename, compound, isotopolog) %>%
-    dplyr::mutate(i.scans = length(scan.no)) %>%
-    dplyr::filter(i.scans < input$rare/100 * n.scans) %>% # => update selection in GUI?, add message?
-    dplyr::select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
+remove.rare <-
+  function(data, input) {
+    #temp check functions correctly in different tabs
 
 
-  df <- anti_join(data, remove.df, by = c("filename", "scan.no", "time.min", "compound", "isotopolog", "ions.incremental", "tic", "it.ms")) #FIXME:More elegant/robust solution?
+    remove.df <- data %>%
+      dplyr::group_by(filename) %>%
+      dplyr::mutate(n.scans = max(scan.no) - min(scan.no)) %>% #FIXME: implement a more general solution here
+      dplyr::group_by(filename, compound, isotopolog) %>%
+      dplyr::mutate(i.scans = length(scan.no)) %>%
+      dplyr::filter(i.scans < input$rare / 100 * n.scans) %>% # => update selection in GUI?, add message?
+      dplyr::select(-n.scans,-i.scans) %>% droplevels() %>% as.data.frame()
 
-  return(df)
 
-}
+    df <-
+      anti_join(
+        data,
+        remove.df,
+        by = c(
+          "filename",
+          "scan.no",
+          "time.min",
+          "compound",
+          "isotopolog",
+          "ions.incremental",
+          "tic",
+          "it.ms"
+        )
+      ) #FIXME:More elegant/robust solution?
+
+    return(df)
+
+  }
 
 #FIXME-LEIF: complete and confirm
 #' @title remove.satellitePeaks
@@ -53,14 +65,12 @@ remove.rare <- function(data, input){ #temp check functions correctly in differe
 #' @param df Simplified IsoX file to have satellites removed from
 #' @return IsoX file with satellites removed
 #' @export
-remove.satellitePeaks <- function(df){
-
+remove.satellitePeaks <- function(df) {
   df <- df %>%
     dplyr::group_by(filename, compound, scan.no, isotopolog) %>%
     dplyr::filter(ions.incremental == max(ions.incremental))
 
   return(df)
-
 }
 
 #FIXME-LEIF: complete and confirm
@@ -68,18 +78,15 @@ remove.satellitePeaks <- function(df){
 #' @description Remove extreme scans based on TIC x Injection time
 #' @param df Simplified IsoX file to have 'ticxit' removed
 #' @param input ???
-#' @return Returns filtered IsoXfile based of input value
+#' @return Returns filtered IsoX file based of input value
 #' @export
-remove.ticxit <- function(df, input){
-
-  # validate(
-  #   need(input$extreme, 'Missing input input$extreme'),
-  #   need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
-  # )
-
-
-  df <- df %>% dplyr::group_by(filename) %>% dplyr::mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files
-    dplyr::filter( TICxIT > quantile(TICxIT, input$extreme/100) & TICxIT < quantile(TICxIT, 1- input$extreme/100)) %>%
+remove.ticxit <- function(df, input) {
+  df <-
+    df %>% dplyr::group_by(filename) %>% dplyr::mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files
+    dplyr::filter(
+      TICxIT > quantile(TICxIT, input$extreme / 100) &
+        TICxIT < quantile(TICxIT, 1 - input$extreme / 100)
+    ) %>%
     dplyr::select(-TICxIT)
 
   return(df)
@@ -95,7 +102,7 @@ remove.ticxit <- function(df, input){
 iso_filter_isox_file <- function(dataset, input) {
   df.out <- dataset %>%
     # isotopolog filter
-    dplyr::filter(isotopolog %in% c(input$isotopolog,input$base_peak)) %>% #maybe this line should be moved out of the core function!
+    dplyr::filter(isotopolog %in% c(input$isotopolog, input$base_peak)) %>% #maybe this line should be moved out of the core function!
     # file name filter
     {
       if (!"all" %in% input$filename)
@@ -126,8 +133,10 @@ iso_filter_isox_file <- function(dataset, input) {
 #' @description Define 'se' as a new function to calculate standard error
 #' @param x value to sompute standard error from
 #' @return Returns value of standard error
-#' @export
-se <- function(x) { sd(x) / sqrt(length(x)) }
+
+se <- function(x) {
+  sd(x) / sqrt(length(x))
+}
 
 #' @title Geometric mean
 #' @description  Define 'gmean' to calculate geometic mean
@@ -135,8 +144,10 @@ se <- function(x) { sd(x) / sqrt(length(x)) }
 #' @param x value to compute geometric mean from
 #'
 #' @return The calculated geometric mean
-#' @export
-gmean <- function(x){  exp(mean(log(x))) } #define geometric mean
+
+gmean <- function(x) {
+  exp(mean(log(x)))
+} #define geometric mean
 
 #' @title Standard deviation (geometric)
 #' @description  Define 'gsd' to calculate geometic standard deviation
@@ -144,8 +155,10 @@ gmean <- function(x){  exp(mean(log(x))) } #define geometric mean
 #' @param x value to compute geometric standard deviation from
 #'
 #' @return The calculated geometric standard deviation
-#' @export
-gsd <- function(x) {exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))}
+
+gsd <- function(x) {
+  exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
+}
 
 #' @title Standard error (geometric)
 #' @description  Define 'gse' to calculate geometic standard error
@@ -153,8 +166,10 @@ gsd <- function(x) {exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))}
 #' @param x value to compute geometric standard error from
 #'
 #' @return The calculated geometric standard error
-#' @export
-gse <- function(x) {(exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))}
+
+gse <- function(x) {
+  (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))
+}
 
 #' @title slope
 #' @description  Define 'slope' to calculate geometic mean
@@ -163,11 +178,13 @@ gse <- function(x) {(exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(
 #' @param y ???
 #'
 #' @return The slope
-#' @export
-slope <- function(x, y) { model <- lm(x ~ y + 0, weights = x) #Note order of x and y to get correct slope!
-    sl <- model$coefficients[[1]]
-    sl
-  }
+
+slope <- function(x, y) {
+  model <-
+    lm(x ~ y + 0, weights = x) #Note order of x and y to get correct slope!
+  sl <- model$coefficients[[1]]
+  sl
+}
 
 #' @title weighted.vector.sum
 #' @description ???
@@ -176,7 +193,7 @@ slope <- function(x, y) { model <- lm(x ~ y + 0, weights = x) #Note order of x a
 #' @param y ???
 #'
 #' @return ???
-#' @export
+
 weighted.vector.sum <- function(x, y) {
   df <- cbind(x, y)
 
@@ -198,65 +215,51 @@ weighted.vector.sum <- function(x, y) {
 #' @param ratio.method The desired method of computing ratio
 #'
 #' @return calculated ratio between peak1 and peak2 with selected ratio method
-#' @export
-calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "geometric.mean", "slope", "weighted.vector.sum") ) {
 
-  if(ratio.method == "mean") { o <- mean(peak1/peak2); o } else {
-    if(ratio.method == "slope") {o <- slope(peak1, peak2); o } else{
-      if(ratio.method == "sum") {o <- sum(peak1)/sum(peak2); o } else{
-        if(ratio.method == "geometric.mean") {o <- gmean(peak1/peak2); o } else{
-          if(ratio.method == "weighted.vector.sum") {o <- weighted.vector.sum(peak1, peak2); o } else{
-            if(ratio.method == "median") {o <- median(peak1/peak2); o } else{print("`ratio.method` has to be `mean`, `sum`, `median`, `geometric.mean`, `slope` or `weighted.vector.sum`")
+calc.ratio <-
+  function(peak1,
+           peak2,
+           ratio.method = c("mean",
+                            "sum",
+                            "median",
+                            "geometric.mean",
+                            "slope",
+                            "weighted.vector.sum")) {
+    if (ratio.method == "mean") {
+      o <- mean(peak1 / peak2)
+      o
+    } else {
+      if (ratio.method == "slope") {
+        o <- slope(peak1, peak2)
+        o
+      } else{
+        if (ratio.method == "sum") {
+          o <- sum(peak1) / sum(peak2)
+          o
+        } else{
+          if (ratio.method == "geometric.mean") {
+            o <- gmean(peak1 / peak2)
+            o
+          } else{
+            if (ratio.method == "weighted.vector.sum") {
+              o <- weighted.vector.sum(peak1, peak2)
+              o
+            } else{
+              if (ratio.method == "median") {
+                o <-
+                  median(peak1 / peak2)
+                o
+              } else{
+                print(
+                  "`ratio.method` has to be `mean`, `sum`, `median`, `geometric.mean`, `slope` or `weighted.vector.sum`"
+                )
+              }
             }
-          }}}}}
+          }
+        }
+      }
+    }
+  }
 
-}
-
-
-#' @title make.xls
-#' @description Save the summary statistics table as Excel
-#'
-#' @param df.stat The IsoX file with statistics of interest
-#' @param params IsoXL parameters
-#'
-#' @return Returns statistics of interest as an excel file
-#' @export
-make.xls <- function(df.stat, params){ wb <- createWorkbook()
-tabs <- levels(df.stat$isotopolog)
-
-for (i in tabs) {
-  addWorksheet(wb, i)
-  writeData(wb, i, df.stat[df.stat$isotopolog==i, ])
-}
-
-addWorksheet(wb, "IsoXL Parameters")
-writeData(wb, "IsoXL Parameters" , params)
-
-return(wb)
-
-}
-
-#' @title make.xls.onetab
-#' @description add a tab to record parameters
-#'
-#' @param df.stat The IsoX file with statistics of interest
-#' @param params IsoXL parameters
-#'
-#' @return Return modified excel workbook
-#' @export
-make.xls.onetab <- function(df.stat, params){ wb <- createWorkbook()
-tabs <- levels(df.stat$filename)
-
-for (i in tabs) {
-  addWorksheet(wb, i)
-  writeData(wb, i, df.stat[df.stat$filename==i, ])
-}
-
-addWorksheet(wb, "IsoXL Parameters")
-writeData(wb, "IsoXL Parameters" , params)
-
-return(wb)
-
-}
 
 
