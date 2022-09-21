@@ -26,8 +26,8 @@ Depends:
 Imports:
     tidyr,
     dplyr,
-    magrittr,
-    rlang,
+    magrittr (>= 1.5),
+    rlang (>= 1.0.5),
     readr,
     stringr
 Suggests:
@@ -35,10 +35,10 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: First generation tool to process data from Orbitrap Iso mass spectrometers
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 7.2.1
+Roxygen: list(markdown = TRUE)

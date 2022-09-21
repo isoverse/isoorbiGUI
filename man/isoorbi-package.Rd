@@ -6,7 +6,7 @@
 \alias{isoorbi-package}
 \title{isoorbi: Process Orbitrap Isotopocule Data}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+First generation tool to process data from Orbitrap Iso mass spectrometers
 }
 \seealso{
 Useful links:
