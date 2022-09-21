@@ -1,9 +1,9 @@
 # functions for logic_isox_file_interactions.R
 
-#' @title Read an isox file
-#' @description This function reads in a IsoX file
-#' @param filepath The path to the isox file
-#' @return Return error, else reads file.tsv as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
+#' @title Read .isox file
+#' @description Read an IsoX output file into a tibble
+#' @param filepath Path to the .isox file
+#' @return Return error, else read TSV file as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
 #' @export
 iso_read_isox_file <- function(filepath) {
   # safety checks
