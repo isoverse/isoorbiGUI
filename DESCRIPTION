@@ -24,7 +24,6 @@ BugReports: https://github.com/isoverse/isoorbi/issues
 Depends:
     R (>= 4.0.0)
 Imports:
-    tidyverse,
     tidyr,
     dplyr,
     magrittr,
