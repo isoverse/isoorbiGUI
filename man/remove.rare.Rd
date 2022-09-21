@@ -4,16 +4,16 @@
 \alias{remove.rare}
 \title{Remove rare isotopocules}
 \usage{
-remove.rare(data, input)
+remove.rare(data, min.percent)
 }
 \arguments{
-\item{data}{Simplified IsoX file to be processed}
+\item{data}{Simplified IsoX data to be processed}
 
-\item{input}{...}
+\item{min.percent}{Set threshold. Isotopocule must be observed in at least  x percent of scans}
 }
 \value{
-Returns data frame with inconsistent isotopologs removed
+Returns data frame with inconsistent isotopocules removed
 }
 \description{
-Remove isotopologs that are not consistently detected across scans
+Remove isotopocules that are not consistently detected across scans
 }
