@@ -2,17 +2,18 @@ Package: isoorbi
 Type: Package
 Title: Process Orbitrap Isotopocule Data
 Version: 1.0
+Date: 2022-09-20
 Authors@R: 
     c(person(
+        given = "Caj", family = "Neubauer", 
+        email = "caj.neubauer@colorado.edu", 
+        role = c("aut", "cre", "cph"), 
+        comment = c(ORCID = "0000-0002-5348-5609")),
+    person(
         given = "Sebastian", family = "Kopf", 
         email = "sebastian.kopf@colorado.edu", 
         role = c("aut"), 
         comment = c(ORCID = "0000-0002-2044-0201")),
-    person(
-        given = "Caj", family = "Neubauer", 
-        email = "caj.neubauer@colorado.edu", 
-        role = c("aut", "cre"), 
-        comment = c(ORCID = "0000-0002-5348-5609")),
     person(
         given = "Kristýna", family = "Kantnerová", 
         email = "kristyna.kantnerova@colorado.edu", 
@@ -36,6 +37,8 @@ Suggests:
     rmarkdown,
     testthat
 Description: First generation tool to process data from Orbitrap Iso mass spectrometers.
+	Hilkert A, Böhlke JK, Mroczkowski SJ, Fort KL, Aizikov K, Wang XT, Kopf SH, Neubauer C (2021) 
+	<doi:10.1021/acs.analchem.1c00944>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
