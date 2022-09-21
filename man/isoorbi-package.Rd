@@ -6,7 +6,7 @@
 \alias{isoorbi-package}
 \title{isoorbi: Process Orbitrap Isotopocule Data}
 \description{
-First generation tool to process data from Orbitrap Iso mass spectrometers. Hilkert A, Böhlke JK, Mroczkowski SJ, Fort KL, Aizikov K, Wang XT, Kopf SH, Neubauer C (2021) \doi{10.1021/acs.analchem.1c00944}.
+First generation tool to process data from Orbitrap Iso mass spectrometers. Citation: \doi{10.1021/acs.analchem.1c00944}.
 }
 \seealso{
 Useful links:
