@@ -15,3 +15,9 @@ Return error, else read TSV file as columns 'filename', 'scan.no', 'time.min', '
 \description{
 Read an IsoX output file into a tibble
 }
+\examples{
+foo <- data.frame(filename="foo.isox", scan.no=1, time.min=0.01, compound="NO3", isotopolog="15N", ions.incremental=123.456, tic=12345, it.ms=0.1)
+write.table(foo, file = "foo.isox", sep = "\t", row.names = FALSE)
+df <- iso_read_isox_file(filepath = "inst/extdata/testfile_DualInlet_small.isox")
+
+}
