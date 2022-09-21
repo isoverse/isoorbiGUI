@@ -120,57 +120,59 @@ iso_filter_isox_file <- function(dataset, input) {
 
 # isox data manipulation
 
-#' @title se
+#' @title Standard error
 #' @description Define 'se' as a new function to calculate standard error
 #' @param x value to sompute standard error from
 #' @return Returns value of standard error
 #' @export
 se <- function(x) { sd(x) / sqrt(length(x)) }
 
-#' @title gmean
+#' @title Geometric mean
 #' @description  Define 'gmean' to calculate geometic mean
+#'
 #' @param x value to compute geometric mean from
+#'
 #' @return The calculated geometric mean
 #' @export
-gmean <- function(x)
-  exp(mean(log(x))) #define geometric mean
+gmean <- function(x){  exp(mean(log(x))) } #define geometric mean
 
-#' @title gsd
+#' @title Standard deviation (geometric)
 #' @description  Define 'gsd' to calculate geometic standard deviation
+#'
 #' @param x value to compute geometric standard deviation from
+#'
 #' @return The calculated geometric standard deviation
 #' @export
-gsd <-
-  function(x)
-    exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
+gsd <- function(x) {exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))}
 
-#' @title gse
+#' @title Standard error (geometric)
 #' @description  Define 'gse' to calculate geometic standard error
+#'
 #' @param x value to compute geometric standard error from
+#'
 #' @return The calculated geometric standard error
 #' @export
-gse <-
-  function(x)
-    (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))
+gse <- function(x) {(exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))}
 
 #' @title slope
 #' @description  Define 'slope' to calculate geometic mean
+#'
 #' @param x ???
 #' @param y ???
+#'
 #' @return The slope
 #' @export
-slope <-
-  function(x, y) {
-    model <-
-      lm(x ~ y + 0, weights = x) #Note order of x and y to get correct slope!
+slope <- function(x, y) { model <- lm(x ~ y + 0, weights = x) #Note order of x and y to get correct slope!
     sl <- model$coefficients[[1]]
     sl
   }
 
 #' @title weighted.vector.sum
 #' @description ???
+#'
 #' @param x ???
 #' @param y ???
+#'
 #' @return ???
 #' @export
 weighted.vector.sum <- function(x, y) {
@@ -186,11 +188,13 @@ weighted.vector.sum <- function(x, y) {
   ratio
 }
 
-#' @title calc.ratio
+#' @title Calculate ratio
 #' @description Ratio calculation between peaks of interest. NOTE: The formula used to average ratios matters! Do not simply use arithmetic mean.
+#'
 #' @param peak1 Peak 1 of interest
 #' @param peak2 Peak 2 of interest
 #' @param ratio.method The desired method of computing ratio
+#'
 #' @return calculated ratio between peak1 and peak2 with selected ratio method
 #' @export
 calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "geometric.mean", "slope", "weighted.vector.sum") ) {
@@ -209,8 +213,10 @@ calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "
 
 #' @title make.xls
 #' @description Save the summary statistics table as Excel
+#'
 #' @param df.stat The IsoX file with statistics of interest
 #' @param params IsoXL parameters
+#'
 #' @return Returns statistics of interest as an excel file
 #' @export
 make.xls <- function(df.stat, params){ wb <- createWorkbook()
@@ -230,8 +236,10 @@ return(wb)
 
 #' @title make.xls.onetab
 #' @description add a tab to record parameters
+#'
 #' @param df.stat The IsoX file with statistics of interest
 #' @param params IsoXL parameters
+#'
 #' @return Return modified excel workbook
 #' @export
 make.xls.onetab <- function(df.stat, params){ wb <- createWorkbook()
