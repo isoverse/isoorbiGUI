@@ -1,6 +1,6 @@
-# common core logic functions
+# Common core logic functions
 
-#' @title iso_simplify_isox_file
+#' @title Simplify IsoX data
 #' @description Keep only columns that are useful for isotopocule ratio calculation
 #' @param dataset The file.tsv that is to be simplified
 #' @return Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'.
@@ -17,11 +17,13 @@ iso_simplify_isox_file <- function(dataset) {
 }
 
 #FIXME-LEIF: complete @param input
-#' @title remove.rare
+#' @title Remove rare isotopocules
 #' @description Remove isotopologs that are not consistently detected across scans
+#'
 #' @param data Simplified IsoX file to be processed
 #' @param input ...
-#' @return Returns dataframe with inconsistent isotopologs removed
+#'
+#' @return Returns data frame with inconsistent isotopologs removed
 #' @export
 remove.rare <- function(data, input){ #temp check functions correctly in different tabs
 
