@@ -28,7 +28,9 @@ Imports:
     tidyr,
     dplyr,
     magrittr,
-    rlang
+    rlang,
+    readr,
+    stringr
 Suggests:
     devtools,
     knitr,
