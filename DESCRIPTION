@@ -1,7 +1,7 @@
 Package: isoorbi
 Type: Package
 Title: Process Orbitrap Isotopocule Data
-Version: 1.0.0
+Version: 1.0
 Authors@R: 
     c(person(
         given = "Sebastian", family = "Kopf", 

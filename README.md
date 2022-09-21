@@ -3,23 +3,25 @@ This R package is providing functions for processing isotopocule measurements fr
 
 ## Installation
 
-# Install from CRAN:
+To install from CRAN:
+
 install.packages("isoorbi")
 
 ## Usage
 
 library(isoorbi)
 
-iso_read_isox(path)
+iso_read_isox(filepath)
 
 ## Getting help
 
-If you encounter a clear bug, please file an issue with a minimal reproducible example on [GitHub](https://github.com/isoverse/isoorbi). 
+If you encounter a clear bug, please file an issue with a minimal reproducible example on [GitHub](https://github.com/isoverse/isoorbi/issues). 
 
-### Development version
+## Development version
 
 To get a bug fix or to use the latest features from the development version, you can install 
 the development version of isoorbi from GitHub.
 
-# install.packages("devtools")
+install.packages("devtools")
+
 devtools::install_github("isoverse/isoorbi")
