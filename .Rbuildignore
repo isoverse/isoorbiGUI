@@ -1,5 +1,3 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-Gemfile
-Gemfile.lock
 ^LICENSE\.md$
