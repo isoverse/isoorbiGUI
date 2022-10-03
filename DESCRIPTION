@@ -22,7 +22,8 @@ Authors@R:
 URL: https://github.com/isoverse/isoorbiGUI
 BugReports: https://github.com/isoverse/isoorbiGUI/issues
 Depends:
-    R (>= 4.0.0)
+    R (>= 4.0.0),
+    isoorbi
 Imports:
     dplyr,
     DT,

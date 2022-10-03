@@ -67,7 +67,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
 
-    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbiGUI"))
+    values$data <- isoorbi::orbi_read_isox(system.file("extdata", "testfile_DualInlet.isox", package="isoorbiGUI"))
 
     # Download test data: .isox file ----------------------------------
 
@@ -191,8 +191,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
       updateSelectInput(
         inputId = "base_peak",
-        choices = levels(values$data$isotopolog),
-        selected = values$data$isotopolog[1]
+        choices = levels(values$data$isotopocule),
+        selected = values$data$isotopocule[1]
       )
 
       # FIXME: add segments, blocks, block.time, startup.time etc?
@@ -450,7 +450,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       `Filename` = filename,
       `Sample` = Sample.Name,
       `BasePeak` = Basepeak,
-      `Isotopocule` = isotopolog,
+      `Isotopocule` = isotopocule,
       Compound = compound,
       `SEM` = Ratio.SEM,
       `SEM (permil)` = relSE.permil,
@@ -547,7 +547,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       isolate({
         plotly::ggplotly(
           ggplot(data = data.output, aes(
-            x = Block, y = Ratio, color = isotopolog
+            x = Block, y = Ratio, color = isotopocule
           )) + scale_color_brewer(palette = "Dark2") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
@@ -567,7 +567,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
           # +
           #   scale_x_continuous(breaks=1:100), #temp
-          # temp: could be interesting option: + facet_grid(isotopolog~.),
+          # temp: could be interesting option: + facet_grid(isotopocule~.),
 
           dynamicTicks = TRUE #change ticks on zoom
         ) %>% layout(legend=list(title=list(text='Isotopocule'))) %>%
