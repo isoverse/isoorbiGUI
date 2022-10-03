@@ -437,7 +437,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
     data.basepeak <-
-      assign.basepeak(data.annotated, input$base_peak)
+      isoorbi::orbi_define_basepeak(dataset = data.annotated, basepeak = input$base_peak)
 
 
 
