@@ -12,8 +12,8 @@ remove.rare(data, input)
 \item{input}{...}
 }
 \value{
-Returns dataframe with inconsistent isotopologs removed
+Returns dataframe with inconsistent isotopocules removed
 }
 \description{
-Remove isotopologs that are not consistently detected across scans
+Remove isotopocules that are not consistently detected across scans
 }

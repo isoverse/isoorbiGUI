@@ -10,7 +10,7 @@ iso_simplify_isox_file(dataset)
 \item{dataset}{The file.tsv that is to be simplified}
 }
 \value{
-Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'.
+Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopocule', 'ions.incremental', 'tic', 'it.ms'.
 }
 \description{
 Keep only columns that are useful for isotopocule ratio calculation

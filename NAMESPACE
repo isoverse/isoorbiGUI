@@ -2,10 +2,8 @@
 
 S3method(merge,di.annotations)
 export("%>%")
-export(assign.basepeak)
 export(assign.basepeak.single)
 export(assign_basepeak_shotnoise)
-export(calc.output)
 export(calc.output.flow)
 export(calc.output.single)
 export(calc.ratio)
