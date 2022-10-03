@@ -406,7 +406,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       na.omit() %>% #FIXME: really necessary?
       isoorbi::orbi_filter_satellitePeaks() %>%
       isoorbi::orbi_filter_weak(min_percent = input$rare) %>%
-      remove.ticxit(input = input)  #temp: validate correct functioning
+      isoorbi::orbi_filter_TICxIT(truncate_extreme = input$extreme)  #temp: validate correct functioning
 
 
 
