@@ -444,7 +444,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     # Dual Inlet: Calculate output table for results file ---------------
 
     data.output <-
-      calc.output(df = data.basepeak, INPUT_RatioMethod = input$ratio.method)
+      isoorbi::orbi_calculate_results(dataset = data.basepeak, ratio.method = input$ratio.method)
 
     data.output.renamed <- data.output  %>% rename(
       `Filename` = filename,
