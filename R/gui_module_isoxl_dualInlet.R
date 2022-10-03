@@ -404,8 +404,8 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     data.dual_inlet_filtered <- values$data %>%
       isoorbi::orbi_simplify_isox() %>%
       na.omit() %>% #FIXME: really necessary?
-      remove.satellitePeaks() %>%
-      remove.rare(input = input) %>%
+      isoorbi::orbi_filter_satellitePeaks() %>%
+      isoorbi::orbi_filter_weak(min_percent = input$rare) %>%
       remove.ticxit(input = input)  #temp: validate correct functioning
 
 
