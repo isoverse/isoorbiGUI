@@ -72,7 +72,7 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
     need(INPUT_Basepeak, 'Missing input for Basepeak'),
     #temp; check this works correctly
     need(
-      INPUT_Basepeak %in% levels(df$isotopolog),
+      INPUT_Basepeak %in% levels(df$isotopocule),
       'Specified Basepeak was not found in dataframe'
     )
   )
@@ -84,11 +84,11 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
            Block,
            compound,
            scan.no,
-           isotopolog,
+           isotopocule,
            ions.incremental) %>%
-    dplyr::group_by(filename, Block, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
+    dplyr::group_by(filename, Block, scan.no) %>% dplyr::filter(isotopocule == INPUT_Basepeak) %>%
 
-    dplyr::mutate(Basepeak = factor(.data$isotopolog),
+    dplyr::mutate(Basepeak = factor(.data$isotopocule),
            Basepeak.Ions = .data$ions.incremental) %>%
     dplyr::select(.data$filename,
            .data$compound,
@@ -101,7 +101,7 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
   df.out <- merge(df.sel, df, all = TRUE)
 
   df.out <-
-    df.out %>% dplyr::filter(isotopolog != INPUT_Basepeak) %>% droplevels()
+    df.out %>% dplyr::filter(isotopocule != INPUT_Basepeak) %>% droplevels()
 
   return(df.out)
 }
@@ -111,7 +111,7 @@ assign.basepeak <- function(df, INPUT_Basepeak) {
 #' @title calc.output
 #' @description Logic for generating Excel output for Dual Inlet analysis
 #' @param df a dataframe output from `iso_simplify_isox_file()`
-#' @param INPUT_RatioMethod Method of computing isotopolog ratios
+#' @param INPUT_RatioMethod Method of computing isotopocule ratios
 #' @return Returns dataframe with statisitic of interest for dual inlet analysis
 #' @export
 calc.output <- function(df, INPUT_RatioMethod) {
@@ -120,7 +120,7 @@ calc.output <- function(df, INPUT_RatioMethod) {
                                Sample.Name,
                                compound,
                                Basepeak,
-                               isotopolog) %>%
+                               isotopocule) %>%
 
     dplyr::mutate(Ratio = calc.ratio(.data$ions.incremental, .data$Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
 
@@ -152,7 +152,7 @@ calc.output <- function(df, INPUT_RatioMethod) {
       Sample.Name,
       Basepeak,
       compound,
-      isotopolog,
+      isotopocule,
       Ratio,
       Ratio.SEM,
       relSE.permil,
@@ -161,7 +161,7 @@ calc.output <- function(df, INPUT_RatioMethod) {
       No.of.scans
     ) %>%
     unique() %>% dplyr::mutate(Block = as.factor(Block)) %>%
-    arrange(filename, Block, isotopolog)
+    arrange(filename, Block, isotopocule)
 
   df.stat <- as.data.frame(df.stat)
   return(df.stat)
@@ -203,7 +203,7 @@ merge.di.annotations <- function(df.in, dual.inlet.anno){
 
   df$Sample.Name <- as.factor(df$Sample.Name)
   df$compound <- as.factor(df$compound)
-  df$isotopolog <- as.factor(df$isotopolog)
+  df$isotopocule <- as.factor(df$isotopocule)
 
   return(df)
 

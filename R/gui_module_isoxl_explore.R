@@ -163,7 +163,7 @@ module_isoxl_explore_server <- function(input, output, session) {
 
       # shinyjs::hide("parameters-panel")
       # shinyjs::hide("main-plot")
-      # updateSelectInput(inputId = "isotopolog", choices = c())
+      # updateSelectInput(inputId = "isotopocule", choices = c())
       # updateSelectInput(inputId = "base_peak", choices = c())
       # updateSelectInput(inputId = "filename", choices = c())
       # updateSelectInput(inputId = "compound", choices = c())
@@ -177,14 +177,14 @@ module_isoxl_explore_server <- function(input, output, session) {
       # yes data --> update parameters and show
 
       # updateSelectInput(
-      #   inputId = "isotopolog",
-      #   choices = levels(values$data$isotopolog),
-      #   selected = values$data$isotopolog[2]
+      #   inputId = "isotopocule",
+      #   choices = levels(values$data$isotopocule),
+      #   selected = values$data$isotopocule[2]
       # )
       # updateSelectInput(
       #   inputId = "base_peak",
-      #   choices = levels(values$data$isotopolog),
-      #   selected = values$data$isotopolog[1]
+      #   choices = levels(values$data$isotopocule),
+      #   selected = values$data$isotopocule[1]
       # )
       # updateSelectInput(
       #   inputId = "filename",
@@ -234,7 +234,7 @@ module_isoxl_explore_server <- function(input, output, session) {
   #                                 col_types = list(
   #                                   filename = readr::col_factor(),
   #                                   compound = readr::col_factor(),
-  #                                   isotopolog = readr::col_factor()
+  #                                   isotopocule = readr::col_factor()
   #                                 ) ),
   #
   #
@@ -252,7 +252,7 @@ module_isoxl_explore_server <- function(input, output, session) {
     module_message(
       ns, "info",
       "generating plot with selected parameters:" #,
-      # "\n - isotopolog: ", input$isotopolog %then% "",
+      # "\n - isotopocule: ", input$isotopocule %then% "",
       # "\n - basepeak: ", input$base_peak %then% "",
       # "\n - files: ", paste(input$filename %then% "", collapse = ", "),
       # "\n - compounds: ", paste(input$compound %then% "", collapse = ", "),
