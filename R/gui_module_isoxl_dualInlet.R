@@ -67,7 +67,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
 
-    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbi"))
+    values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbiGUI"))
 
     # Download test data: .isox file ----------------------------------
 
@@ -132,7 +132,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbi"))
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbiGUI"))
 
       # ,
       # warning = function(w)
@@ -227,7 +227,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
   }, ignoreNULL = FALSE)
 
 
-  isoXL.version <- as.character(utils::packageVersion("isoorbi")) #FIXME: get version information directly from main UI?
+  isoXL.version <- as.character(utils::packageVersion("isoorbiGUI")) #FIXME: get version information directly from main UI?
 
 
 

@@ -64,7 +64,7 @@ module_isoxl_single_server <- function(input, output, session) {
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
 
-      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
       # Download test data: .isox file ----------------------------------
 
@@ -137,7 +137,7 @@ module_isoxl_single_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-        values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbi"))
+        values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
         # ,
         # warning = function(w)
@@ -241,7 +241,7 @@ module_isoxl_single_server <- function(input, output, session) {
   }, ignoreNULL = FALSE)
 
 
-  isoXL.version <- as.character(utils::packageVersion("isoorbi"))
+  isoXL.version <- as.character(utils::packageVersion("isoorbiGUI"))
 
 
 

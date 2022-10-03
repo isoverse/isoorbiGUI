@@ -1,7 +1,7 @@
-Package: isoorbi
+Package: isoorbiGUI
 Type: Package
-Title: Process Orbitrap Isotope Data
-Version: 0.4.4
+Title: Graphical Unser Interfaces for Orbitrap Iso
+Version: 0.0.1
 Authors@R: 
     c(person(
         given = "Sebastian", family = "Kopf", 
@@ -19,8 +19,8 @@ Authors@R:
         role = c("aut"), 
         comment = c(ORCID = "0000-0001-6259-3225"))
     )
-URL: https://github.com/isoverse/isoorbi
-BugReports: https://github.com/isoverse/isoorbi/issues
+URL: https://github.com/isoverse/isoorbiGUI
+BugReports: https://github.com/isoverse/isoorbiGUI/issues
 Depends:
     R (>= 4.0.0)
 Imports:

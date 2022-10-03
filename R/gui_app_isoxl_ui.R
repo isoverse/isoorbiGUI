@@ -54,8 +54,8 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
       sidebarMenu(
         id = "menu",
         h5(a(
-          paste("Version", as.character(utils::packageVersion("isoorbi"))), #get isoorbi package version
-          href = "https://github.com/isoverse/isoorbi", target = "_blank"),
+          paste("Version", as.character(utils::packageVersion("isoorbiGUI"))), #get isoorbiGUI package version
+          href = "https://github.com/isoverse/isoorbiGUI", target = "_blank"),
           align = "center"),
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
         menuItem("Autosampler", tabName = "flow", icon = icon("braille")),

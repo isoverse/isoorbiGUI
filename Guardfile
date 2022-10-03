@@ -6,8 +6,8 @@
 
 guard 'process', name: 'Shiny', command: ['R', '-e', " \
 devtools::load_all('.'); \
-isoorbi:::turn_debug_on(); \
-isoorbi:::iso_start_isoxl_app(log = TRUE, reset = FALSE)"] do
+isoorbiGUI:::turn_debug_on(); \
+isoorbiGUI:::iso_start_isoxl_app(log = TRUE, reset = FALSE)"] do
   watch(%r{NAMESPACE})
   watch(%r{R/.+\.R$})
 end

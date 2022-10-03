@@ -57,7 +57,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     if (input$test_data == TRUE) {
 
 
-      values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbi"))
+      values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
       # Download test data: .isox file ----------------------------------
 
@@ -131,7 +131,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-        values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbi"))
+        values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
         # ,
         # warning = function(w)
