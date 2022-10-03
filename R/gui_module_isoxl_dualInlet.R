@@ -121,7 +121,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     tryCatch(
 
 
-      values$data <- iso_read_isox_file(input$upload$datapath),
+      values$data <- isoorbi::orbi_read_isox(input$upload$datapath),
       warning = function(w)
         values$upload_error <- w$message,
       error = function(e)
@@ -132,7 +132,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet.isox", package="isoorbiGUI"))
+      values$data <- isoorbi::orbi_read_isox(system.file("extdata", "testfile_DualInlet.isox", package="isoorbiGUI"))
 
       # ,
       # warning = function(w)
@@ -402,7 +402,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     #req(input$INPUT_Rare)
     data.dual_inlet_filtered <- values$data %>%
-      iso_simplify_isox_file() %>%
+      isoorbi::orbi_simplify_isox() %>%
       na.omit() %>% #FIXME: really necessary?
       remove.satellitePeaks() %>%
       remove.rare(input = input) %>%
