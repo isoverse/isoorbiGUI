@@ -13,7 +13,7 @@ calc.output.flow <- function(df, INPUT_RatioMethod){
 
   df.stat <- df  %>%  dplyr::group_by(filename,
                                segment,
-                               #Sample.Name,
+                               #sample_name,
                                compound,
                                Basepeak,
                                isotopolog) %>%
@@ -36,7 +36,7 @@ calc.output.flow <- function(df, INPUT_RatioMethod){
 
     dplyr::select(filename,
            segment,
-           #Sample.Name,
+           #sample_name,
            Basepeak,
            compound,
            isotopolog,

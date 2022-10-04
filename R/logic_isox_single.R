@@ -60,12 +60,12 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 #' @description Contains the logic to generate the Excel output for single analysis
 #' @param df A dataframe from a single analysis experiment
 #' @param INPUT_RatioMethod The method of computing ratio
-#' @return Returns table containing 'filename', 'sample.name', 'Basepeak', 'Compound', 'Isotopolog', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
+#' @return Returns table containing 'filename', 'sample_name', 'Basepeak', 'Compound', 'Isotopolog', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
 #' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  dplyr::group_by(filename,
                                       Segment,
-                                      Sample.Name,
+                                      sample_name,
                                       compound,
                                       Basepeak,
                                       isotopolog) %>%
@@ -96,7 +96,7 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
 
     dplyr::select(
       filename,
-      Sample.Name,
+      sample_name,
       Segment,
       compound,
       Basepeak,

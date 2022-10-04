@@ -458,7 +458,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% dplyr::rename(
       `Filename` = filename,
-      #`Sample` = Sample.Name,
+      #`Sample` = sample_name,
       `BasePeak` = Basepeak,
       `Isotopocule` = isotopolog,
       Compound = compound,

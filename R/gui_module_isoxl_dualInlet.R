@@ -404,9 +404,9 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     data.dual_inlet_filtered <- values$data %>%
       isoorbi::orbi_simplify_isox() %>%
       na.omit() %>% #FIXME: really necessary?
-      isoorbi::orbi_filter_satellitePeaks() %>%
-      isoorbi::orbi_filter_weak(min_percent = input$rare) %>%
-      isoorbi::orbi_filter_TICxIT(truncate_extreme = input$extreme)  #temp: validate correct functioning
+      isoorbi::orbi_filter_satellite_peaks() %>%
+      isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
+      isoorbi::orbi_filter_scan_intensity(truncate_extreme = input$extreme)  #temp: validate correct functioning
 
 
 
@@ -435,26 +435,28 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
     data.basepeak <-
-      isoorbi::orbi_define_basepeak(dataset = data.annotated, basepeak = input$base_peak)
+      isoorbi::orbi_define_basepeak(dataset = data.annotated, base_peak = input$base_peak)
 
 
 
     # Dual Inlet: Calculate output table for results file ---------------
 
     data.output <-
-      isoorbi::orbi_calculate_results(dataset = data.basepeak, ratio.method = input$ratio.method)
+      isoorbi::orbi_summarize_results(dataset = data.basepeak, ratio_method = input$ratio.method)
 
     data.output.renamed <- data.output  %>% rename(
       `Filename` = filename,
-      `Sample` = Sample.Name,
-      `BasePeak` = Basepeak,
+      `Sample` = sample_name,
+      `BasePeak` = basepeak,
       `Isotopocule` = isotopocule,
-      Compound = compound,
-      `SEM` = Ratio.SEM,
-      `SEM (permil)` = relSE.permil,
-      `Shot Noise (permil)` = Shot.Noise.permil,
-      `Minutes to 1E6 ions` = Mins.to.1mio,
-      `Scans` = No.of.scans
+       Compound = compound,
+      `SEM` = ratio_sem,
+      `SEM (permil)` = ratio_relative_sem_permil,
+      `Shot Noise (permil)` = shot_noise_permil,
+      `Minutes to 1E6 ions` = minutes_to_1e6_ions,
+      `Scans` = number_of_scans,
+      `Ratio` = ratio,
+      `Block` = block
 
     ) %>%
       select(
@@ -545,15 +547,15 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       isolate({
         plotly::ggplotly(
           ggplot(data = data.output, aes(
-            x = Block, y = Ratio, color = isotopocule
+            x = block, y = ratio, color = isotopocule
           )) + scale_color_brewer(palette = "Dark2") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
 
             geom_errorbar(
               aes(
-                ymin = (Ratio - Ratio.SEM),
-                ymax = (Ratio + Ratio.SEM)
+                ymin = (ratio - ratio_sem),
+                ymax = (ratio + ratio_sem)
               ),
               width = 0.7,
               size = 0.3,

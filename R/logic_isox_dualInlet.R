@@ -51,7 +51,7 @@ define.dual.inlet <-
     block.number <- 1:length(blocks)
     dual.inlet.annot <- data.frame(
       Block.Number = block.number,
-      Block = blocks,
+      block = blocks,
       Start.Time = start.time,
       End.Time = end.time
     )
@@ -72,27 +72,27 @@ merge.di.annotations <- function(df.in, dual.inlet.anno){
   #temp; Add validations later for Dual Inlet input parameters. Are provided values reasonable.
 
   df.data <- df.in
-  df.data$Sample.Name <- "NA" #normal NA caused issues!
-  df.data$Block <- 0L  #normal NA caused issues! L makes the zero an integer, not double
+  df.data$sample_name <- "NA" #normal NA caused issues!
+  df.data$block <- 0L  #normal NA caused issues! L makes the zero an integer, not double
   #
   for (i in 1:nrow(dual.inlet.anno)) {
 
-    sample <- dual.inlet.anno$Block[i]
+    sample <- dual.inlet.anno$block[i]
     block.no <- dual.inlet.anno$Block.Number[i]
     #
     time.start <- dual.inlet.anno$Start.Time[i]
     time.end <- dual.inlet.anno$End.Time[i]
     #
-    df.data[(df.data$time.min > time.start) & (df.data$time.min < time.end), ]$Sample.Name <- sample
-    df.data[(df.data$time.min > time.start) & (df.data$time.min < time.end), ]$Block <- block.no
+    df.data[(df.data$time.min > time.start) & (df.data$time.min < time.end), ]$sample_name <- sample
+    df.data[(df.data$time.min > time.start) & (df.data$time.min < time.end), ]$block <- block.no
 
     #return(df.data) #would be returned for function!
   }
   #
 
-  df<- df.data  %>% dplyr::filter(Block >0) %>% dplyr::filter(Sample.Name != "NA")
+  df<- df.data  %>% dplyr::filter(block >0) %>% dplyr::filter(sample_name != "NA")
 
-  df$Sample.Name <- as.factor(df$Sample.Name)
+  df$sample_name <- as.factor(df$sample_name)
   df$compound <- as.factor(df$compound)
   df$isotopocule <- as.factor(df$isotopocule)
 

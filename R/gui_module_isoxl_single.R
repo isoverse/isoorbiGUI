@@ -392,7 +392,7 @@ module_isoxl_single_server <- function(input, output, session) {
     data.single_filtered <-   values$data %>%
                                           dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
                                           na.omit() %>%
-                                          dplyr::mutate(Sample.Name = input$sample) %>%
+                                          dplyr::mutate(sample_name = input$sample) %>%
                                           dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
                                           remove.satellitePeaks() %>%
                                           remove.rare(input = input) %>%
@@ -456,7 +456,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
     data.single_output.renamed <- data.single_output  %>% rename(
       `Filename` = filename,
-      `Sample` = Sample.Name,
+      `Sample` = sample_name,
       `BasePeak` = Basepeak,
       `Isotopocule` = isotopolog,
       Compound = compound,
