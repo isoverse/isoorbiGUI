@@ -64,7 +64,7 @@ module_isoxl_single_server <- function(input, output, session) {
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
 
-      values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+      values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
       # Download test data: .isox file ----------------------------------
 
@@ -126,7 +126,7 @@ module_isoxl_single_server <- function(input, output, session) {
       tryCatch(
 
 
-        values$data <- iso_read_isox_file(input$upload$datapath),
+        values$data <- orbi_read_isox(filepath = input$upload$datapath),
         warning = function(w)
           values$upload_error <- w$message,
         error = function(e)
@@ -137,7 +137,7 @@ module_isoxl_single_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-        values$data <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+        values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
         # ,
         # warning = function(w)
@@ -442,7 +442,7 @@ module_isoxl_single_server <- function(input, output, session) {
 # Single Analysis: Assign base peak --------------------------------------------
 
 
-      data.single_basepeak <- assign.basepeak.single(df = data.single_filtered, INPUT_Basepeak = input$base_peak)
+      data.single_basepeak <- orbi_define_basepeak(dataset = data.single_filtered, basepeak_def = input$base_peak)
 
       #needs validation; e.g. is base peak present in data?
 
@@ -451,24 +451,35 @@ module_isoxl_single_server <- function(input, output, session) {
 
 
 
-      data.single_output <- calc.output.single(df = data.single_basepeak, INPUT_RatioMethod = input$ratio.method)
+    data.output <- orbi_summarize_results(dataset = data.single_basepeak, ratio_method = input$ratio.method)
 
 
-    data.single_output.renamed <- data.single_output  %>% rename(
+    data.output.renamed <- data.output  %>% rename(
       `Filename` = filename,
       `Sample` = sample_name,
-      `BasePeak` = Basepeak,
+      `BasePeak` = basepeak,
       `Isotopocule` = isotopocule,
       Compound = compound,
-      `SEM` = Ratio.SEM,
-      `SEM (permil)` = relSE.permil,
-      `Shot Noise (permil)` = Shot.Noise.permil,
-      `Minutes to 1E6 ions` = Mins.to.1mio,
-      `Scans` = No.of.scans
+      `SEM` = ratio_sem,
+      `SEM (permil)` = ratio_relative_sem_permil,
+      `Shot Noise (permil)` = shot_noise_permil,
+      `Minutes to 1E6 ions` = minutes_to_1e6_ions,
+      `Scans` = number_of_scans,
+      `Ratio` = ratio
 
     ) %>%
-      select(Filename, Sample, Segment, Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
-             `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
+      select(
+        Filename,
+        Sample,
+        Compound,
+        Isotopocule,
+        Ratio,
+        SEM,
+        `SEM (permil)`,
+        `Shot Noise (permil)`,
+        `Minutes to 1E6 ions`,
+        Scans
+      )
 
 
 
@@ -480,7 +491,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
       output$summary.single <- DT::renderDataTable({
 
-        datatable( data.single_output.renamed, rownames= FALSE,
+        datatable( data.output.renamed, rownames= FALSE,
                    extensions = c('Buttons','ColReorder'),
                    options = list(
                      # autoWidth = TRUE, #scroll bar to see enture table
@@ -547,7 +558,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot2::ggplot(data = data.single_output, ggplot2::aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopocule)) +
+          ggplot2::ggplot(data = data.output, ggplot2::aes(x = shot_noise_permil, y = relative_sem_permil, color=isotopocule)) +
 
             ggplot2::scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
 
