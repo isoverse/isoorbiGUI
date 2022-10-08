@@ -67,14 +67,14 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 
 
-      values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+      values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI"))
 
 
       # Download test data: .isox file ----------------------------------
 
       output$download_test_data <- downloadHandler(
         filename = function() {
-          "testfile_FlowInjection_DataExploration_small.isox" #FIXME: provide name as a variable
+          "testfile_flow.isox" #FIXME: provide name as a variable
         },
         content = function(file) {
           write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
@@ -126,7 +126,7 @@ module_isoxl_flow_server <- function(input, output, session) {
     if (input$test_data == FALSE) {
     # try to read the uploaded file
     tryCatch(
-      values$data <- iso_read_isox_file(input$upload$datapath),
+      values$data <- orbi_read_isox(filepath = input$upload$datapath),
       warning = function(w)
         values$upload_error <- w$message,
       error = function(e)
@@ -136,7 +136,7 @@ module_isoxl_flow_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-        values$data <- iso_read_isox_file(system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+        values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_flow.isox", package="isoorbiGUI"))
 
         # ,
         # warning = function(w)
@@ -186,8 +186,8 @@ module_isoxl_flow_server <- function(input, output, session) {
 
       updateSelectInput(
         inputId = "base_peak",
-        choices = levels(values$data$isotopolog),
-        selected = values$data$isotopolog[1]
+        choices = levels(values$data$isotopocule),
+        selected = values$data$isotopocule[1]
       )
 
       shinyWidgets::updateNumericRangeInput(session,
@@ -445,7 +445,7 @@ module_isoxl_flow_server <- function(input, output, session) {
     # Flow Analysis: Assign base peak --------------------------------------------
 
 
-    data.flow_basepeak <- assign.basepeak.single(df = data.flow_filtered, INPUT_Basepeak = input$base_peak) #confirm that grouping is correct; Move function to common core?
+    data.flow_basepeak <- orbi_define_basepeak(dataset = data.flow_filtered, basepeak_def = input$base_peak) #confirm that grouping is correct; Move function to common core?
 
     #needs validation; e.g. is base peak present in data?
 
@@ -454,23 +454,52 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 
 
-    data.flow_output <- calc.output.flow(df = data.flow_basepeak, INPUT_RatioMethod = input$ratio.method)
+    data.output <- orbi_summarize_results(dataset = data.flow_basepeak, ratio_method =  input$ratio.method)
 
-    data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% dplyr::rename(
+    data.output.renamed <- data.output  %>% rename(
       `Filename` = filename,
-      #`Sample` = sample_name,
-      `BasePeak` = Basepeak,
-      `Isotopocule` = isotopolog,
+     # `Sample` = sample_name,
+      `BasePeak` = basepeak,
+      `Isotopocule` = isotopocule,
       Compound = compound,
-      `SEM` = Ratio.SEM,
-      `SEM (permil)` = relSE.permil,
-      `Shot Noise (permil)` = Shot.Noise.permil,
-      `Minutes to 1E6 ions` = Mins.to.1mio,
-      `Scans` = No.of.scans
+      `SEM` = ratio_sem,
+      `SEM (permil)` = ratio_relative_sem_permil,
+      `Shot Noise (permil)` = shot_noise_permil,
+      `Minutes to 1E6 ions` = minutes_to_1e6_ions,
+      `Scans` = number_of_scans,
+      `Ratio` = ratio#,
+      #`Block` = block
 
     ) %>%
-      dplyr::select(Filename,  Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
-             `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
+      select(
+        Filename,
+       # Sample,
+       # Block,
+        Compound,
+        Isotopocule,
+        Ratio,
+        SEM,
+        `SEM (permil)`,
+        `Shot Noise (permil)`,
+        `Minutes to 1E6 ions`,
+        Scans
+      )
+
+    # data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% dplyr::rename(
+    #   `Filename` = filename,
+    #   #`Sample` = sample_name,
+    #   `BasePeak` = basepeak,
+    #   `Isotopocule` = isotopocule,
+    #   Compound = compound,
+    #   `SEM` = ratio_sem,
+    #   `SEM (permil)` = relSE.permil,
+    #   `Shot Noise (permil)` = Shot.Noise.permil,
+    #   `Minutes to 1E6 ions` = Mins.to.1mio,
+    #   `Scans` = No.of.scans
+    #
+    # ) %>%
+    #   dplyr::select(Filename,  Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
+    #          `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
 
 
     # Table output: Flow Analysis, summary statistics ----------------------------
@@ -478,7 +507,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     output$summary.flow <- DT::renderDataTable({
 
-      datatable( data.flow_output.renamed, rownames= FALSE ,
+      datatable( data.output.renamed, rownames= FALSE ,
                  extensions = c('Buttons','ColReorder'),
                  options = list(
                    # autoWidth = TRUE, #scroll bar to see enture table
@@ -513,14 +542,14 @@ module_isoxl_flow_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot(data = data.flow_output, aes(x = filename, y = Ratio, color = isotopolog)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+          ggplot(data = data.output, aes(x = filename, y = ratio, color = isotopocule)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
             xlab("Filename") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
 
 
-            geom_errorbar(aes(ymin=(Ratio-Ratio.SEM),
-                              ymax=(Ratio+Ratio.SEM)),
+            geom_errorbar(aes(ymin=(ratio-ratio_sem),
+                              ymax=(ratio+ratio_sem)),
                           width=0.7,
                           size=0.3,
                           color="black",
@@ -561,7 +590,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 # Flow analysis: Make Excel file ---------------------------------------------
 
-data_flow.xls <- make.xls(df.stat = data.flow_output, params = inputs.flow) #FIX
+data_flow.xls <- make.xls(df.stat = data.output, params = inputs.flow) #FIX
 
 
     # Download output: Excel file ----------------------------------

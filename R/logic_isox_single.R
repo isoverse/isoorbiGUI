@@ -7,8 +7,8 @@
 #' @title Assign a base peak
 #' @description `assign.basepeak.single` assigns one isotopocule in the data frame as the base peak
 #' @details This is a function specific to the analysis of data from a single analysis direct infusion experiment.
-#' @param df A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopolog, ions.incremental.
-#' @param INPUT_Basepeak The isotopolog used as base peak in the ratio calculation by calc.ratio() function.
+#' @param df A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopocule, ions.incremental.
+#' @param INPUT_Basepeak The isotopocule used as base peak in the ratio calculation by calc.ratio() function.
 #' @returns Outputs the input dataframe plus two columns called `Basepeak` and `Basepeak.Ions`
 #' @export
 assign.basepeak.single <- function(df, INPUT_Basepeak) {
@@ -16,7 +16,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
     need(INPUT_Basepeak, 'Missing input for Basepeak'),
     #temp; check this works correctly
     need(
-      INPUT_Basepeak %in% levels(df$isotopolog),
+      INPUT_Basepeak %in% levels(df$isotopocule),
       'Specified Basepeak was not found in dataframe'
     )
   )
@@ -28,12 +28,12 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
                   #Injection, #not present in single run analysis
                   compound,
                   scan.no,
-                  isotopolog,
+                  isotopocule,
                   ions.incremental) %>%
-    #dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
+    #dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopocule == INPUT_Basepeak) %>%
     dplyr::group_by(.data$filename, .data$scan.no) %>%
-    dplyr::filter(isotopolog == INPUT_Basepeak) %>%
-    dplyr::mutate(Basepeak = factor(.data$isotopolog),
+    dplyr::filter(isotopocule == INPUT_Basepeak) %>%
+    dplyr::mutate(Basepeak = factor(.data$isotopocule),
                   Basepeak.Ions = .data$ions.incremental) %>%
     dplyr::select(.data$filename,
                   .data$compound,
@@ -46,7 +46,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
   df.out <- merge(df.sel, df, all = TRUE)
 
   df.out <-
-    df.out %>% dplyr::filter(isotopolog != INPUT_Basepeak) %>% droplevels()
+    df.out %>% dplyr::filter(isotopocule != INPUT_Basepeak) %>% droplevels()
 
   return(df.out)
 }
@@ -60,7 +60,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
 #' @description Contains the logic to generate the Excel output for single analysis
 #' @param df A dataframe from a single analysis experiment
 #' @param INPUT_RatioMethod The method of computing ratio
-#' @return Returns table containing 'filename', 'sample_name', 'Basepeak', 'Compound', 'Isotopolog', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
+#' @return Returns table containing 'filename', 'sample_name', 'Basepeak', 'Compound', 'isotopocule', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
 #' @export
 calc.output.single <- function(df, INPUT_RatioMethod) {
   df.stat <- df  %>%  dplyr::group_by(filename,
@@ -68,7 +68,7 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
                                       sample_name,
                                       compound,
                                       Basepeak,
-                                      isotopolog) %>%
+                                      isotopocule) %>%
 
     dplyr::mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
 
@@ -100,7 +100,7 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
       Segment,
       compound,
       Basepeak,
-      isotopolog,
+      isotopocule,
       Ratio,
       Ratio.SEM,
       relSE.permil,
@@ -109,8 +109,8 @@ calc.output.single <- function(df, INPUT_RatioMethod) {
       Mins.to.1mio
     ) %>%
     unique() %>% #dplyr::mutate(Injection= as.integer(Injection)) %>%
-    #arrange(filename, Injection, isotopolog)
-    arrange(filename, isotopolog)
+    #arrange(filename, Injection, isotopocule)
+    arrange(filename, isotopocule)
 
   df.stat <- as.data.frame(df.stat)
   return(df.stat)

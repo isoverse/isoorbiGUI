@@ -38,8 +38,8 @@ utils::globalVariables(c(".",
                          "Injection",
                          "compound",
                          "scan.no",
-                         "isotopolog",
-                         "Isotopolog",
+                         "isotopocule",
+                         "isotopocule",
                          "i.scans",
                          "n.scans",
                          "ions.incremental",
@@ -74,7 +74,7 @@ utils::globalVariables(c(".",
                          "write.table",
                          "lm",
                          "quantile",
-                         "Isotopolog.Ions")) #FIXME: add others, okay like this?
+                         "isotopocule.Ions")) #FIXME: add others, okay like this?
 
 # release questions (elaborate once selenium testing for the GUI is implemented)
 # https://cran.r-project.org/web/packages/RSelenium/vignettes/shinytesting.html

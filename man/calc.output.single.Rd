@@ -12,7 +12,7 @@ calc.output.single(df, INPUT_RatioMethod)
 \item{INPUT_RatioMethod}{The method of computing ratio}
 }
 \value{
-Returns table containing 'filename', 'sample_name', 'Basepeak', 'Compound', 'Isotopolog', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
+Returns table containing 'filename', 'sample_name', 'Basepeak', 'Compound', 'isotopocule', 'Ratio', 'relSE.permill', 'shot.noise.permill', 'mins.to.1mio'
 }
 \description{
 Contains the logic to generate the Excel output for single analysis

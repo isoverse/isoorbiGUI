@@ -7,19 +7,19 @@
 #' @description This function assigns a base peak to data for shotnoise calculation
 #' @param data a dataframe output from `iso_simplify_isox_file()`
 #' @param input the isotopocule assigned to be the base peak for ratio calculation
-#' @return processed dataframe containing new columns `Basepeak.Ions`, `Isotopolog. Ions`, and `Ratio`
+#' @return processed dataframe containing new columns `Basepeak.Ions`, `isotopocule. Ions`, and `Ratio`
 #' @export
 assign_basepeak_shotnoise <- function(data, input) {
 
 #FIXME: what to do when beasepeak and signal are the same? add Input validation
   df.out <- data %>%
-    dplyr::filter(.data$isotopolog %in% c(input$base_peak, input$isotopolog)) %>% #cross check with core logic filter function
+    dplyr::filter(.data$isotopocule %in% c(input$base_peak, input$isotopocule)) %>% #cross check with core logic filter function
     droplevels() %>%
-    pivot_wider(names_from = isotopolog, values_from = ions.incremental) %>% na.omit() %>%
+    pivot_wider(names_from = isotopocule, values_from = ions.incremental) %>% na.omit() %>%
 
     rename(Basepeak.Ions = input$base_peak,
-           Isotopolog.Ions = input$isotopolog)%>%
-    dplyr::mutate(Ratio = .data$Isotopolog.Ions/.data$Basepeak.Ions)
+           isotopocule.Ions = input$isotopocule)%>%
+    dplyr::mutate(Ratio = .data$isotopocule.Ions/.data$Basepeak.Ions)
 
   return(df.out)
 }
@@ -45,14 +45,14 @@ calc_shotnoise <- function(dataset){
     df <- dataset[1:l,]
 
     neff <-
-      (sum(df$Basepeak.Ions) * sum(df$Isotopolog.Ions)) / (sum(df$Basepeak.Ions) + sum(df$Isotopolog.Ions))
+      (sum(df$Basepeak.Ions) * sum(df$isotopocule.Ions)) / (sum(df$Basepeak.Ions) + sum(df$isotopocule.Ions))
     df.out$neff[l] <- neff
 
     shotnoise.neff <- neff ^ -0.5
     df.out$shotnoise.neff[l] <- shotnoise.neff
 
     shotnoise <-
-      ((1 / sum(df$Isotopolog.Ions) + (1 / sum(df$Basepeak.Ions)))) ^ 0.5
+      ((1 / sum(df$isotopocule.Ions) + (1 / sum(df$Basepeak.Ions)))) ^ 0.5
     df.out$shotnoise[l] <- shotnoise
 
     rse <- gse(dataset[1:l,]$Ratio) / gmean(dataset[1:l,]$Ratio)

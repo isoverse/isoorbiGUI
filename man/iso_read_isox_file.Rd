@@ -10,7 +10,7 @@ iso_read_isox_file(filepath)
 \item{filepath}{The path to the isox file}
 }
 \value{
-Return error, else reads file.tsv as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
+Return error, else reads file.tsv as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopocule', 'ions.incremental', 'tic', 'it.ms'
 }
 \description{
 This function reads in a IsoX file

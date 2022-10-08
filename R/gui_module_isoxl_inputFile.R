@@ -96,7 +96,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
     # FIXME: rename INPUT_IsoX_compound etc. Legacy before introducing shiny modules
     # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
-    # FIXME: basepeak and isotopolog must not be identical
+    # FIXME: basepeak and isotopocule must not be identical
 
     if (iv$is_valid()) {
 
@@ -163,7 +163,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
 
 
-# Preview isotopologs.tsv --------------------------------------------------
+# Preview isotopocules.tsv --------------------------------------------------
 
     output$isox = DT::renderDataTable({
 
@@ -189,10 +189,10 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
     })
 
 
-    # Download isotopologs.tsv ------------------------------------------------
+    # Download isotopocules.tsv ------------------------------------------------
 
     output$download_IsoX <- downloadHandler(
-      filename = function(){"isotopologs.tsv"},
+      filename = function(){"isotopocules.tsv"},
       content = function(fname){
         write.table(out.isox, fname, sep="\t", row.names =FALSE, quote = FALSE)
       }
@@ -268,7 +268,7 @@ module_isoxl_make_inputFile_ui <- function(id) {
             step = 0.0001,
             width = NULL
           ),
-          "Processing option: Threshold to include an isotopolog (in ppm abundance)",
+          "Processing option: Threshold to include an isotopocule (in ppm abundance)",
           placement = "right"
         ),
 
@@ -302,7 +302,7 @@ module_isoxl_make_inputFile_ui <- function(id) {
              hr(),
 
              box(
-               title = "Preview of isotopologs.tsv",
+               title = "Preview of isotopocules.tsv",
                width = "auto" ,
                status = "primary",
                solidHeader = T,

@@ -7,9 +7,9 @@
 assign.basepeak.single(df, INPUT_Basepeak)
 }
 \arguments{
-\item{df}{A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopolog, ions.incremental.}
+\item{df}{A dataframe from a single analysis experiment. Needs to contain columns for filename, compound, scan.no, isotopocule, ions.incremental.}
 
-\item{INPUT_Basepeak}{The isotopolog used as base peak in the ratio calculation by calc.ratio() function.}
+\item{INPUT_Basepeak}{The isotopocule used as base peak in the ratio calculation by calc.ratio() function.}
 }
 \value{
 Outputs the input dataframe plus two columns called `Basepeak` and `Basepeak.Ions`

@@ -33,7 +33,7 @@ varselect_mod_ui <- function(id) {
       "Select facet variable",
       choices = list(
         `None` = "",
-        `isotopolog` = "isotopolog",
+        `isotopocule` = "isotopocule",
         `compound` = "compound",
         `filename` = "filename"
       )
@@ -66,7 +66,7 @@ varselect_mod_density_ui <- function(id) {
       "Select facet variable",
       choices = list(
         `None` = "",
-        `isotopolog` = "isotopolog",
+        `isotopocule` = "isotopocule",
         `compound` = "compound",
         `filename` = "filename"
       )
@@ -125,7 +125,7 @@ dataviewer_mod_ui <- function(id) {
 #'   datatable widget.
 dataviewer_mod_server <- function(input, output, session, dataset) {
 
-   cols_select <- c("filename", "scan.no", "time.min", "compound", "isotopolog",
+   cols_select <- c("filename", "scan.no", "time.min", "compound", "isotopocule",
                     "ions.incremental", "tic", "it.ms", "intensity", "resolution",
                     "peakResolution", "peakNoise", "mzMeasured", "basePeakIntensity",
                     "rawOvFtT", "intensCompFactor", "agc", "agcTarget", "microscans",

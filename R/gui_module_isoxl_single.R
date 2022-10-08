@@ -201,8 +201,8 @@ module_isoxl_single_server <- function(input, output, session) {
 
       updateSelectInput(
         inputId = "base_peak",
-        choices = levels(values$data$isotopolog),
-        selected = values$data$isotopolog[1]
+        choices = levels(values$data$isotopocule),
+        selected = values$data$isotopocule[1]
       )
 
       shinyWidgets::updateNumericRangeInput(session,
@@ -458,7 +458,7 @@ module_isoxl_single_server <- function(input, output, session) {
       `Filename` = filename,
       `Sample` = sample_name,
       `BasePeak` = Basepeak,
-      `Isotopocule` = isotopolog,
+      `Isotopocule` = isotopocule,
       Compound = compound,
       `SEM` = Ratio.SEM,
       `SEM (permil)` = relSE.permil,
@@ -530,7 +530,7 @@ module_isoxl_single_server <- function(input, output, session) {
     #         height = 600,
     #         scale = 4,
     #         filename = paste("shotnoise",
-    #                          input$isotopolog,
+    #                          input$isotopocule,
     #                          input$base_peak,
     #                          sep = "_")
     #       )
@@ -547,7 +547,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot2::ggplot(data = data.single_output, ggplot2::aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopolog)) +
+          ggplot2::ggplot(data = data.single_output, ggplot2::aes(x = Shot.Noise.permil, y = relSE.permil, color=isotopocule)) +
 
             ggplot2::scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
 

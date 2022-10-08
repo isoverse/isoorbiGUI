@@ -12,7 +12,7 @@ assign_basepeak_shotnoise(data, input)
 \item{input}{the isotopocule assigned to be the base peak for ratio calculation}
 }
 \value{
-processed dataframe containing new columns `Basepeak.Ions`, `Isotopolog. Ions`, and `Ratio`
+processed dataframe containing new columns `Basepeak.Ions`, `isotopocule. Ions`, and `Ratio`
 }
 \description{
 This function assigns a base peak to data for shotnoise calculation

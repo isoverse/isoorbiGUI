@@ -1,4 +1,4 @@
-filename	scan.no	time.min	compound	isotopolog	ions.incremental	it.ms
+filename	scan.no	time.min	compound	isotopocule	ions.incremental	it.ms
 20220125_01	1	0.005	NO3-	15N	74180.54854632	26.293
 20220125_01	1	0.005	NO3-	17O	23131.88926153	26.293
 20220125_01	1	0.005	NO3-	18O	171488.81002336	26.293

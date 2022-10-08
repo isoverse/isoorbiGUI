@@ -21,6 +21,6 @@ isox <- iso_read_isox_file(file_path)
 iso_filter_isox_file()
 
 # Note: not running on 29-June-2022
-iso_plot_shotnoise(isox, isotopolog = "15N", base = "18O", ...)
+iso_plot_shotnoise(isox, isotopocule = "15N", base = "18O", ...)
 ```
 

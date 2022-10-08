@@ -160,7 +160,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       # no data (maybe incorrect input file --> hide)
       shinyjs::hide("parameters-panel")
       shinyjs::hide("main-plot")
-      updateSelectInput(inputId = "isotopolog", choices = c())
+      updateSelectInput(inputId = "isotopocule", choices = c())
       updateSelectInput(inputId = "base_peak", choices = c())
       updateSelectInput(inputId = "filename", choices = c())
       updateSelectInput(inputId = "compound", choices = c())
@@ -173,14 +173,14 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     } else {
       # yes data --> update parameters and show
       updateSelectInput(
-        inputId = "isotopolog",
-        choices = levels(values$data$isotopolog),
-        selected = levels(values$data$isotopolog)[2]
+        inputId = "isotopocule",
+        choices = levels(values$data$isotopocule),
+        selected = levels(values$data$isotopocule)[2]
       )
       updateSelectInput(
         inputId = "base_peak",
-        choices = levels(values$data$isotopolog),
-        selected = levels(values$data$isotopolog)[1]
+        choices = levels(values$data$isotopocule),
+        selected = levels(values$data$isotopocule)[1]
       )
       updateSelectInput(
         inputId = "filename",
@@ -275,7 +275,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     #Required inputs
     iv$add_rule("filename", shinyvalidate::sv_required())
     iv$add_rule("compound", shinyvalidate::sv_required())
-    iv$add_rule("isotopolog", shinyvalidate::sv_required())
+    iv$add_rule("isotopocule", shinyvalidate::sv_required())
     iv$add_rule("base_peak", shinyvalidate::sv_required())
     iv$add_rule("timerange", shinyvalidate::sv_required())
     # #timerange input requires special attention
@@ -285,7 +285,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     #Input values
     iv$add_rule("rare", shinyvalidate::sv_between(0, 90))
     iv$add_rule("extreme", shinyvalidate::sv_between(0, 10))
-    iv$add_rule("isotopolog", shinyvalidate::sv_not_equal(input$base_peak, message_fmt = "Equal to base peak")) #basepeak and isotopolog must not be identical
+    iv$add_rule("isotopocule", shinyvalidate::sv_not_equal(input$base_peak, message_fmt = "Equal to base peak")) #basepeak and isotopocule must not be identical
 
     # FIXME: Bug if I delete rare or extreme input after clicking plot button (does not update)
 
@@ -313,7 +313,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     module_message(
       ns, "info",
       "generating plot with selected parameters:",
-      "\n - isotopolog: ", input$isotopolog %then% "",
+      "\n - isotopocule: ", input$isotopocule %then% "",
       "\n - basepeak: ", input$base_peak %then% "",
       "\n - files: ", paste(input$filename %then% "", collapse = ", "),
       "\n - compound: ", paste(input$compound %then% "", collapse = ", "),
@@ -363,7 +363,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
             height = 600,
             scale = 4,
             filename = paste("shotnoise",
-                             input$isotopolog,
+                             input$isotopocule,
                              input$base_peak,
                              sep = "_")
           )
@@ -459,7 +459,7 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        selectInput(inputId = ns("isotopolog"), label = "Isotopolog", c()),
+        selectInput(inputId = ns("isotopocule"), label = "isotopocule", c()),
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
 

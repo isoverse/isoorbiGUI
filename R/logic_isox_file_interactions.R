@@ -3,7 +3,7 @@
 #' @title Read an isox file
 #' @description This function reads in a IsoX file
 #' @param filepath The path to the isox file
-#' @return Return error, else reads file.tsv as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopolog', 'ions.incremental', 'tic', 'it.ms'
+#' @return Return error, else reads file.tsv as columns 'filename', 'scan.no', 'time.min', 'compound', 'isotopocule', 'ions.incremental', 'tic', 'it.ms'
 #' @export
 iso_read_isox_file <- function(filepath) {
   # safety checks
@@ -21,7 +21,7 @@ iso_read_isox_file <- function(filepath) {
         scan.no = readr::col_integer(),
         time.min = readr::col_double(),
         compound = readr::col_factor(),
-        isotopolog = readr::col_factor(),
+        isotopocule = readr::col_factor(),
         ions.incremental = readr::col_double(),
         tic = readr::col_double(),
         it.ms = readr::col_double()
