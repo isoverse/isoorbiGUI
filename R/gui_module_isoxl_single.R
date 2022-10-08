@@ -609,7 +609,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
       # Single analysis: Make Excel file ---------------------------------------------
 
-      data_single.xls <- make.xls.onetab(df.stat = data.single_output, params = inputs.single)
+      data_single.xls <- make.xls.onetab(df.stat = data.output, params = inputs.single)
 
 
     # Download output: Excel file ----------------------------------
