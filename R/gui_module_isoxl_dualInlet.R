@@ -406,7 +406,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       na.omit() %>% #FIXME: really necessary?
       isoorbi::orbi_filter_satellite_peaks() %>%
       isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
-      isoorbi::orbi_filter_scan_intensity(truncate_extreme = input$extreme)  #temp: validate correct functioning
+      isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme)  #temp: validate correct functioning
 
 
 
@@ -435,7 +435,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
 
     data.basepeak <-
-      isoorbi::orbi_define_basepeak(dataset = data.annotated, base_peak = input$base_peak)
+      isoorbi::orbi_define_basepeak(dataset = data.annotated, basepeak_def = input$base_peak)
 
 
 
@@ -461,7 +461,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     ) %>%
       select(
         Filename,
-        Sample,
+       Sample,
         Block,
         Compound,
         Isotopocule,
