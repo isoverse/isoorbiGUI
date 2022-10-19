@@ -64,7 +64,7 @@ module_isoxl_single_server <- function(input, output, session) {
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
 
-      values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+      values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
       # Download test data: .isox file ----------------------------------
 
@@ -126,7 +126,7 @@ module_isoxl_single_server <- function(input, output, session) {
       tryCatch(
 
 
-        values$data <- orbi_read_isox(filepath = input$upload$datapath),
+        values$data <-isoorbi::orbi_read_isox(file = input$upload$datapath),
         warning = function(w)
           values$upload_error <- w$message,
         error = function(e)
@@ -137,7 +137,7 @@ module_isoxl_single_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-        values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+        values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_DualInlet_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
         # ,
         # warning = function(w)
@@ -442,7 +442,7 @@ module_isoxl_single_server <- function(input, output, session) {
 # Single Analysis: Assign base peak --------------------------------------------
 
 
-      data.single_basepeak <- orbi_define_basepeak(dataset = data.single_filtered, basepeak_def = input$base_peak)
+      data.single_basepeak <-isoorbi::orbi_define_basepeak(dataset = data.single_filtered, basepeak_def = input$base_peak)
 
       #needs validation; e.g. is base peak present in data?
 
@@ -451,7 +451,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
 
 
-    data.output <- orbi_summarize_results(dataset = data.single_basepeak, ratio_method = input$ratio.method)
+    data.output <-isoorbi::orbi_summarize_results(dataset = data.single_basepeak, ratio_method = input$ratio.method)
 
 
     data.output.renamed <- data.output  %>% rename(

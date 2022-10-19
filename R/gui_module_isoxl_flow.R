@@ -67,7 +67,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 
 
-      values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI"))
+      values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI"))
 
 
       # Download test data: .isox file ----------------------------------
@@ -126,7 +126,7 @@ module_isoxl_flow_server <- function(input, output, session) {
     if (input$test_data == FALSE) {
     # try to read the uploaded file
     tryCatch(
-      values$data <- orbi_read_isox(filepath = input$upload$datapath),
+      values$data <-isoorbi::orbi_read_isox(file = input$upload$datapath),
       warning = function(w)
         values$upload_error <- w$message,
       error = function(e)
@@ -136,7 +136,7 @@ module_isoxl_flow_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-        values$data <- orbi_read_isox(filepath = system.file("extdata", "testfile_flow.isox", package="isoorbiGUI"))
+        values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_flow.isox", package="isoorbiGUI"))
 
         # ,
         # warning = function(w)
@@ -445,7 +445,7 @@ module_isoxl_flow_server <- function(input, output, session) {
     # Flow Analysis: Assign base peak --------------------------------------------
 
 
-    data.flow_basepeak <- orbi_define_basepeak(dataset = data.flow_filtered, basepeak_def = input$base_peak) #confirm that grouping is correct; Move function to common core?
+    data.flow_basepeak <-isoorbi::orbi_define_basepeak(dataset = data.flow_filtered, basepeak_def = input$base_peak) #confirm that grouping is correct; Move function to common core?
 
     #needs validation; e.g. is base peak present in data?
 
@@ -454,7 +454,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
 
 
-    data.output <- orbi_summarize_results(dataset = data.flow_basepeak, ratio_method =  input$ratio.method)
+    data.output <-isoorbi::orbi_summarize_results(dataset = data.flow_basepeak, ratio_method =  input$ratio.method)
 
     data.output.renamed <- data.output  %>% rename(
       `Filename` = filename,

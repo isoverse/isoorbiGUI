@@ -1,18 +1,12 @@
 ---
-title: "Untitled"
+title: "Example"
 output: html_document
-date: '2022-06-24'
+date: '2022-10-18'
 ---
-
 
 ```{r}
 library(isoorbi)
-```
 
-
-
-
-```{r}
 file_path <-system.file("extdata", "testfile_DualInlet.isox", package = "isoorbi")
 isox <- iso_read_isox_file(file_path) 
 ```
@@ -23,4 +17,3 @@ iso_filter_isox_file()
 # Note: not running on 29-June-2022
 iso_plot_shotnoise(isox, isotopocule = "15N", base = "18O", ...)
 ```
-
