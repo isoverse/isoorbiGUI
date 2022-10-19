@@ -397,8 +397,11 @@ module_isoxl_single_server <- function(input, output, session) {
                                           remove.satellitePeaks() %>%
                                           remove.rare(input = input) %>%
                                           remove.ticxit(input = input)%>%
-                                          group_by(filename) %>%
-                                          dplyr::mutate(Segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
+                                          group_by(filename)
+    # %>%
+    #                                       dplyr::mutate(Segment = ceiling(
+    #                                           (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))
+    #                                           ) # FIXME: fix this!
 
 
     #SEGMENTATION
@@ -451,21 +454,22 @@ module_isoxl_single_server <- function(input, output, session) {
 
 
 
-    data.output <-isoorbi::orbi_summarize_results(dataset = data.single_basepeak, ratio_method = input$ratio.method)
+    data.output <- isoorbi::orbi_summarize_results(dataset = data.single_basepeak, ratio_method = input$ratio.method)
 
+  message(colnames(data.output))
 
-    data.output.renamed <- data.output  %>% rename(
+    data.output.renamed <- data.output  %>% dplyr::rename(
       `Filename` = filename,
       `Sample` = sample_name,
       `BasePeak` = basepeak,
       `Isotopocule` = isotopocule,
       Compound = compound,
-      `SEM` = ratio_sem,
-      `SEM (permil)` = ratio_relative_sem_permil,
-      `Shot Noise (permil)` = shot_noise_permil,
-      `Minutes to 1E6 ions` = minutes_to_1e6_ions,
-      `Scans` = number_of_scans,
-      `Ratio` = ratio
+        `SEM` = ratio_sem,
+      `SEM (permil)`= ratio_relative_sem_permil,
+       `Shot Noise (permil)` = shot_noise_permil,
+       `Minutes to 1E6 ions` = minutes_to_1e6_ions,
+       `Scans` = number_of_scans,
+       `Ratio` = ratio
 
     ) %>%
       select(
@@ -474,7 +478,7 @@ module_isoxl_single_server <- function(input, output, session) {
         Compound,
         Isotopocule,
         Ratio,
-        SEM,
+        `SEM`,
         `SEM (permil)`,
         `Shot Noise (permil)`,
         `Minutes to 1E6 ions`,
@@ -558,7 +562,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot2::ggplot(data = data.output, ggplot2::aes(x = shot_noise_permil, y = relative_sem_permil, color=isotopocule)) +
+          ggplot2::ggplot(data = data.output, ggplot2::aes(x = shot_noise_permil, y = ratio_relative_sem_permil, color=isotopocule)) +
 
             ggplot2::scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
 
@@ -570,7 +574,7 @@ module_isoxl_single_server <- function(input, output, session) {
             #               position=position_dodge(.9))       +
             ggplot2::geom_point(size=3, shape=10) +
             ggplot2::geom_abline(slope=1) +
-            ggplot2::facet_grid(filename~Segment) +
+            ggplot2::facet_grid(filename~.) + #FIXME: add segments
             ggplot2::theme(legend.position="right") +
             ggplot2::ylab(paste("Relative SEM ", "[\u2030]")) + ggplot2::xlab(paste("Shot Noise Limit", "[\u2030]")),
 
