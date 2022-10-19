@@ -550,7 +550,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
             geom_errorbar(aes(ymin=(ratio-ratio_sem),
                               ymax=(ratio+ratio_sem)),
-                          width=0.7,
+                          width=0.4,
                           size=0.3,
                           color="black",
                           position=position_dodge(.9))       +
