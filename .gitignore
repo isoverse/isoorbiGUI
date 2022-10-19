@@ -37,6 +37,7 @@ bin/
 inst/extdata/.DS_Store
 dev/
 tmp/
-#app/
+app/
 #inst/
 .DS_Store
+
