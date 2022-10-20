@@ -59,6 +59,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
           align = "center"),
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
         menuItem("Autosampler", tabName = "flow", icon = icon("braille")),
+        menuItem("LCMS", tabName = "lcms", icon = icon("water")),
         menuItem("Direct Infusion", tabName = "single", icon = icon("syringe")),
         menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
@@ -132,6 +133,18 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
           module_isoxl_flow_ui(id = "flow")
 
         ),
+
+        # UI: LCMS Analysis ----------------------------------------------
+
+        tabItem(
+          tabName = "lcms",
+
+          h4(icon("water"), "LCMS"),
+
+          module_isoxl_lcms_ui(id = "lcms")
+
+        ),
+
 
         # UI: Single Analysis -----------------------------------------------------
 
