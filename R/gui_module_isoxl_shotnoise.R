@@ -196,7 +196,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       )
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min)))
+                                            value = 0:floor(max(values$data$time.min)))
 
       updateNumericInput(
         inputId = "rare",
