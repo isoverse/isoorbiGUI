@@ -434,7 +434,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
               extend = 'pdf',
               pageSize = 'A4',
               orientation = 'landscape',
-              filename = 'IsoXL_lcmsInjection_isox'
+              filename = 'IsoXL_LCMS_isox'
             )),
           colReorder = TRUE #columns can be reordered
         )
@@ -442,7 +442,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
     })
 
-    # lcms Analysis: Assign base peak --------------------------------------------
+    # LCMS Analysis: Assign base peak --------------------------------------------
 
 
     data.lcms_basepeak <-isoorbi::orbi_define_basepeak(dataset = data.lcms_filtered, basepeak_def = input$base_peak) #confirm that grouping is correct; Move function to common core?
@@ -450,7 +450,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
     #needs validation; e.g. is base peak present in data?
 
 
-    # lcms Analysis: Calculate output table for results file ---------------
+    # LCMS Analysis: Calculate output table for results file ---------------
 
 
 
@@ -502,7 +502,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
     #          `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
 
 
-    # Table output: lcms Analysis, summary statistics ----------------------------
+    # Table output: LCMS Analysis, summary statistics ----------------------------
 
 
     output$summary.lcms <- DT::renderDataTable({

@@ -42,6 +42,9 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     # Server: Flow Injection Inlet Analysis -----------------------------------------------------
     flow <- callModule(module_isoxl_flow_server, id = "flow")
 
+    # Server: LCMS Analysis -----------------------------------------------------
+    lcms <- callModule(module_isoxl_lcms_server, id = "lcms")
+
     # Server: Explore Data --------------------------------------------------------
     explore <- callModule(module_isoxl_explore_server, id = "explore")
 
