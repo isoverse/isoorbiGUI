@@ -165,15 +165,21 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot(data = data.frame(x=1:10, y=1:10), aes(x = x, y = y)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
-            xlab("Filename") +
+          ggplot(data = values$data, aes(x = time.min, y = ions.incremental, color = filename)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+            xlab("Time [min]") +
 
-            theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
+            facet_grid(filename~isotopocule, scales="free") +
 
-            geom_point(size=3, shape=10) ,
+            theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1),
+                  legend.position = 'bottom') +
+
+           # ggridges::geom_density_ridges() +
+            geom_point(size=0.2),
+
+
 
           dynamicTicks = TRUE #change ticks on zoom
-        ) %>% layout(legend=list(title=list(text='Isotopocule'))) %>% plotly::config(
+        )  %>% layout(legend=list(orientation = "h", y = -0.2))  %>% plotly::config(
 
           displaylogo = FALSE,
           modeBarButtonsToRemove = c(
