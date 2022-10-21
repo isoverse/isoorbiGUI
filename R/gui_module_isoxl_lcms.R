@@ -47,7 +47,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
     plot = NULL #revise
   )
 
-  observeEvent(input$start, {
+  observeEvent(req(nrow(values$data) != 0), {
 
     # Plot output: LCMS Analysis--------------------------------------------------------
 
