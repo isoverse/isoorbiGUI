@@ -30,7 +30,6 @@ Imports:
     enviPat,
     ggplot2,
     ggrepel,
-    ggridges,
     magrittr,
     mailtoR,
     methods,

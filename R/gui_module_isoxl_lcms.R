@@ -47,33 +47,41 @@ module_isoxl_lcms_server <- function(input, output, session) {
     plot = NULL #revise
   )
 
-  observeEvent(input$test_data, {
+  observeEvent(input$start, {
 
-    # Plot output: lcms Analysis--------------------------------------------------------
+    # Plot output: LCMS Analysis--------------------------------------------------------
 
     output$plot.overview <- renderPlotly({
 
+
       # isolate to avoid triggers on other input parameter selections
       isolate({
-
         plotly::ggplotly(
+          ggplot(
+            data = values$data,
+            aes(x = time.min, y = ions.incremental, color = filename)
+          ) +
 
-          ggplot(data = values$data, aes(x = time.min, y = ions.incremental, color = filename)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+            scale_color_brewer(palette = "Dark2") + #temp: could be segments... for x axis
+
             xlab("Time [min]") +
 
-            facet_grid(filename~isotopocule, scales="free") +
+            facet_grid(isotopocule~compound, scales = "free_y") +
 
-            theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1),
-                  legend.position = 'bottom') +
-
-            # ggridges::geom_density_ridges() +
-            geom_point(size=0.2),
-
+            #strip.text.x = element_blank(),
+            theme(
+              axis.text.x = element_text(
+                angle = 30,
+                vjust = 0.5,
+                hjust = 1
+              ),
+              legend.position = 'bottom'
+            ) +
+            geom_point(size = 0.1),
 
 
           dynamicTicks = TRUE #change ticks on zoom
-        )  %>% layout(legend=list(orientation = "h", y = -0.2))  %>% plotly::config(
-
+        )  %>% layout(legend = list(orientation = "h", y = -0.2))  %>% plotly::config(
           displaylogo = FALSE,
           modeBarButtonsToRemove = c(
             "zoomIn2d",
@@ -91,18 +99,21 @@ module_isoxl_lcms_server <- function(input, output, session) {
             height = 600,
             scale = 4,
 
-            filename = if (input$test_data == TRUE) {paste("testfile_lcms", sep="")} #FIXME: use a variable for testfile name!
+            #FIXME: use a variable for testfile name!
+            filename = if (input$test_data == TRUE) {
+              paste("testfile_lcms", sep = "")
+            }
+
             else{
               paste("lcms_injection",
                     tools::file_path_sans_ext(input$upload$name),
-                    sep="_")}
-
+                    sep = "_")
+            }
           )
         )
       })
 
     })
-
 
   })
 
@@ -235,63 +246,6 @@ module_isoxl_lcms_server <- function(input, output, session) {
       updateNumericInput(inputId = "rare", value = c())
       updateNumericInput(inputId = "extreme", value = c())
       updateRadioButtons(inputId = "ratio.method", choices =c())
-
-
-
-      # Plot output: lcms Analysis--------------------------------------------------------
-
-      output$plot.overview <- renderPlotly({
-
-        # isolate to avoid triggers on other input parameter selections
-        isolate({
-
-          plotly::ggplotly(
-
-            ggplot(data = values$data, aes(x = time.min, y = ions.incremental, color = filename)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
-              xlab("Time [min]") +
-
-              facet_grid(filename~isotopocule, scales="free") +
-
-              theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1),
-                    legend.position = 'bottom') +
-
-              # ggridges::geom_density_ridges() +
-              geom_point(size=0.2),
-
-
-
-            dynamicTicks = TRUE #change ticks on zoom
-          )  %>% layout(legend=list(orientation = "h", y = -0.2))  %>% plotly::config(
-
-            displaylogo = FALSE,
-            modeBarButtonsToRemove = c(
-              "zoomIn2d",
-              "zoomOut2d",
-              "lasso2d",
-              "select2d",
-              "hoverClosestCartesian",
-              "hoverCompareCartesian"
-            ),
-
-            #options on how to save an image
-            toImageButtonOptions = list(
-              format = "png",
-              width = 900,
-              height = 600,
-              scale = 4,
-
-              filename = if (input$test_data == TRUE) {paste("testfile_lcms", sep="")} #FIXME: use a variable for testfile name!
-              else{
-                paste("lcms_injection",
-                      tools::file_path_sans_ext(input$upload$name),
-                      sep="_")}
-
-            )
-          )
-        })
-
-      })
-
 
 
     } else {
@@ -711,77 +665,27 @@ module_isoxl_lcms_server <- function(input, output, session) {
 data_lcms.xls <- make.xls(df.stat = data.output, params = inputs.lcms) #FIX
 
 
-    # Plot output: lcms Analysis--------------------------------------------------------
 
-    output$plot.overview <- renderPlotly({
-
-      # isolate to avoid triggers on other input parameter selections
-      isolate({
-
-        plotly::ggplotly(
-
-          ggplot(data = values$data, aes(x = time.min, y = ions.incremental, color = filename)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
-            xlab("Time [min]") +
-
-            facet_grid(filename~isotopocule, scales="free") +
-
-            theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1),
-                  legend.position = 'bottom') +
-
-            # ggridges::geom_density_ridges() +
-            geom_point(size=0.2),
-
-
-
-          dynamicTicks = TRUE #change ticks on zoom
-        )  %>% layout(legend=list(orientation = "h", y = -0.2))  %>% plotly::config(
-
-          displaylogo = FALSE,
-          modeBarButtonsToRemove = c(
-            "zoomIn2d",
-            "zoomOut2d",
-            "lasso2d",
-            "select2d",
-            "hoverClosestCartesian",
-            "hoverCompareCartesian"
-          ),
-
-          #options on how to save an image
-          toImageButtonOptions = list(
-            format = "png",
-            width = 900,
-            height = 600,
-            scale = 4,
-
-            filename = if (input$test_data == TRUE) {paste("testfile_lcms", sep="")} #FIXME: use a variable for testfile name!
-            else{
-              paste("lcms_injection",
-                    tools::file_path_sans_ext(input$upload$name),
-                    sep="_")}
-
-          )
-        )
-      })
-
-    })
 
 
     # Download output: Excel file ----------------------------------
 
 
-output$download_xlsx <- downloadHandler(
-  filename = function() {
-
-    if (input$test_data == TRUE) {paste("testfile_lcms", "_IsoXL.xlsx", sep="")} #FIXME: use a variable for testfile name!
-    else{
-      paste(tools::file_path_sans_ext(input$upload$name),
-            "_IsoXL.xlsx",
-            sep = "")}
-  },
-  content = function(file) {
-    saveWorkbook(data_lcms.xls, file)
-  }
-)
+    output$download_xlsx <- downloadHandler(
+      filename = function() {
+        if (input$test_data == TRUE) {
+          paste("testfile_lcms", "_IsoXL.xlsx", sep = "")
+        } #FIXME: use a variable for testfile name!
+        else{
+          paste(tools::file_path_sans_ext(input$upload$name),
+                "_IsoXL.xlsx",
+                sep = "")
+        }
+      },
+      content = function(file) {
+        saveWorkbook(data_lcms.xls, file)
+      }
+    )
 
 
 
