@@ -57,7 +57,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     if (input$test_data == TRUE) {
 
 
-      values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+      values$data <- isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
 
       # Download test data: .isox file ----------------------------------
 
@@ -196,7 +196,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
       )
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:floor(max(values$data$time.min)))
+                                            value = 0:ceiling(max(values$data$time.min)))
 
       updateNumericInput(
         inputId = "rare",
@@ -327,12 +327,12 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
     #ACTUAL DATA PROCESSING STEP
 
     values$plot <- values$data  %>%
-                        iso_simplify_isox_file() %>%
+                        isoorbi::orbi_simplify_isox() %>%
                         iso_filter_isox_file(input=input) %>%
-                        remove.satellitePeaks() %>%
-                        remove.rare(input=input)  %>%
-                        remove.ticxit(input=input) %>%
-                        assign_basepeak_shotnoise(input=input)  %>%
+                        isoorbi::orbi_filter_satellite_peaks() %>%
+                        isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare)  %>%
+                        isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme) %>%
+                        assign_basepeak_shotnoise(input=input)  %>% #FIXME: using isoorbi:: has some issues
                         calc_shotnoise() %>%
                         plot_shot_noise(input=input)
 
