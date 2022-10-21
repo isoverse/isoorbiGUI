@@ -115,6 +115,8 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
     })
 
+    shinyjs::show("overview-plot")
+
   })
 
 
@@ -123,6 +125,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
     shinyjs::hide("main-plot")
     shinyjs::hide("main-rest")
+    shinyjs::hide("overview-plot")
 
     # reset the reactive values that hold the file and data
     values$upload_file <- NULL
@@ -839,6 +842,9 @@ module_isoxl_lcms_ui <- function(id) {
 
   mainPanel(
 
+    div(
+      id = ns("overview-plot"),
+
     box(
       title = "Overview of Data",
       width = "auto" ,
@@ -846,7 +852,7 @@ module_isoxl_lcms_ui <- function(id) {
       status = "primary",
       solidHeader = T,
       withSpinner(plotlyOutput(ns("plot.overview")))
-    ),
+    )    ) %>% shinyjs::hidden(),
 
 
     width = 9,
