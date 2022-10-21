@@ -1,6 +1,6 @@
 # test ----
-# test the lcms injection analysis module as a standalone app
-# test the lcms module as a standalone app
+# test the LCMS injection analysis module as a standalone app
+# test the LCMS module as a standalone app
 #' @title test_module_isoxl_lcms
 #' @description ...
 #' @param port ...
@@ -43,6 +43,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
     upload_file = NULL,
     upload_error = NULL,
     data = NULL,
+    plot.overview = NULL,
     plot = NULL #revise
   )
 
@@ -61,6 +62,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
     #reset the outputs
     output$mytable.lcms <- NULL
     output$summary.lcms <- NULL
+    output$plot.overview <- NULL
     output$plot <- NULL
 
     if (input$test_data == TRUE) {
@@ -138,11 +140,6 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
         values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_lcms.isox", package="isoorbiGUI"))
 
-        # ,
-        # warning = function(w)
-        #   values$upload_error <- w$message,
-        # error = function(e)
-        #   values$upload_error <- e$message
       )
 
     }
@@ -158,6 +155,54 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
   # update plot options ----
   observeEvent(values$data, {
+
+    # Plot output: lcms Analysis--------------------------------------------------------
+
+    output$plot.overview <- renderPlotly({
+
+      # isolate to avoid triggers on other input parameter selections
+      isolate({
+
+        plotly::ggplotly(
+
+          ggplot(data = data.frame(x=1:10, y=1:10), aes(x = x, y = y)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+            xlab("Filename") +
+
+            theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
+
+            geom_point(size=3, shape=10) ,
+
+          dynamicTicks = TRUE #change ticks on zoom
+        ) %>% layout(legend=list(title=list(text='Isotopocule'))) %>% plotly::config(
+
+          displaylogo = FALSE,
+          modeBarButtonsToRemove = c(
+            "zoomIn2d",
+            "zoomOut2d",
+            "lasso2d",
+            "select2d",
+            "hoverClosestCartesian",
+            "hoverCompareCartesian"
+          ),
+
+          #options on how to save an image
+          toImageButtonOptions = list(
+            format = "png",
+            width = 900,
+            height = 600,
+            scale = 4,
+
+            filename = if (input$test_data == TRUE) {paste("testfile_lcms", sep="")} #FIXME: use a variable for testfile name!
+            else{
+              paste("lcms_injection",
+                    tools::file_path_sans_ext(input$upload$name),
+                    sep="_")}
+
+          )
+        )
+      })
+
+    })
 
     module_message(ns, "info", "updating parameter table")
     if (is.null(values$data) || nrow(values$data) == 0) {
@@ -761,6 +806,15 @@ module_isoxl_lcms_ui <- function(id) {
     # UI: LCMS  Main Panel ------------------------------------------
 
   mainPanel(
+
+    box(
+      title = "Overview of Results",
+      width = "auto" ,
+      height = "auto",
+      status = "primary",
+      solidHeader = T,
+      withSpinner(plotlyOutput(ns("plot.overview")))
+    ),
 
 
     width = 9,
