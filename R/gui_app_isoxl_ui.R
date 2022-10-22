@@ -134,7 +134,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         ),
 
-        # UI: LCMS Analysis ----------------------------------------------
+        # UI: CSIA LC/MS Analysis ----------------------------------------------
 
         tabItem(
           tabName = "csia",
