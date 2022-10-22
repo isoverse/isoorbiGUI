@@ -288,17 +288,21 @@ module_isoxl_csia_server <- function(input, output, session) {
                                             value = c(minTime, maxTime)
       )
 
+      #Compound 2
+
+      comp2 <- ifelse( length(levels(values$data$compound)) > 1, levels(values$data$compound)[2], levels(values$data$compound)[1] )
+
       updateSelectInput(
         inputId = "compound.sel2",
-        choices = levels(values$data$compound),
-        selected = levels(values$data$compound)[2]
+        choices = levels(values$data$compound), #drop first compound [-1]
+        selected = comp2
       )
 
       #calculate timerange2
-      peakTime <- values$data %>% filter(compound == levels(values$data$compound)[2]) %>% #FIXME
+      peakTime <- values$data %>% filter(compound == comp2) %>% #FIXME
         filter(ions.incremental > 0.1* max(ions.incremental))
-      minTime <- NA
-      maxTime <- NA
+      minTime <- 0
+      maxTime <- 0
       minTime <- min(peakTime$time.min)
       maxTime <- max(peakTime$time.min)
 
@@ -390,10 +394,10 @@ module_isoxl_csia_server <- function(input, output, session) {
     #Required inputs
     iv$add_rule("filename.sel", shinyvalidate::sv_required())
     iv$add_rule("compound.sel1", shinyvalidate::sv_required())
-    iv$add_rule("compound.sel2", shinyvalidate::sv_required())
+    #iv$add_rule("compound.sel2", shinyvalidate::sv_required())
     iv$add_rule("base_peak", shinyvalidate::sv_required())
     iv$add_rule("timerange1", shinyvalidate::sv_required())
-    iv$add_rule("timerange2", shinyvalidate::sv_required())
+    #iv$add_rule("timerange2", shinyvalidate::sv_required())
     #timerange1 input requires special attention
 
     iv$add_rule("segments", shinyvalidate::sv_required())
