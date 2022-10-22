@@ -60,10 +60,10 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
           paste("Version", as.character(utils::packageVersion("isoorbiGUI"))), #get isoorbiGUI package version
           href = "https://github.com/isoverse/isoorbiGUI", target = "_blank"),
           align = "center"),
+        menuItem("Direct Infusion", tabName = "single", icon = icon("syringe")),
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
         menuItem("Autosampler", tabName = "flow", icon = icon("vials")), #icon = icon("braille")
         menuItem("CSIA", tabName = "csia", icon = icon("mound")), #icon("water")
-        menuItem("Direct Infusion", tabName = "single", icon = icon("syringe")),
         menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
