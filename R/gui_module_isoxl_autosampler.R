@@ -249,10 +249,10 @@ module_isoxl_flow_server <- function(input, output, session) {
                                                   type="error",
                                                   duration=20)
 
-    if (input$timerange[1] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",
+    if (input$timerange[1] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",
                                                                                type="error",
                                                                                duration=20) #give a bit leeway
-    if (input$timerange[2] > max(values$data$time.min) +0.01) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",
+    if (input$timerange[2] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",
                                                                                type="error",
                                                                                duration=20) #give a bit leeway
 
@@ -264,8 +264,8 @@ module_isoxl_flow_server <- function(input, output, session) {
     req(input$timerange[2] > input$timerange[1])
     req(input$timerange[1] >= 0)
     req(input$timerange[2] > 0)
-    req(input$timerange[2] <= max(values$data$time.min)+0.01) #give a bit leeway
-    req(input$timerange[1] <= max(values$data$time.min)+0.01) #give a bit leeway; ~ redundant
+    req(input$timerange[2] <= max(values$data$time.min)+0.05) #give a bit leeway
+    req(input$timerange[1] <= max(values$data$time.min)+0.05) #give a bit leeway; ~ redundant
     req((input$timerange[2] - input$timerange[1]) > 0.5)
 
 

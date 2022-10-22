@@ -35,6 +35,7 @@ Imports:
     methods,
     openxlsx,
     plotly,
+    plyr,
     RColorBrewer,
     readr,
     rlang,
