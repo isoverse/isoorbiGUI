@@ -1,36 +1,36 @@
 # test ----
-# test the LCMS injection analysis module as a standalone app
-# test the LCMS module as a standalone app
-#' @title test_module_isoxl_lcms
+# test the CSIA injection analysis module as a standalone app
+# test the CSIA module as a standalone app
+#' @title test_module_isoxl_csia
 #' @description ...
 #' @param port ...
 #' @return ...
 #' @export
-test_module_isoxl_lcms <- function(port = 5000) {
+test_module_isoxl_csia <- function(port = 5000) {
   app <-
     shinyApp(
       ui = fluidPage(
         shinyjs::useShinyjs(),
-        h1("LCMS Module Test"),
-        module_isoxl_lcms_ui(id = "lcms")
+        h1("CSIA Module Test"),
+        module_isoxl_csia_ui(id = "csia")
       ),
       server = function(input, output) {
-        lcms <-
-          callModule(module_isoxl_lcms_server, id = "lcms")
+        csia <-
+          callModule(module_isoxl_csia_server, id = "csia")
       }
     )
   runApp(app, display.mode = "normal", port = 5000)
 }
 
 # server ----
-#' @title module_isoxl_lcms_server
+#' @title module_isoxl_csia_server
 #' @description ...
 #' @param input ...
 #' @param output ...
 #' @param session ...
 #' @return ...
 #' @export
-module_isoxl_lcms_server <- function(input, output, session) {
+module_isoxl_csia_server <- function(input, output, session) {
 
 # namespace
   ns <- session$ns
@@ -49,7 +49,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
   observeEvent(req(nrow(values$data) != 0), {
 
-    # Plot output: LCMS Analysis--------------------------------------------------------
+    # Plot output: CSIA Analysis--------------------------------------------------------
 
     output$plot.overview <- renderPlotly({
 
@@ -65,6 +65,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
             scale_color_brewer(palette = "Dark2") + #temp: could be segments... for x axis
 
             xlab("Time [min]") +
+            ylab("Ions") +
 
             facet_grid(isotopocule~compound, scales = "free_y") +
 
@@ -101,11 +102,11 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
             #FIXME: use a variable for testfile name!
             filename = if (input$test_data == TRUE) {
-              paste("testfile_lcms", sep = "")
+              paste("testfile_csia", sep = "")
             }
 
             else{
-              paste("lcms_injection",
+              paste("csia_injection",
                     tools::file_path_sans_ext(input$upload$name),
                     sep = "_")
             }
@@ -133,8 +134,8 @@ module_isoxl_lcms_server <- function(input, output, session) {
     values$data <- NULL
 
     #reset the outputs
-    output$mytable.lcms <- NULL
-    output$summary.lcms <- NULL
+    output$mytable.csia <- NULL
+    output$summary.csia <- NULL
     output$plot.overview <- NULL
     output$plot <- NULL
 
@@ -142,7 +143,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
 
 
-      values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_lcms.isox", package="isoorbiGUI"))
+      values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_csia.isox", package="isoorbiGUI"))
 
 
 
@@ -152,7 +153,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
       output$download_test_data <- downloadHandler(
         filename = function() {
-          "testfile_lcms.isox" #FIXME: provide name as a variable
+          "testfile_csia.isox" #FIXME: provide name as a variable
         },
         content = function(file) {
           write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
@@ -214,7 +215,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
       # try to read the test file
       tryCatch(
 
-        values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_lcms.isox", package="isoorbiGUI"))
+        values$data <-isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_csia.isox", package="isoorbiGUI"))
 
       )
 
@@ -242,6 +243,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
       updateSelectInput(inputId = "filename.sel", choices = c())
+      updateSelectInput(inputId = "compound.sel", choices = c())
       updateSelectInput(inputId = "base_peak", choices = c())
       shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
 
@@ -260,6 +262,12 @@ module_isoxl_lcms_server <- function(input, output, session) {
       )
 
       updateSelectInput(
+        inputId = "compound.sel",
+        choices = levels(values$data$compound),
+        selected = values$data$compound
+      )
+
+      updateSelectInput(
         inputId = "base_peak",
         choices = levels(values$data$isotopocule),
         selected = values$data$isotopocule[1]
@@ -267,7 +275,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min))
+                                            value = 0:floor(max(values$data$time.min))
                                             # Fix: How to avoid negative numbers?
                                             # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
       )
@@ -354,6 +362,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
     #Required inputs
     iv$add_rule("filename.sel", shinyvalidate::sv_required())
+    iv$add_rule("compound.sel", shinyvalidate::sv_required())
     iv$add_rule("base_peak", shinyvalidate::sv_required())
     iv$add_rule("timerange", shinyvalidate::sv_required())
     #timerange input requires special attention
@@ -412,6 +421,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
       ns, "info",
       "Processing data with selected parameters:",
       "\n - files selected: ", paste(input$filename.sel %then% "", collapse = ", "),
+      "\n - compounds selected: ", paste(input$compound.sel %then% "", collapse = ", "),
       "\n - basepeak: ", input$base_peak %then% "",
       "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
       "\n - segments: ",
@@ -421,33 +431,35 @@ module_isoxl_lcms_server <- function(input, output, session) {
       "\n - ratio method: ", input$ratio.method %then% "" #)#edit
     )
 
-##### Data: LCMS ---------------------------------------------------
+##### Data: CSIA ---------------------------------------------------
 
 
-    inputs.lcms <-
+    inputs.csia <-
 
 
-      #req(input$INPUT_LCMS_Basepeak) #temp
+      #req(input$INPUT_CSIA_Basepeak) #temp
 
       data.frame(
         parameter = c(
           "IsoXL Version",
-          "INPUT_LCMS_Filename",
-          "INPUT_LCMS_Basepeak",
-          "INPUT_LCMS_timerange[1]",
-          "INPUT_LCMS_timerange[2]" ,
+          "INPUT_CSIA_Filename",
+          "INPUT_CSIA_Compound",
+          "INPUT_CSIA_Basepeak",
+          "INPUT_CSIA_timerange[1]",
+          "INPUT_CSIA_timerange[2]" ,
           "Segments",
-          "INPUT_LCMS_Rare",
-          "INPUT_LCMS_TICxIT",
-          "INPUT_LCMS_RatioMethod"
+          "INPUT_CSIA_Rare",
+          "INPUT_CSIA_TICxIT",
+          "INPUT_CSIA_RatioMethod"
         ),
-        #,"INPUT_LCMS_IONS"),
+        #,"INPUT_CSIA_IONS"),
 
 
         value = c(
           isoXL.version,
           #paste(input$filename.sel, sep="", collapse=""), #FIX
           input$filename.sel[1],
+          input$compound.sel[1],
           input$base_peak,
           input$timerange[1],
           input$timerange[2],
@@ -456,7 +468,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
           input$extreme,
           input$ratio.method
         )
-        #   ,input$INPUT_LCMS_IONS)
+        #   ,input$INPUT_CSIA_IONS)
 
       )
 
@@ -465,8 +477,9 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
     # FIXME: before IsoXL I had a more sophisticated procedure to find the sample vs solvent. Implement this going forward?
 
-    data.lcms_filtered <-   values$data %>%
+    data.csia_filtered <-   values$data %>%
       dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
+      dplyr::filter(compound %in% input$compound.sel) %>%
       na.omit() %>%
       dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
       remove.satellitePeaks() %>%
@@ -479,7 +492,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
     #SEGMENTATION
     if (input$segments > 1) {
 
-      data.lcms_filtered <- data.lcms_filtered            %>%
+      data.csia_filtered <- data.csia_filtered            %>%
         dplyr::mutate(filename=as.factor(paste(filename, segment, sep="_")))
 
     }
@@ -487,13 +500,13 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
 
 
-    # Table output: lcms Analysis show rows of isox file------------------------------------------------
+    # Table output: csia Analysis show rows of isox file------------------------------------------------
 
 
-    output$mytable.lcms = DT::renderDataTable({
+    output$mytable.csia = DT::renderDataTable({
 
       datatable(
-        data.lcms_filtered %>% ungroup() %>% mutate_if(is.double, round, digits = 2),
+        data.csia_filtered %>% ungroup() %>% mutate_if(is.double, round, digits = 2),
         rownames = FALSE ,
         extensions = c('Buttons', 'ColReorder'),
         options = list(
@@ -504,12 +517,12 @@ module_isoxl_lcms_server <- function(input, output, session) {
           buttons =
             list('colvis', 'copy',   list(
               extend = 'excel',
-              filename = 'IsoXL_lcmsInjection_isox'
+              filename = 'IsoXL_csiaInjection_isox'
             ), list(
               extend = 'pdf',
               pageSize = 'A4',
               orientation = 'landscape',
-              filename = 'IsoXL_LCMS_isox'
+              filename = 'IsoXL_CSIA_isox'
             )),
           colReorder = TRUE #columns can be reordered
         )
@@ -517,19 +530,19 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
     })
 
-    # LCMS Analysis: Assign base peak --------------------------------------------
+    # CSIA Analysis: Assign base peak --------------------------------------------
 
 
-    data.lcms_basepeak <-isoorbi::orbi_define_basepeak(dataset = data.lcms_filtered, basepeak_def = input$base_peak) #confirm that grouping is correct; Move function to common core?
+    data.csia_basepeak <-isoorbi::orbi_define_basepeak(dataset = data.csia_filtered, basepeak_def = input$base_peak) #confirm that grouping is correct; Move function to common core?
 
     #needs validation; e.g. is base peak present in data?
 
 
-    # LCMS Analysis: Calculate output table for results file ---------------
+    # CSIA Analysis: Calculate output table for results file ---------------
 
 
 
-    data.output <-isoorbi::orbi_summarize_results(dataset = data.lcms_basepeak, ratio_method =  input$ratio.method)
+    data.output <-isoorbi::orbi_summarize_results(dataset = data.csia_basepeak, ratio_method =  input$ratio.method)
 
     data.output.renamed <- data.output  %>% rename(
       `Filename` = filename,
@@ -560,7 +573,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
         Scans
       )
 
-    # data.lcms_output.renamed <- data.lcms_output %>% as_tibble() %>% dplyr::rename(
+    # data.csia_output.renamed <- data.csia_output %>% as_tibble() %>% dplyr::rename(
     #   `Filename` = filename,
     #   #`Sample` = sample_name,
     #   `BasePeak` = basepeak,
@@ -577,10 +590,10 @@ module_isoxl_lcms_server <- function(input, output, session) {
     #          `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
 
 
-    # Table output: LCMS Analysis, summary statistics ----------------------------
+    # Table output: CSIA Analysis, summary statistics ----------------------------
 
 
-    output$summary.lcms <- DT::renderDataTable({
+    output$summary.csia <- DT::renderDataTable({
 
       datatable( data.output.renamed, rownames= FALSE ,
                  extensions = c('Buttons','ColReorder'),
@@ -595,12 +608,12 @@ module_isoxl_lcms_server <- function(input, output, session) {
                    buttons =
                      list('colvis', 'copy',  list(
                        extend = 'excel',
-                       filename = 'IsoXL_lcmsInjection_results'
+                       filename = 'IsoXL_csiaInjection_results'
                      ), list(
                        extend = 'pdf',
                        pageSize = 'A4',
                        orientation = 'landscape',
-                       filename = 'IsoXL_lcmsInjection_results'
+                       filename = 'IsoXL_csiaInjection_results'
                      )),
                    colReorder = TRUE #columns can be reordered
                  )
@@ -608,7 +621,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
     })
 
-# Plot output: lcms Analysis--------------------------------------------------------
+# Plot output: csia Analysis--------------------------------------------------------
 
       output$plot <- renderPlotly({
 
@@ -619,6 +632,7 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
           ggplot(data = data.output, aes(x = filename, y = ratio, color = isotopocule)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
             xlab("Filename") +
+            ylab("Ratio") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
 
@@ -651,9 +665,9 @@ module_isoxl_lcms_server <- function(input, output, session) {
               height = 600,
               scale = 4,
 
-              filename = if (input$test_data == TRUE) {paste("testfile_lcms", sep="")} #FIXME: use a variable for testfile name!
+              filename = if (input$test_data == TRUE) {paste("testfile_csia", sep="")} #FIXME: use a variable for testfile name!
               else{
-                paste("lcms_injection",
+                paste("csia_injection",
                       tools::file_path_sans_ext(input$upload$name),
                       sep="_")}
 
@@ -663,9 +677,9 @@ module_isoxl_lcms_server <- function(input, output, session) {
 
       })
 
-# lcms analysis: Make Excel file ---------------------------------------------
+# csia analysis: Make Excel file ---------------------------------------------
 
-data_lcms.xls <- make.xls(df.stat = data.output, params = inputs.lcms) #FIX
+data_csia.xls <- make.xls(df.stat = data.output, params = inputs.csia) #FIX
 
 
 
@@ -677,7 +691,7 @@ data_lcms.xls <- make.xls(df.stat = data.output, params = inputs.lcms) #FIX
     output$download_xlsx <- downloadHandler(
       filename = function() {
         if (input$test_data == TRUE) {
-          paste("testfile_lcms", "_IsoXL.xlsx", sep = "")
+          paste("testfile_csia", "_IsoXL.xlsx", sep = "")
         } #FIXME: use a variable for testfile name!
         else{
           paste(tools::file_path_sans_ext(input$upload$name),
@@ -686,7 +700,7 @@ data_lcms.xls <- make.xls(df.stat = data.output, params = inputs.lcms) #FIX
         }
       },
       content = function(file) {
-        saveWorkbook(data_lcms.xls, file)
+        saveWorkbook(data_csia.xls, file)
       }
     )
 
@@ -701,12 +715,12 @@ data_lcms.xls <- make.xls(df.stat = data.output, params = inputs.lcms) #FIX
 
 
 # user interface ----
-#' @title module_isoxl_lcms_ui
+#' @title module_isoxl_csia_ui
 #' @description ...
 #' @param id ...
 #' @return ...
 #' @export
-module_isoxl_lcms_ui <- function(id) {
+module_isoxl_csia_ui <- function(id) {
 
 
   # namespace
@@ -771,11 +785,18 @@ module_isoxl_lcms_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h5("Define lcms Injection Analysis:"),
+        h5("Define csia Injection Analysis:"),
 
         selectInput(
           inputId = ns("filename.sel"),
           label = "File",
+          c(),
+          multiple = TRUE
+        ),
+
+        selectInput(
+          inputId = ns("compound.sel"),
+          label = "Compound",
           c(),
           multiple = TRUE
         ),
@@ -838,7 +859,7 @@ module_isoxl_lcms_ui <- function(id) {
 
     ),
 
-    # UI: LCMS  Main Panel ------------------------------------------
+    # UI: CSIA  Main Panel ------------------------------------------
 
   mainPanel(
 
@@ -885,7 +906,7 @@ module_isoxl_lcms_ui <- function(id) {
         width = "auto" ,
         status = "primary",
         solidHeader = T,
-        DT::dataTableOutput(ns("summary.lcms"))
+        DT::dataTableOutput(ns("summary.csia"))
       ),
 
       hr(),
@@ -896,7 +917,7 @@ module_isoxl_lcms_ui <- function(id) {
         width = "auto" ,
         status = "primary",
         solidHeader = T,
-        DT::dataTableOutput(ns("mytable.lcms"))
+        DT::dataTableOutput(ns("mytable.csia"))
       )
     )
   )
