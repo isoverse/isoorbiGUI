@@ -23,6 +23,7 @@ orbitrap_reports_server <- function(local) {
       folder_isox_files = c()
     )
 
+
     # close app
     observeEvent(input$close, {
       shinyjs::runjs("window.close();")
