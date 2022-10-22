@@ -58,8 +58,8 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
           href = "https://github.com/isoverse/isoorbiGUI", target = "_blank"),
           align = "center"),
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
-        menuItem("Autosampler", tabName = "flow", icon = icon("braille")),
-        menuItem("CSIA", tabName = "csia", icon = icon("water")),
+        menuItem("Autosampler", tabName = "flow", icon = icon("vials")), #icon = icon("braille")
+        menuItem("CSIA", tabName = "csia", icon = icon("mound")), #icon("water")
         menuItem("Direct Infusion", tabName = "single", icon = icon("syringe")),
         menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
@@ -119,7 +119,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         tabItem(
           tabName = "dual",
-          h4(icon("grip-lines"), "Dual Inlet (two syringes)"),
+          h4(icon("grip-lines"), "Dual Inlet (using two syringes)"),
           module_isoxl_dual_inlet_ui(id = "dual_inlet")
         ),
 
@@ -128,7 +128,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "flow",
 
-          h4(icon("braille"), "Autosampler (flow injections)"),
+          h4(icon("vials"), "Autosampler-assisted flow injections"), #icon("braille")
 
           module_isoxl_flow_ui(id = "flow")
 
@@ -139,7 +139,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "csia",
 
-          h4(icon("water"), "CSIA"),
+          h4(icon("mound"), "Compound-Specific LC/MS Analysis"),
 
           module_isoxl_csia_ui(id = "csia")
 
@@ -151,7 +151,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         tabItem(
           tabName = "single",
 
-          h4(icon("syringe"), "Direct Infusion (single syringe)"), #add blinking:  fa-beat-fade
+          h4(icon("syringe"), "Direct Infusion (using one syringe)"), #add blinking:  fa-beat-fade
 
           module_isoxl_single_ui(id = "single")
         ),

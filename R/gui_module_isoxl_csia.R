@@ -785,7 +785,7 @@ module_isoxl_csia_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        h5("Define csia Injection Analysis:"),
+        h5("Define Compound-Specific LC/MS Analysis:"),
 
         selectInput(
           inputId = ns("filename.sel"),
