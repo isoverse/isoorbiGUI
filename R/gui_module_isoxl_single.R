@@ -207,8 +207,8 @@ module_isoxl_single_server <- function(input, output, session) {
 
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min))
-      # Fix: How to avoid negative numbers?
+                                            value = c(min(values$data$time.min), max(values$data$time.min))
+                                            # Fix: How to avoid negative numbers?
       # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
       )
 

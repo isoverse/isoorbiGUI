@@ -273,9 +273,18 @@ module_isoxl_csia_server <- function(input, output, session) {
         selected = values$data$isotopocule[1]
       )
 
+      #calculate timerange
+
+      ionMax <- max(values$data$ions.incremental)
+      peakTime <- values$data %>% filter(ions.incremental > 0.05* max(ions.incremental))
+      minTime <- min(peakTime$time.min)
+      maxTime <- max(peakTime$time.min)
+
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:floor(max(values$data$time.min))
+                                            #value = 0:floor(max(values$data$time.min))
+                                            value = c(minTime, maxTime)
+
                                             # Fix: How to avoid negative numbers?
                                             # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
       )
@@ -803,7 +812,7 @@ module_isoxl_csia_ui <- function(id) {
 
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0),
+        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0, step=0.1),
         tags$hr(style = "border-color: grey;"),
 
         h5("Processing options:"),

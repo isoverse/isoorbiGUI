@@ -192,7 +192,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min))
+                                            value = c(min(values$data$time.min), max(values$data$time.min))
                                             # Fix: How to avoid negative numbers?
                                             # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
       )
@@ -702,7 +702,7 @@ module_isoxl_flow_ui <- function(id) {
 
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0),
+        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0 , step=0.5),
         tags$hr(style = "border-color: grey;"),
 
         h5("Processing options:"),

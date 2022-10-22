@@ -198,7 +198,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
       shinyWidgets::updateNumericRangeInput(session,
                                             inputId = "timerange",
-                                            value = 0:ceiling(max(values$data$time.min))
+                                            value = c(min(values$data$time.min), max(values$data$time.min))
                                             )
 
       updateNumericInput(
@@ -469,7 +469,7 @@ module_isoxl_shotnoise_ui <- function(id) {
         #FIXME: negative values can still be typed into the input
         #FIXME: what if there is an empty input for timerange
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min = 0), #FIXME: validate that timerange[2] > timerange[1]
+        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min = 0, step=1), #FIXME: validate that timerange[2] > timerange[1]
         tags$hr(style = "border-color: grey;"),
 
         #currently not used in data processing!
