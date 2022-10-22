@@ -9,7 +9,7 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  shiny::addResourcePath('www',
-                         system.file('www',
-                                     package = 'isoorbiGUI'))
+  shiny::addResourcePath('figures',
+                         system.file('help/figures',
+                                     package = 'isoorbi'))
 }
