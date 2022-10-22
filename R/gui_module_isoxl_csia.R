@@ -243,9 +243,13 @@ module_isoxl_csia_server <- function(input, output, session) {
       shinyjs::hide("main-plot")
       shinyjs::hide("main-rest")
       updateSelectInput(inputId = "filename.sel", choices = c())
-      updateSelectInput(inputId = "compound.sel", choices = c())
       updateSelectInput(inputId = "base_peak", choices = c())
-      shinyWidgets::updateNumericRangeInput(session, inputId = "timerange", value = c())
+
+      updateSelectInput(inputId = "compound.sel1", choices = c())
+      shinyWidgets::updateNumericRangeInput(session, inputId = "timerange1", value = c())
+
+      updateSelectInput(inputId = "compound.sel2", choices = c())
+      shinyWidgets::updateNumericRangeInput(session, inputId = "timerange2", value = c())
 
       updateNumericInput(inputId = "segments", value = c())
       updateNumericInput(inputId = "rare", value = c())
@@ -262,31 +266,45 @@ module_isoxl_csia_server <- function(input, output, session) {
       )
 
       updateSelectInput(
-        inputId = "compound.sel",
-        choices = levels(values$data$compound),
-        selected = values$data$compound
-      )
-
-      updateSelectInput(
         inputId = "base_peak",
         choices = levels(values$data$isotopocule),
         selected = values$data$isotopocule[1]
       )
 
-      #calculate timerange
+      updateSelectInput(
+        inputId = "compound.sel1",
+        choices = levels(values$data$compound),
+        selected = levels(values$data$compound)[1]
+      )
 
-      ionMax <- max(values$data$ions.incremental)
-      peakTime <- values$data %>% filter(ions.incremental > 0.05* max(ions.incremental))
+      #calculate timerange1
+      peakTime <- values$data %>% filter(compound == values$data$compound[1]) %>% #FIXME
+                                  filter(ions.incremental > 0.1* max(ions.incremental))
       minTime <- min(peakTime$time.min)
       maxTime <- max(peakTime$time.min)
 
       shinyWidgets::updateNumericRangeInput(session,
-                                            inputId = "timerange",
-                                            #value = 0:floor(max(values$data$time.min))
+                                            inputId = "timerange1",
                                             value = c(minTime, maxTime)
+      )
 
-                                            # Fix: How to avoid negative numbers?
-                                            # https://stackoverflow.com/questions/42164171/protect-shiny-numericinput-from-negative-numbers
+      updateSelectInput(
+        inputId = "compound.sel2",
+        choices = levels(values$data$compound),
+        selected = levels(values$data$compound)[2]
+      )
+
+      #calculate timerange2
+      peakTime <- values$data %>% filter(compound == levels(values$data$compound)[2]) %>% #FIXME
+        filter(ions.incremental > 0.1* max(ions.incremental))
+      minTime <- NA
+      maxTime <- NA
+      minTime <- min(peakTime$time.min)
+      maxTime <- max(peakTime$time.min)
+
+      shinyWidgets::updateNumericRangeInput(session,
+                                            inputId = "timerange2",
+                                            value = c(minTime, maxTime)
       )
 
 
@@ -331,34 +349,34 @@ module_isoxl_csia_server <- function(input, output, session) {
     shinyjs::hide("main-rest")
 
     # special safety checks for shinywidget that does not work with shinyvalidate
-    if (input$timerange[2] <= input$timerange[1]) showNotification("Input Time [min]: First value has to be smaller than second value",
+    if (input$timerange1[2] <= input$timerange1[1]) showNotification("Input Time [min]: First value has to be smaller than second value",
                                                                    type="error",
                                                                    duration=20)
-    if (input$timerange[1] < 0) showNotification("Input Time [min]: Check first input value",
+    if (input$timerange1[1] < 0) showNotification("Input Time [min]: Check first input value",
                                                  type="error",
                                                  duration=20)
-    if (input$timerange[2] <= 0) showNotification("Input Time [min]: Check second input value",
+    if (input$timerange1[2] <= 0) showNotification("Input Time [min]: Check second input value",
                                                   type="error",
                                                   duration=20)
 
-    if (input$timerange[1] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",
+    if (input$timerange1[1] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",
                                                                                type="error",
                                                                                duration=20) #give a bit leeway
-    if (input$timerange[2] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",
+    if (input$timerange1[2] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",
                                                                                type="error",
                                                                                duration=20) #give a bit leeway
 
-    if ((input$timerange[2] - input$timerange[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",
+    if ((input$timerange1[2] - input$timerange1[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",
                                                                           type="error",
                                                                           duration=20)
 
 
-    req(input$timerange[2] > input$timerange[1])
-    req(input$timerange[1] >= 0)
-    req(input$timerange[2] > 0)
-    req(input$timerange[2] <= max(values$data$time.min)+0.05) #give a bit leeway
-    req(input$timerange[1] <= max(values$data$time.min)+0.05) #give a bit leeway; ~ redundant
-    req((input$timerange[2] - input$timerange[1]) > 0.5)
+    req(input$timerange1[2] > input$timerange1[1])
+    req(input$timerange1[1] >= 0)
+    req(input$timerange1[2] > 0)
+    req(input$timerange1[2] <= max(values$data$time.min)+0.05) #give a bit leeway
+    req(input$timerange1[1] <= max(values$data$time.min)+0.05) #give a bit leeway; ~ redundant
+    req((input$timerange1[2] - input$timerange1[1]) > 0.5)
 
 
 
@@ -371,10 +389,12 @@ module_isoxl_csia_server <- function(input, output, session) {
 
     #Required inputs
     iv$add_rule("filename.sel", shinyvalidate::sv_required())
-    iv$add_rule("compound.sel", shinyvalidate::sv_required())
+    iv$add_rule("compound.sel1", shinyvalidate::sv_required())
+    iv$add_rule("compound.sel2", shinyvalidate::sv_required())
     iv$add_rule("base_peak", shinyvalidate::sv_required())
-    iv$add_rule("timerange", shinyvalidate::sv_required())
-    #timerange input requires special attention
+    iv$add_rule("timerange1", shinyvalidate::sv_required())
+    iv$add_rule("timerange2", shinyvalidate::sv_required())
+    #timerange1 input requires special attention
 
     iv$add_rule("segments", shinyvalidate::sv_required())
 
@@ -430,9 +450,11 @@ module_isoxl_csia_server <- function(input, output, session) {
       ns, "info",
       "Processing data with selected parameters:",
       "\n - files selected: ", paste(input$filename.sel %then% "", collapse = ", "),
-      "\n - compounds selected: ", paste(input$compound.sel %then% "", collapse = ", "),
+      "\n - compound 1 selected: ", paste(input$compound.sel1 %then% "", collapse = ", "),
+      "\n - compound 2 selected: ", paste(input$compound.sel2 %then% "", collapse = ", "),
+
       "\n - basepeak: ", input$base_peak %then% "",
-      "\n - timerange: ", paste(input$timerange %then% "", collapse = " to "),
+      "\n - timerange1: ", paste(input$timerange1 %then% "", collapse = " to "),
       "\n - segments: ",
       input$segments %then% "",
       "\n - rare: ", input$rare %then% "",
@@ -452,10 +474,13 @@ module_isoxl_csia_server <- function(input, output, session) {
         parameter = c(
           "IsoXL Version",
           "INPUT_CSIA_Filename",
-          "INPUT_CSIA_Compound",
           "INPUT_CSIA_Basepeak",
-          "INPUT_CSIA_timerange[1]",
-          "INPUT_CSIA_timerange[2]" ,
+          "INPUT_CSIA_Compound1",
+          "INPUT_CSIA_timerange1[1]",
+          "INPUT_CSIA_timerange1[2]",
+          "INPUT_CSIA_Compound2",
+          "INPUT_CSIA_timerange2[1]",
+          "INPUT_CSIA_timerange2[2]",
           "Segments",
           "INPUT_CSIA_Rare",
           "INPUT_CSIA_TICxIT",
@@ -468,10 +493,13 @@ module_isoxl_csia_server <- function(input, output, session) {
           isoXL.version,
           #paste(input$filename.sel, sep="", collapse=""), #FIX
           input$filename.sel[1],
-          input$compound.sel[1],
           input$base_peak,
-          input$timerange[1],
-          input$timerange[2],
+          input$compound.sel1[1],
+          input$timerange1[1],
+          input$timerange1[2],
+          input$compound.sel2[1],
+          input$timerange2[1],
+          input$timerange2[2],
           input$segments,
           input$rare,
           input$extreme,
@@ -487,10 +515,14 @@ module_isoxl_csia_server <- function(input, output, session) {
     # FIXME: before IsoXL I had a more sophisticated procedure to find the sample vs solvent. Implement this going forward?
 
     data.csia_filtered <-   values$data %>%
-      dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
-      dplyr::filter(compound %in% input$compound.sel) %>%
+
+      dplyr::filter( (compound %in% input$compound.sel1 &
+                        (time.min>  input$timerange1[1] | time.min <  input$timerange1[2])) |
+                     (compound %in% input$compound.sel2 &
+                        (time.min>  input$timerange2[1] | time.min <  input$timerange2[2])) #CHECK
+                      ) %>%
       na.omit() %>%
-      dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
+      dplyr::filter(time.min>  input$timerange1[1], time.min <  input$timerange1[2]) %>%
       remove.satellitePeaks() %>%
       remove.rare(input = input) %>%
       remove.ticxit(input = input) %>%
@@ -803,16 +835,30 @@ module_isoxl_csia_ui <- function(id) {
           multiple = TRUE
         ),
 
-        selectInput(
-          inputId = ns("compound.sel"),
-          label = "Compound",
-          c(),
-          multiple = TRUE
-        ),
-
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
-        shinyWidgets::numericRangeInput(ns("timerange"), "Time [min]", value = c(), min=0, step=0.1),
+
+        selectInput(
+          inputId = ns("compound.sel1"),
+          label = "Compound 1",
+          c(),
+          multiple = FALSE
+        ),
+
+
+        shinyWidgets::numericRangeInput(ns("timerange1"), "Time [min]", value = c(), min=0, step=0.1),
+
+        selectInput(
+          inputId = ns("compound.sel2"),
+          label = "Compound 2",
+          c(),
+          multiple = FALSE
+        ),
+
+
+        shinyWidgets::numericRangeInput(ns("timerange2"), "Time [min]", value = c(), min=0, step=0.1),
+
+
         tags$hr(style = "border-color: grey;"),
 
         h5("Processing options:"),
