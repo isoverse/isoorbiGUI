@@ -8,7 +8,7 @@
 #' @param sidebar_width the width of the left-side navigation sidebar
 #' @return ...
 #' @export
-orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='www/logo.png', height=37 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
+orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='www/isoorbi-logo-round.png', height=35 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
 
 
   # orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.org/', tags$img(src='https://github.com/123caj/123caj.github.io/blob/main/isoorbi-logo-round.png?raw=true', height=37 ))), "IsoXL"), app_color = "blue", sidebar_width = NULL) {
@@ -114,7 +114,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
       #Favicon for browser tab
       # tags$head(tags$link(rel = "shortcut icon", href = "https://github.com/isoverse/isoverse.github.io/blob/master/images/isoverse_icon.png?raw=true")),
-      tags$head(tags$link(rel = "shortcut icon", href = "www/isoverse_icon.png")),
+      tags$head(tags$link(rel = "shortcut icon", href = "www/isoorbi-logo-round.png")),
 
       #div(class = "row",
 
