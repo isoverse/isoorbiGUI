@@ -113,7 +113,8 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
     dashboardBody(
 
       #Favicon for browser tab
-      tags$head(tags$link(rel = "shortcut icon", href = "https://github.com/isoverse/isoverse.github.io/blob/master/images/isoverse_icon.png?raw=true")),
+      # tags$head(tags$link(rel = "shortcut icon", href = "https://github.com/isoverse/isoverse.github.io/blob/master/images/isoverse_icon.png?raw=true")),
+      tags$head(tags$link(rel = "shortcut icon", href = "www/isoverse_icon.png")),
 
       #div(class = "row",
 
