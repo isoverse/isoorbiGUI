@@ -397,8 +397,8 @@ module_isoxl_csia_server <- function(input, output, session) {
     if (input$timerange1[1] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: First value exceeds data in uploaded isox files.",
                                                                                type="error",
                                                                                duration=20) #give a bit leeway
-    if (input$timerange1[2] > max(values$data$time.min) +0.05) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",
-                                                                               type="error",
+    if (input$timerange1[2] > (max(values$data$time.min) +0.05)) showNotification("Input Time [min]: Second value exceeds data in uploaded isox files.",
+                                                                               type="warning",
                                                                                duration=20) #give a bit leeway
 
     if ((input$timerange1[2] - input$timerange1[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",
@@ -409,7 +409,7 @@ module_isoxl_csia_server <- function(input, output, session) {
     req(input$timerange1[2] > input$timerange1[1])
     req(input$timerange1[1] >= 0)
     req(input$timerange1[2] > 0)
-    req(input$timerange1[2] <= max(values$data$time.min)+0.05) #give a bit leeway
+    #req(input$timerange1[2] <= max(values$data$time.min)+0.05) #give a bit leeway
     req(input$timerange1[1] <= max(values$data$time.min)+0.05) #give a bit leeway; ~ redundant
     req((input$timerange1[2] - input$timerange1[1]) > 0.5)
 
