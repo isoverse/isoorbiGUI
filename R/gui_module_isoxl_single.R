@@ -459,30 +459,30 @@ module_isoxl_single_server <- function(input, output, session) {
   message(colnames(data.output))
 
     data.output.renamed <- data.output  %>% dplyr::rename(
-      `Filename` = filename,
-      `Sample` = sample_name,
-      `BasePeak` = basepeak,
-      `Isotopocule` = isotopocule,
-      Compound = compound,
-        `SEM` = ratio_sem,
-      `SEM (permil)`= ratio_relative_sem_permil,
-       `Shot Noise (permil)` = shot_noise_permil,
-       `Minutes to 1E6 ions` = minutes_to_1e6_ions,
-       `Scans` = number_of_scans,
-       `Ratio` = ratio
+       Filename = "filename",
+       Sample = "sample_name",
+       BasePeak = "basepeak",
+       Isotopocule = "isotopocule",
+      Compound = "compound",
+        SEM = "ratio_sem",
+      `SEM (permil)`= "ratio_relative_sem_permil",
+       `Shot Noise (permil)` = "shot_noise_permil",
+       `Minutes to 1E6 ions` = "minutes_to_1e6_ions",
+        Scans  = "number_of_scans",
+        Ratio = "ratio"
 
     ) %>%
       select(
-        Filename,
-        Sample,
-        Compound,
-        Isotopocule,
-        Ratio,
-        `SEM`,
-        `SEM (permil)`,
-        `Shot Noise (permil)`,
-        `Minutes to 1E6 ions`,
-        Scans
+        "Filename",
+        "Sample",
+        "Compound",
+        "Isotopocule",
+        "Ratio",
+        "SEM",
+        "SEM (permil)",
+        "Shot Noise (permil)",
+        "Minutes to 1E6 ions",
+        "Scans"
       )
 
 
@@ -562,7 +562,9 @@ module_isoxl_single_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot2::ggplot(data = data.output, ggplot2::aes(x = shot_noise_permil, y = ratio_relative_sem_permil, color=isotopocule)) +
+          ggplot2::ggplot(data = data.output, ggplot2::aes(x = .data$shot_noise_permil,
+                                                           y = .data$ratio_relative_sem_permil,
+                                                           color = .data$isotopocule)) +
 
             ggplot2::scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
 

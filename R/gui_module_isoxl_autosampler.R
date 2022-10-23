@@ -398,14 +398,14 @@ module_isoxl_flow_server <- function(input, output, session) {
       remove.rare(input = input) %>%
       remove.ticxit(input = input) %>%
       group_by(filename) %>%
-      dplyr::mutate(segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
+      dplyr::mutate(segment = ceiling( (.data$scan.no -min(.data$scan.no)+1) / ((max(.data$scan.no) - min(.data$scan.no)+1)/input$segments ))) # FIXME: fix this!
 
 
     #SEGMENTATION
     if (input$segments > 1) {
 
       data.flow_filtered <- data.flow_filtered            %>%
-        dplyr::mutate(filename=as.factor(paste(filename, segment, sep="_")))
+        dplyr::mutate(filename=as.factor(paste(.data$filename, .data$segment, sep="_")))
 
     }
 
@@ -457,32 +457,32 @@ module_isoxl_flow_server <- function(input, output, session) {
     data.output <-isoorbi::orbi_summarize_results(dataset = data.flow_basepeak, ratio_method =  input$ratio.method)
 
     data.output.renamed <- data.output  %>% rename(
-      `Filename` = filename,
+       Filename = "filename",
      # `Sample` = sample_name,
-      `BasePeak` = basepeak,
-      `Isotopocule` = isotopocule,
-      Compound = compound,
-      `SEM` = ratio_sem,
-      `SEM (permil)` = ratio_relative_sem_permil,
-      `Shot Noise (permil)` = shot_noise_permil,
-      `Minutes to 1E6 ions` = minutes_to_1e6_ions,
-      `Scans` = number_of_scans,
-      `Ratio` = ratio#,
+       BasePeak = "basepeak",
+       Isotopocule = "isotopocule",
+       Compound = "compound",
+       SEM = "ratio_sem",
+      `SEM (permil)` = "ratio_relative_sem_permil",
+      `Shot Noise (permil)` = "shot_noise_permil",
+      `Minutes to 1E6 ions` = "minutes_to_1e6_ions",
+       Scans = "number_of_scans",
+       Ratio = "ratio" #,
       #`Block` = block
 
     ) %>%
       select(
-        Filename,
+        "Filename",
        # Sample,
        # Block,
-        Compound,
-        Isotopocule,
-        Ratio,
-        SEM,
-        `SEM (permil)`,
-        `Shot Noise (permil)`,
-        `Minutes to 1E6 ions`,
-        Scans
+        "Compound",
+        "Isotopocule",
+        "Ratio",
+         "SEM",
+        "SEM (permil)",
+        "Shot Noise (permil)",
+        "Minutes to 1E6 ions",
+        "Scans"
       )
 
     # data.flow_output.renamed <- data.flow_output %>% as_tibble() %>% dplyr::rename(
@@ -507,7 +507,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     output$summary.flow <- DT::renderDataTable({
 
-      datatable( data.output.renamed, rownames= FALSE ,
+      datatable( data.output.renamed, rownames = FALSE ,
                  extensions = c('Buttons','ColReorder'),
                  options = list(
                    # autoWidth = TRUE, #scroll bar to see enture table
@@ -542,14 +542,16 @@ module_isoxl_flow_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot(data = data.output, aes(x = filename, y = ratio, color = isotopocule)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+          ggplot(data = data.output, aes(x = .data$filename,
+                                         y = .data$ratio,
+                                         color = .data$isotopocule)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
             xlab("Filename") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
 
 
-            geom_errorbar(aes(ymin=(ratio-ratio_sem),
-                              ymax=(ratio+ratio_sem)),
+            geom_errorbar(aes(ymin=(.data$ratio - .data$ratio_sem),
+                              ymax=(.data$ratio + .data$ratio_sem)),
                           width=0.4,
                           size=0.3,
                           color="black",

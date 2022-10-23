@@ -445,32 +445,32 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       isoorbi::orbi_summarize_results(dataset = data.basepeak, ratio_method = input$ratio.method)
 
     data.output.renamed <- data.output  %>% rename(
-      `Filename` = filename,
-      `Sample` = sample_name,
-      `BasePeak` = basepeak,
-      `Isotopocule` = isotopocule,
-       Compound = compound,
-      `SEM` = ratio_sem,
-      `SEM (permil)` = ratio_relative_sem_permil,
-      `Shot Noise (permil)` = shot_noise_permil,
-      `Minutes to 1E6 ions` = minutes_to_1e6_ions,
-      `Scans` = number_of_scans,
-      `Ratio` = ratio,
-      `Block` = block
+       Filename = "filename",
+       Sample = "sample_name",
+       BasePeak = "basepeak",
+       Isotopocule  = "isotopocule",
+       Compound = "compound",
+       SEM = "ratio_sem",
+      `SEM (permil)` = "ratio_relative_sem_permil",
+      `Shot Noise (permil)` = "shot_noise_permil",
+      `Minutes to 1E6 ions` = "minutes_to_1e6_ions",
+       Scans = "number_of_scans",
+       Ratio = "ratio",
+       Block = "block"
 
     ) %>%
       select(
-        Filename,
-       Sample,
-        Block,
-        Compound,
-        Isotopocule,
-        Ratio,
-        SEM,
-        `SEM (permil)`,
-        `Shot Noise (permil)`,
-        `Minutes to 1E6 ions`,
-        Scans
+        "Filename",
+       "Sample",
+        "Block",
+        "Compound",
+        "Isotopocule",
+        "Ratio",
+        "SEM",
+        "SEM (permil)",
+        "Shot Noise (permil)",
+        "Minutes to 1E6 ions",
+        "Scans"
       )
 
 
@@ -547,15 +547,15 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
       isolate({
         plotly::ggplotly(
           ggplot(data = data.output, aes(
-            x = block, y = ratio, color = isotopocule
+            x = .data$block, y = .data$ratio, color = .data$isotopocule
           )) + scale_color_brewer(palette = "Dark2") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
 
             geom_errorbar(
               aes(
-                ymin = (ratio - ratio_sem),
-                ymax = (ratio + ratio_sem)
+                ymin = (.data$ratio - .data$ratio_sem),
+                ymax = (.data$ratio + .data$ratio_sem)
               ),
               width = 0.7,
               size = 0.3,
@@ -563,7 +563,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
               position = position_dodge(.9)
             )       +
             theme(legend.title= element_blank())+
-            geom_point(size = 3, shape = 10) + facet_wrap(~ filename, ncol = 1),
+            geom_point(size = 3, shape = 10) + facet_wrap(~ .data$filename, ncol = 1),
 
           # +
           #   scale_x_continuous(breaks=1:100), #temp
