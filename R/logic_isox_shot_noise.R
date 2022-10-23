@@ -15,7 +15,7 @@ assign_basepeak_shotnoise <- function(data, input) {
   df.out <- data %>%
     dplyr::filter(.data$isotopocule %in% c(input$base_peak, input$isotopocule)) %>% #cross check with core logic filter function
     droplevels() %>%
-    pivot_wider(names_from = isotopocule, values_from = ions.incremental) %>% na.omit() %>%
+    tidyr::pivot_wider(names_from = .data$isotopocule, values_from = .data$ions.incremental) %>% stats::na.omit() %>%
 
     rename(Basepeak.Ions = input$base_peak,
            isotopocule.Ions = input$isotopocule)%>%
@@ -59,7 +59,7 @@ calc_shotnoise <- function(dataset){
     df.out$rse[l] <- rse
   }
 
-  df.out <- df.out %>% na.omit() %>% dplyr::select(-shotnoise, -shotnoise.neff)
+  df.out <- df.out %>% stats::na.omit() %>% dplyr::select(-"shotnoise", -"shotnoise.neff")
 
   df.out <- df.out %>% tidyr::pivot_longer(-c("scans", "neff"), names_to="key", values_to="value") #FIXME: improve nomenclature of columns
 

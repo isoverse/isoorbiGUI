@@ -5,16 +5,16 @@
 #' @param dataset The file.tsv that is to be simplified
 #' @return Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopocule', 'ions.incremental', 'tic', 'it.ms'.
 #' @export
-iso_simplify_isox_file <- function(dataset) {
-  df.out <- dataset %>% dplyr::select(filename,
-                               scan.no,
-                               time.min,
-                               compound,
-                               isotopocule,
-                               ions.incremental,
-                               tic, #ok to keep always?
-                               it.ms) #ok to keep always?
-}
+# iso_simplify_isox_file <- function(dataset) {
+#   df.out <- dataset %>% dplyr::select(filename,
+#                                scan.no,
+#                                time.min,
+#                                compound,
+#                                isotopocule,
+#                                ions.incremental,
+#                                tic, #ok to keep always?
+#                                it.ms) #ok to keep always?
+# }
 
 #FIXME-LEIF: complete @param input
 #' @title remove.rare
@@ -23,27 +23,27 @@ iso_simplify_isox_file <- function(dataset) {
 #' @param input ...
 #' @return Returns dataframe with inconsistent isotopocules removed
 #' @export
-remove.rare <- function(data, input){ #temp check functions correctly in different tabs
-
-  # validate(
-  #   need(input$rare, 'Missing input input$rare'),
-  #   need(input$rare <=100, 'Check input input$rare is smaller than 100%')
-  # )
-
-  remove.df <- data %>%
-    dplyr::group_by(filename) %>%
-    dplyr::mutate(n.scans = max(scan.no) - min(scan.no)) %>% #FIXME: implement a more general solution here
-    dplyr::group_by(filename, compound, isotopocule) %>%
-    dplyr::mutate(i.scans = length(scan.no)) %>%
-    dplyr::filter(i.scans < input$rare/100 * n.scans) %>% # => update selection in GUI?, add message?
-    dplyr::select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
-
-
-  df <- anti_join(data, remove.df, by = c("filename", "scan.no", "time.min", "compound", "isotopocule", "ions.incremental", "tic", "it.ms")) #FIXME:More elegant/robust solution?
-
-  return(df)
-
-}
+# remove.rare <- function(data, input){ #temp check functions correctly in different tabs
+#
+#   # validate(
+#   #   need(input$rare, 'Missing input input$rare'),
+#   #   need(input$rare <=100, 'Check input input$rare is smaller than 100%')
+#   # )
+#
+#   remove.df <- data %>%
+#     dplyr::group_by(filename) %>%
+#     dplyr::mutate(n.scans = max(scan.no) - min(scan.no)) %>% #FIXME: implement a more general solution here
+#     dplyr::group_by(filename, compound, isotopocule) %>%
+#     dplyr::mutate(i.scans = length(scan.no)) %>%
+#     dplyr::filter(i.scans < input$rare/100 * n.scans) %>% # => update selection in GUI?, add message?
+#     dplyr::select(-n.scans, -i.scans) %>% droplevels() %>% as.data.frame()
+#
+#
+#   df <- anti_join(data, remove.df, by = c("filename", "scan.no", "time.min", "compound", "isotopocule", "ions.incremental", "tic", "it.ms")) #FIXME:More elegant/robust solution?
+#
+#   return(df)
+#
+# }
 
 #FIXME-LEIF: complete and confirm
 #' @title remove.satellitePeaks
@@ -51,15 +51,15 @@ remove.rare <- function(data, input){ #temp check functions correctly in differe
 #' @param df Simplified IsoX file to have satellites removed from
 #' @return IsoX file with satellites removed
 #' @export
-remove.satellitePeaks <- function(df){
-
-  df <- df %>%
-    dplyr::group_by(filename, compound, scan.no, isotopocule) %>%
-    dplyr::filter(ions.incremental == max(ions.incremental))
-
-  return(df)
-
-}
+# remove.satellitePeaks <- function(df){
+#
+#   df <- df %>%
+#     dplyr::group_by(filename, compound, scan.no, isotopocule) %>%
+#     dplyr::filter(ions.incremental == max(ions.incremental))
+#
+#   return(df)
+#
+#}
 
 #FIXME-LEIF: complete and confirm
 #' @title Remove.ticxit
@@ -68,20 +68,20 @@ remove.satellitePeaks <- function(df){
 #' @param input ???
 #' @return Returns filtered IsoXfile based of input value
 #' @export
-remove.ticxit <- function(df, input){
-
-  # validate(
-  #   need(input$extreme, 'Missing input input$extreme'),
-  #   need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
-  # )
-
-
-  df <- df %>% dplyr::group_by(filename) %>% dplyr::mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files
-    dplyr::filter( TICxIT > quantile(TICxIT, input$extreme/100) & TICxIT < quantile(TICxIT, 1- input$extreme/100)) %>%
-    dplyr::select(-TICxIT)
-
-  return(df)
-}
+# remove.ticxit <- function(df, input){
+#
+#   # validate(
+#   #   need(input$extreme, 'Missing input input$extreme'),
+#   #   need(input$extreme <=10, 'Check input input$extreme is smaller than 10%')
+#   # )
+#
+#
+#   df <- df %>% dplyr::group_by(filename) %>% dplyr::mutate(TICxIT = tic * it.ms) %>% #edit 28-Feb-2022 enable multiple dual inlet files
+#     dplyr::filter( TICxIT > quantile(TICxIT, input$extreme/100) & TICxIT < quantile(TICxIT, 1- input$extreme/100)) %>%
+#     dplyr::select(-TICxIT)
+#
+#   return(df)
+#}
 
 #FIXME-LEIF: complete and confirm
 #' @title iso_filter_isox_file
@@ -93,23 +93,23 @@ remove.ticxit <- function(df, input){
 iso_filter_isox_file <- function(dataset, input) {
   df.out <- dataset %>%
     # isotopocule filter
-    dplyr::filter(isotopocule %in% c(input$isotopocule,input$base_peak)) %>% #maybe this line should be moved out of the core function!
+    dplyr::filter(.data$isotopocule %in% c(input$isotopocule,input$base_peak)) %>% #maybe this line should be moved out of the core function!
     # file name filter
     {
       if (!"all" %in% input$filename)
-        dplyr::filter(., filename %in% input$filename)
+        dplyr::filter(., .data$filename %in% input$filename)
       else
         .
     } %>%
     # compounds filter
     {
       if (!"all" %in% input$compound)
-        dplyr::filter(., compound %in% input$compound)
+        dplyr::filter(., .data$compound %in% input$compound)
       else
         .
     } %>%
     # timerange filter
-    dplyr::filter(time.min >= input$timerange[1], time.min <= input$timerange[2])
+    dplyr::filter(.data$time.min >= input$timerange[1], .data$time.min <= input$timerange[2])
 
 
   return(df.out)
@@ -200,7 +200,7 @@ calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "
       if(ratio.method == "sum") {o <- sum(peak1)/sum(peak2); o } else{
         if(ratio.method == "geometric.mean") {o <- gmean(peak1/peak2); o } else{
           if(ratio.method == "weighted.vector.sum") {o <- weighted.vector.sum(peak1, peak2); o } else{
-            if(ratio.method == "median") {o <- median(peak1/peak2); o } else{print("`ratio.method` has to be `mean`, `sum`, `median`, `geometric.mean`, `slope` or `weighted.vector.sum`")
+            if(ratio.method == "median") {o <- stats::median(peak1/peak2); o } else{print("`ratio.method` has to be `mean`, `sum`, `median`, `geometric.mean`, `slope` or `weighted.vector.sum`")
             }
           }}}}}
 

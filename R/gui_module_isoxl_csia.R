@@ -527,9 +527,12 @@ module_isoxl_csia_server <- function(input, output, session) {
                       ) %>%
       na.omit() %>%
       dplyr::filter(.data$time.min>  input$timerange1[1], .data$time.min <  input$timerange1[2]) %>%
-      remove.satellitePeaks() %>%
-      remove.rare(input = input) %>%
-      remove.ticxit(input = input) %>%
+      isoorbi::orbi_filter_satellite_peaks() %>%
+      isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
+      isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme)  %>%
+      # remove.satellitePeaks() %>%
+      # remove.rare(input = input) %>%
+      # remove.ticxit(input = input) %>%
       group_by(.data$filename) %>%
       dplyr::mutate(segment = ceiling( (.data$scan.no -min(.data$scan.no)+1) / ((max(.data$scan.no) - min(.data$scan.no)+1)/input$segments ))) # FIXME: fix this!
 

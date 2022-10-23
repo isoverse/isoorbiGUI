@@ -395,9 +395,12 @@ module_isoxl_single_server <- function(input, output, session) {
                                           na.omit() %>%
                                           dplyr::mutate(sample_name = input$sample) %>%
                                           dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
-                                          remove.satellitePeaks() %>%
-                                          remove.rare(input = input) %>%
-                                          remove.ticxit(input = input)%>%
+                                          isoorbi::orbi_filter_satellite_peaks() %>%
+                                          isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
+                                          isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme)  %>%
+                                          # remove.satellitePeaks() %>%
+                                          # remove.rare(input = input) %>%
+                                          # remove.ticxit(input = input)%>%
                                           group_by(filename)
     # %>%
     #                                       dplyr::mutate(Segment = ceiling(
