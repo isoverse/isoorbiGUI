@@ -59,7 +59,7 @@ module_isoxl_csia_server <- function(input, output, session) {
         plotly::ggplotly(
           ggplot(
             data = values$data,
-            aes(x = time.min, y = ions.incremental, color = filename)
+            aes(x = .data$time.min, y = .data$ions.incremental, color = .data$filename)
           ) +
 
             scale_color_brewer(palette = "Dark2") + #temp: could be segments... for x axis
@@ -67,7 +67,7 @@ module_isoxl_csia_server <- function(input, output, session) {
             xlab("Time [min]") +
             ylab("Ions") +
 
-            facet_grid(isotopocule~compound, scales = "free_y") +
+            facet_grid(.data$isotopocule ~ .data$compound, scales = "free_y") +
 
             #strip.text.x = element_blank(),
             theme(
@@ -156,7 +156,7 @@ module_isoxl_csia_server <- function(input, output, session) {
           "testfile_csia.isox" #FIXME: provide name as a variable
         },
         content = function(file) {
-          write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
+          utils::write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
         }
       )
 
@@ -278,8 +278,8 @@ module_isoxl_csia_server <- function(input, output, session) {
       )
 
       #calculate timerange1
-      peakTime <- values$data %>% filter(compound == values$data$compound[1]) %>% #FIXME
-                                  filter(ions.incremental > 0.1* max(ions.incremental))
+      peakTime <- values$data %>% filter(.data$compound == values$data$compound[1]) %>% #FIXME
+                                  filter(.data$ions.incremental > 0.1* max(.data$ions.incremental))
       minTime <- min(peakTime$time.min)
       maxTime <- max(peakTime$time.min)
 
@@ -299,8 +299,8 @@ module_isoxl_csia_server <- function(input, output, session) {
       )
 
       #calculate timerange2
-      peakTime <- values$data %>% filter(compound == comp2) %>% #FIXME
-        filter(ions.incremental > 0.1* max(ions.incremental))
+      peakTime <- values$data %>% filter(.data$compound == comp2) %>% #FIXME
+        filter(.data$ions.incremental > 0.1* max(.data$ions.incremental))
       minTime <- 0
       maxTime <- 0
       minTime <- min(peakTime$time.min)

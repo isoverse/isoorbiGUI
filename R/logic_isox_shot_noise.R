@@ -83,7 +83,7 @@ plot_shot_noise <- function(dataset, input) {
 
   dataset %>%
     ggplot2::ggplot() +
-    ggplot2::aes(x = neff, y = value, color = key) +
+    ggplot2::aes(x = .data$neff, y = .data$value, color = .data$key) +
     ggplot2::geom_point(size = 0.8, alpha = 0.5) +
     geom_abline(intercept = 0,
                 slope = -0.5,

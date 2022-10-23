@@ -77,7 +77,7 @@ module_isoxl_flow_server <- function(input, output, session) {
           "testfile_flow.isox" #FIXME: provide name as a variable
         },
         content = function(file) {
-          write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
+          utils::write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
         }
       )
 
@@ -391,9 +391,9 @@ module_isoxl_flow_server <- function(input, output, session) {
     # FIXME: before IsoXL I had a more sophisticated procedure to find the sample vs solvent. Implement this going forward?
 
     data.flow_filtered <-   values$data %>%
-      dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
+      dplyr::filter(.data$filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
       stats::na.omit() %>%
-      dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
+      dplyr::filter(.data$time.min>  input$timerange[1], .data$time.min <  input$timerange[2]) %>%
       isoorbi::orbi_filter_satellite_peaks() %>%
       isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
       isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme)  %>%

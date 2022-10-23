@@ -66,7 +66,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
           "testfile_FlowInjection_DataExploration_small.isox" #FIXME: provide name as a variable
         },
         content = function(file) {
-          write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
+          utils::write.table(values$data, file, quote=FALSE, sep="\t", row.names = F)
         }
       )
 

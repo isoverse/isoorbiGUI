@@ -21,7 +21,7 @@ scatter_isox <- function(dataset,
   p <- ggplot(dataset, aes(x = !!x, y = !!y))
 
   p <- p +
-    geom_point(aes(color = selected_), alpha=1/2) +
+    geom_point(aes(color = .data$selected_), alpha=1/2) +
     scale_color_manual(values = point_colors, guide = "none") +
     scale_x_continuous(labels = function(l) plot_labeller(l, varname = xvar)) +
     scale_y_continuous(labels = function(l) plot_labeller(l, varname = yvar)) +
@@ -37,8 +37,8 @@ scatter_isox <- function(dataset,
 
   if (label && any(dataset$selected_)) {
     p <- p + geom_label_repel(
-      data = dplyr::filter(dataset, selected_),
-      aes(label = scan.no)
+      data = dplyr::filter(dataset, .data$selected_),
+      aes(label = .data$scan.no)
     )
   }
 

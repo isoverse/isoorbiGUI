@@ -56,7 +56,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
   #isoXL.version <- utils::packageVersion("isoorbiGUI") #FIXME: get version information directly?
 
-  data(isotopes, package = "enviPat") #needed for isopat function
+  utils::data(isotopes, package = "enviPat") #needed for isopat function
 
   observeEvent(input$start, {
 
@@ -194,7 +194,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
     output$download_IsoX <- downloadHandler(
       filename = function(){"isotopocules.tsv"},
       content = function(fname){
-        write.table(out.isox, fname, sep="\t", row.names =FALSE, quote = FALSE)
+        utils::write.table(out.isox, fname, sep="\t", row.names =FALSE, quote = FALSE)
       }
     )
 

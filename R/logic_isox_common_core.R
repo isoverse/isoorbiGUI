@@ -125,15 +125,15 @@ iso_filter_isox_file <- function(dataset, input) {
 #' @param x value to sompute standard error from
 #' @return Returns value of standard error
 #' @export
-se <- function(x) { sd(x) / sqrt(length(x)) }
+# se <- function(x) { sd(x) / sqrt(length(x)) }
 
 #' @title gmean
 #' @description  Define 'gmean' to calculate geometic mean
 #' @param x value to compute geometric mean from
 #' @return The calculated geometric mean
 #' @export
-gmean <- function(x)
-  exp(mean(log(x))) #define geometric mean
+# gmean <- function(x)
+#   exp(mean(log(x))) #define geometric mean
 
 #' @title gsd
 #' @description  Define 'gsd' to calculate geometic standard deviation
@@ -144,14 +144,14 @@ gmean <- function(x)
 #   function(x)
 #     exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
 
-#' @title
+#' @title gse
 #' @description  Define 'gse' to calculate geometic standard error
 #' @param x value to compute geometric standard error from
 #' @return The calculated geometric standard error
 #' @export
-gse <-
-  function(x)
-    (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))
+# gse <-
+#   function(x)
+#     (exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))) / sqrt(length(x))
 
 #' @title slope
 #' @description  Define 'slope' to calculate geometic mean

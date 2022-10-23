@@ -2,7 +2,7 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{make.xls}
 \alias{make.xls}
-\title{gsd}
+\title{se}
 \usage{
 make.xls(df.stat, params)
 }
@@ -22,6 +22,10 @@ make.xls(df.stat, params)
 \item{ratio.method}{The desired method of computing ratio}
 }
 \value{
+Returns value of standard error
+
+The calculated geometric mean
+
 The calculated geometric standard deviation
 
 The calculated geometric standard error
@@ -35,6 +39,10 @@ calculated ratio between peak1 and peak2 with selected ratio method
 Returns statistics of interest as an excel file
 }
 \description{
+Define 'se' as a new function to calculate standard error
+
+Define 'gmean' to calculate geometic mean
+
 Define 'gsd' to calculate geometic standard deviation
 
 Define 'gse' to calculate geometic standard error

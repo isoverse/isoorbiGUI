@@ -15,7 +15,7 @@ install_app <- function(name, missing_deps, create_desktop_shortcut) {
   if (length(missing_deps) > 0) {
     sprintf("INFO: installing the following missing dependencies for the %s app: %s", name, paste(missing_deps, collapse = ", ")) %>%
       message()
-    install.packages(missing_deps)
+    utils::install.packages(missing_deps)
   }
   if (create_desktop_shortcut) {
     # FIXME

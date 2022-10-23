@@ -41,7 +41,7 @@ run_check <- function(INPUT_formula) {
 #' @export
 make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_tolerance, INPUT_massOffset){
 
-  data(isotopes, package = "enviPat")
+  data("isotopes", package = "enviPat")
 
   out.list <- list()
 
@@ -89,7 +89,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     data$z <- abs(INPUT_charge[i]) #absolute value of charge #more than 1?
     data$mass <- data$'m/z'
 
-    data <- data %>% dplyr::select('#Compound', isotopocule, mass, 'Tolerance [mmu]', z)
+    data <- data %>% dplyr::select("#Compound", "isotopocule", "mass", "Tolerance [mmu]", "z")
 
 
     out.list[[i]] <- data
