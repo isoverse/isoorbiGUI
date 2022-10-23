@@ -459,7 +459,7 @@ module_isoxl_flow_server <- function(input, output, session) {
 
     data.output <-isoorbi::orbi_summarize_results(dataset = data.flow_basepeak, ratio_method =  input$ratio.method)
 
-    data.output.renamed <- data.output  %>% rename(
+    data.output.renamed <- data.output  %>% dplyr::rename(
        Filename = "filename",
      # `Sample` = sample_name,
        BasePeak = "basepeak",

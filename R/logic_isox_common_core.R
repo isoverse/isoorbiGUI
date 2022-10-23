@@ -140,11 +140,11 @@ gmean <- function(x)
 #' @param x value to compute geometric standard deviation from
 #' @return The calculated geometric standard deviation
 #' @export
-gsd <-
-  function(x)
-    exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
+# gsd <-
+#   function(x)
+#     exp(mean(log(x)) + sd(log(x))) - exp(mean(log(x)))
 
-#' @title gse
+#' @title
 #' @description  Define 'gse' to calculate geometic standard error
 #' @param x value to compute geometric standard error from
 #' @return The calculated geometric standard error
@@ -159,32 +159,32 @@ gse <-
 #' @param y ???
 #' @return The slope
 #' @export
-slope <-
-  function(x, y) {
-    model <-
-      lm(x ~ y + 0, weights = x) #Note order of x and y to get correct slope!
-    sl <- model$coefficients[[1]]
-    sl
-  }
-
+# slope <-
+#   function(x, y) {
+#     model <-
+#       lm(x ~ y + 0, weights = x) #Note order of x and y to get correct slope!
+#     sl <- model$coefficients[[1]]
+#     sl
+#   }
+#
 #' @title weighted.vector.sum
 #' @description ???
 #' @param x ???
 #' @param y ???
 #' @return ???
 #' @export
-weighted.vector.sum <- function(x, y) {
-  df <- cbind(x, y)
-
-  avg.ions <- (sum(df[, 1]) + sum(df[, 2])) / length(df[, 1])
-
-  scan.ions <- (df[, 1] + df[, 2])
-
-  weighted.x <- avg.ions / scan.ions  * as.numeric(df[, 1])
-  weighted.y <- avg.ions / scan.ions  * as.numeric(df[, 2])
-  ratio <- sum(weighted.x) / sum(weighted.y)
-  ratio
-}
+# weighted.vector.sum <- function(x, y) {
+#   df <- cbind(x, y)
+#
+#   avg.ions <- (sum(df[, 1]) + sum(df[, 2])) / length(df[, 1])
+#
+#   scan.ions <- (df[, 1] + df[, 2])
+#
+#   weighted.x <- avg.ions / scan.ions  * as.numeric(df[, 1])
+#   weighted.y <- avg.ions / scan.ions  * as.numeric(df[, 2])
+#   ratio <- sum(weighted.x) / sum(weighted.y)
+#   ratio
+# }
 
 #' @title calc.ratio
 #' @description Ratio calculation between peaks of interest. NOTE: The formula used to average ratios matters! Do not simply use arithmetic mean.
@@ -193,18 +193,18 @@ weighted.vector.sum <- function(x, y) {
 #' @param ratio.method The desired method of computing ratio
 #' @return calculated ratio between peak1 and peak2 with selected ratio method
 #' @export
-calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "geometric.mean", "slope", "weighted.vector.sum") ) {
-
-  if(ratio.method == "mean") { o <- mean(peak1/peak2); o } else {
-    if(ratio.method == "slope") {o <- slope(peak1, peak2); o } else{
-      if(ratio.method == "sum") {o <- sum(peak1)/sum(peak2); o } else{
-        if(ratio.method == "geometric.mean") {o <- gmean(peak1/peak2); o } else{
-          if(ratio.method == "weighted.vector.sum") {o <- weighted.vector.sum(peak1, peak2); o } else{
-            if(ratio.method == "median") {o <- stats::median(peak1/peak2); o } else{print("`ratio.method` has to be `mean`, `sum`, `median`, `geometric.mean`, `slope` or `weighted.vector.sum`")
-            }
-          }}}}}
-
-}
+# calc.ratio <- function(peak1, peak2, ratio.method = c("mean", "sum", "median", "geometric.mean", "slope", "weighted.vector.sum") ) {
+#
+#   if(ratio.method == "mean") { o <- mean(peak1/peak2); o } else {
+#     if(ratio.method == "slope") {o <- slope(peak1, peak2); o } else{
+#       if(ratio.method == "sum") {o <- sum(peak1)/sum(peak2); o } else{
+#         if(ratio.method == "geometric.mean") {o <- gmean(peak1/peak2); o } else{
+#           if(ratio.method == "weighted.vector.sum") {o <- weighted.vector.sum(peak1, peak2); o } else{
+#             if(ratio.method == "median") {o <- stats::median(peak1/peak2); o } else{print("`ratio.method` has to be `mean`, `sum`, `median`, `geometric.mean`, `slope` or `weighted.vector.sum`")
+#             }
+#           }}}}}
+#
+# }
 
 
 #' @title make.xls

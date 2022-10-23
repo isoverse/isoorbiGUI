@@ -525,7 +525,7 @@ module_isoxl_csia_server <- function(input, output, session) {
                      (.data$compound %in% input$compound.sel2 &
                         (.data$time.min>  input$timerange2[1] | .data$time.min <  input$timerange2[2])) #CHECK
                       ) %>%
-      na.omit() %>%
+      stats::na.omit() %>%
       dplyr::filter(.data$time.min>  input$timerange1[1], .data$time.min <  input$timerange1[2]) %>%
       isoorbi::orbi_filter_satellite_peaks() %>%
       isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
@@ -592,7 +592,7 @@ module_isoxl_csia_server <- function(input, output, session) {
 
     data.output <-isoorbi::orbi_summarize_results(dataset = data.csia_basepeak, ratio_method =  input$ratio.method)
 
-    data.output.renamed <- data.output  %>% rename(
+    data.output.renamed <- data.output  %>% dplyr::rename(
       `Filename` = .data$filename,
      # `Sample` = sample_name,
       `BasePeak` = .data$basepeak,

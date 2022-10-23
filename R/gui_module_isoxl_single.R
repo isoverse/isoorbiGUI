@@ -392,7 +392,7 @@ module_isoxl_single_server <- function(input, output, session) {
 
     data.single_filtered <-   values$data %>%
                                           dplyr::filter(filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
-                                          na.omit() %>%
+                                          stats::na.omit() %>%
                                           dplyr::mutate(sample_name = input$sample) %>%
                                           dplyr::filter(time.min>  input$timerange[1], time.min <  input$timerange[2]) %>%
                                           isoorbi::orbi_filter_satellite_peaks() %>%

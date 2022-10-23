@@ -2,7 +2,7 @@
 
 # check dependencies for gui
 check_dependencies <- function(dependencies) {
-  missing_packages <- dependencies[!(dependencies %in% installed.packages()[,"Package"])]
+  missing_packages <- dependencies[!(dependencies %in% utils::installed.packages()[,"Package"])]
   if (length(missing_packages) > 0)
     warning("there are missing dependencies for the GUI: ",
             paste(missing_packages, collapse = ", "),

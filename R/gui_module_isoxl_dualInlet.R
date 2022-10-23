@@ -403,7 +403,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     #req(input$INPUT_Rare)
     data.dual_inlet_filtered <- values$data %>%
       isoorbi::orbi_simplify_isox() %>%
-      na.omit() %>% #FIXME: really necessary?
+      stats::na.omit() %>% #FIXME: really necessary?
       isoorbi::orbi_filter_satellite_peaks() %>%
       isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
       isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme)  #temp: validate correct functioning
@@ -444,7 +444,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     data.output <-
       isoorbi::orbi_summarize_results(dataset = data.basepeak, ratio_method = input$ratio.method)
 
-    data.output.renamed <- data.output  %>% rename(
+    data.output.renamed <- data.output  %>% dplyr::rename(
        Filename = "filename",
        Sample = "sample_name",
        BasePeak = "basepeak",

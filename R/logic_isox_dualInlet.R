@@ -42,7 +42,7 @@ define.dual.inlet <-
         seq(start.time[i],
             start.time[i] + input$block.time - input$idle.time,
             segment.time)
-      out.start  <- append(out.start, head(a,-1))
+      out.start  <- append(out.start, utils::head(a,-1))
     }
     start.time <- out.start + input$startup.time
     end.time <- start.time + segment.time

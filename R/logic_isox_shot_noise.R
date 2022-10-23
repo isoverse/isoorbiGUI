@@ -15,9 +15,10 @@ assign_basepeak_shotnoise <- function(data, input) {
   df.out <- data %>%
     dplyr::filter(.data$isotopocule %in% c(input$base_peak, input$isotopocule)) %>% #cross check with core logic filter function
     droplevels() %>%
-    tidyr::pivot_wider(names_from = .data$isotopocule, values_from = .data$ions.incremental) %>% stats::na.omit() %>%
+    tidyr::pivot_wider(names_from = .data$isotopocule, values_from = .data$ions.incremental) %>%
+    stats::na.omit() %>%
 
-    rename(Basepeak.Ions = input$base_peak,
+    dplyr::rename(Basepeak.Ions = input$base_peak,
            isotopocule.Ions = input$isotopocule)%>%
     dplyr::mutate(Ratio = .data$isotopocule.Ions/.data$Basepeak.Ions)
 
@@ -41,7 +42,7 @@ calc_shotnoise <- function(dataset){
     shotnoise.neff = 1:length(dataset$scan.no)
   )
 
-  for (l in 1:length(dataset$scan.no)) {
+  for (l in 2:length(dataset$scan.no)) {
     df <- dataset[1:l,]
 
     neff <-
@@ -55,7 +56,8 @@ calc_shotnoise <- function(dataset){
       ((1 / sum(df$isotopocule.Ions) + (1 / sum(df$Basepeak.Ions)))) ^ 0.5
     df.out$shotnoise[l] <- shotnoise
 
-    rse <- gse(dataset[1:l,]$Ratio) / gmean(dataset[1:l,]$Ratio)
+    #rse <- gse(dataset[1:l,]$Ratio) / gmean(dataset[1:l,]$Ratio)
+    rse <- isoorbi:::calculate_ratios_sem(dataset[1:l,]$Ratio) / isoorbi:::calculate_ratios_gmean(dataset[1:l,]$Ratio)
     df.out$rse[l] <- rse
   }
 
@@ -102,6 +104,8 @@ plot_shot_noise <- function(dataset, input) {
       trans = log10_trans(),
       breaks = c( 10000, 100000, 1000000, 10000000, 100000000),
       labels = c("1E4", "1E5", "1E6", "1E7", "1E8")
+      # ,
+      # limits = c(10000, max(dataset$neff))
     ) +
     scale_y_continuous(
       trans = log10_trans(),
@@ -116,8 +120,6 @@ plot_shot_noise <- function(dataset, input) {
         "0.2 permil",
         "0.1 permil"
       )
-      # ,
-      # limits = c(0.0001, 0.01)
     )
 
 }
