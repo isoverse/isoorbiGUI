@@ -245,11 +245,16 @@ module_isoxl_csia_server <- function(input, output, session) {
       updateSelectInput(inputId = "filename.sel", choices = c())
       updateSelectInput(inputId = "base_peak", choices = c())
 
+
       updateSelectInput(inputId = "compound.sel1", choices = c())
       shinyWidgets::updateNumericRangeInput(session, inputId = "timerange1", value = c())
 
       updateSelectInput(inputId = "compound.sel2", choices = c())
       shinyWidgets::updateNumericRangeInput(session, inputId = "timerange2", value = c())
+
+      updateSelectInput(inputId = "compound.sel3", choices = c())
+      shinyWidgets::updateNumericRangeInput(session, inputId = "timerange3", value = c())
+
 
       updateNumericInput(inputId = "segments", value = c())
       updateNumericInput(inputId = "rare", value = c())
@@ -270,6 +275,8 @@ module_isoxl_csia_server <- function(input, output, session) {
         choices = levels(values$data$isotopocule),
         selected = values$data$isotopocule[1]
       )
+
+      #Compound 1
 
       updateSelectInput(
         inputId = "compound.sel1",
@@ -310,6 +317,30 @@ module_isoxl_csia_server <- function(input, output, session) {
                                             inputId = "timerange2",
                                             value = c(minTime, maxTime)
       )
+
+      #Compound 3
+
+      comp3 <- ifelse( length(levels(values$data$compound)) > 2, levels(values$data$compound)[3], levels(values$data$compound)[1] )
+
+      updateSelectInput(
+        inputId = "compound.sel3",
+        choices = levels(values$data$compound), #drop first compound [-1] [-2]
+        selected = comp3
+      )
+
+      #calculate timerange3
+      peakTime <- values$data %>% filter(.data$compound == comp3) %>% #FIXME
+        filter(.data$ions.incremental > 0.1* max(.data$ions.incremental))
+      minTime <- 0
+      maxTime <- 0
+      minTime <- min(peakTime$time.min)
+      maxTime <- max(peakTime$time.min)
+
+      shinyWidgets::updateNumericRangeInput(session,
+                                            inputId = "timerange3",
+                                            value = c(minTime, maxTime)
+      )
+
 
 
       # FIXME: add segments,
@@ -395,9 +426,11 @@ module_isoxl_csia_server <- function(input, output, session) {
     iv$add_rule("filename.sel", shinyvalidate::sv_required())
     iv$add_rule("compound.sel1", shinyvalidate::sv_required())
     #iv$add_rule("compound.sel2", shinyvalidate::sv_required())
+    #iv$add_rule("compound.sel3", shinyvalidate::sv_required())
     iv$add_rule("base_peak", shinyvalidate::sv_required())
     iv$add_rule("timerange1", shinyvalidate::sv_required())
     #iv$add_rule("timerange2", shinyvalidate::sv_required())
+    #iv$add_rule("timerange3", shinyvalidate::sv_required())
     #timerange1 input requires special attention
 
     iv$add_rule("segments", shinyvalidate::sv_required())
@@ -454,13 +487,14 @@ module_isoxl_csia_server <- function(input, output, session) {
       ns, "info",
       "Processing data with selected parameters:",
       "\n - files selected: ", paste(input$filename.sel %then% "", collapse = ", "),
-      "\n - compound 1 selected: ", paste(input$compound.sel1 %then% "", collapse = ", "),
-      "\n - compound 2 selected: ", paste(input$compound.sel2 %then% "", collapse = ", "),
-
       "\n - basepeak: ", input$base_peak %then% "",
+      "\n - compound 1 selected: ", paste(input$compound.sel1 %then% "", collapse = ", "),
       "\n - timerange1: ", paste(input$timerange1 %then% "", collapse = " to "),
-      "\n - segments: ",
-      input$segments %then% "",
+      "\n - compound 2 selected: ", paste(input$compound.sel2 %then% "", collapse = ", "),
+      "\n - timerange2: ", paste(input$timerange2 %then% "", collapse = " to "),
+      "\n - compound 3 selected: ", paste(input$compound.sel3 %then% "", collapse = ", "),
+      "\n - timerange3: ", paste(input$timerange3 %then% "", collapse = " to "),
+      "\n - segments: ",  input$segments %then% "",
       "\n - rare: ", input$rare %then% "",
       "\n - extreme: ", input$extreme %then% "", #)#edit
       "\n - ratio method: ", input$ratio.method %then% "" #)#edit
@@ -485,6 +519,9 @@ module_isoxl_csia_server <- function(input, output, session) {
           "INPUT_CSIA_Compound2",
           "INPUT_CSIA_timerange2[1]",
           "INPUT_CSIA_timerange2[2]",
+          "INPUT_CSIA_Compound3",
+          "INPUT_CSIA_timerange3[1]",
+          "INPUT_CSIA_timerange3[2]",
           "Segments",
           "INPUT_CSIA_Rare",
           "INPUT_CSIA_TICxIT",
@@ -504,6 +541,9 @@ module_isoxl_csia_server <- function(input, output, session) {
           input$compound.sel2[1],
           input$timerange2[1],
           input$timerange2[2],
+          input$compound.sel3[1],
+          input$timerange3[1],
+          input$timerange3[2],
           input$segments,
           input$rare,
           input$extreme,
@@ -520,10 +560,12 @@ module_isoxl_csia_server <- function(input, output, session) {
 
     data.csia_filtered <-   values$data %>%
 
-      dplyr::filter( (.data$compound %in% input$compound.sel1 &
+      dplyr::filter( (.data$compound %in% input$compound.sel1 & #CHECK
                         (.data$time.min>  input$timerange1[1] | .data$time.min <  input$timerange1[2])) |
                      (.data$compound %in% input$compound.sel2 &
-                        (.data$time.min>  input$timerange2[1] | .data$time.min <  input$timerange2[2])) #CHECK
+                        (.data$time.min>  input$timerange2[1] | .data$time.min <  input$timerange2[2])) |
+                     (.data$compound %in% input$compound.sel3 &
+                        (.data$time.min>  input$timerange3[1] | .data$time.min <  input$timerange3[2]))
                       ) %>%
       stats::na.omit() %>%
       dplyr::filter(.data$time.min>  input$timerange1[1], .data$time.min <  input$timerange1[2]) %>%
@@ -593,49 +635,35 @@ module_isoxl_csia_server <- function(input, output, session) {
     data.output <-isoorbi::orbi_summarize_results(dataset = data.csia_basepeak, ratio_method =  input$ratio.method)
 
     data.output.renamed <- data.output  %>% dplyr::rename(
-      `Filename` = .data$filename,
-     # `Sample` = sample_name,
-      `BasePeak` = .data$basepeak,
-      `Isotopocule` = .data$isotopocule,
+
+      Filename = .data$filename,
+      # `Sample` = sample_name,
+      BasePeak = .data$basepeak,
+      Isotopocule = .data$isotopocule,
       Compound = .data$compound,
-      `SEM` = .data$ratio_sem,
+      SEM = .data$ratio_sem,
       `SEM (permil)` = .data$ratio_relative_sem_permil,
       `Shot Noise (permil)` = .data$shot_noise_permil,
       `Minutes to 1E6 ions` = .data$minutes_to_1e6_ions,
-      `Scans` = .data$number_of_scans,
-      `Ratio` = .data$ratio#,
+      Scans = .data$number_of_scans,
+      Ratio = .data$ratio#,
       #`Block` = block
 
     ) %>%
       select(
+
         "Filename",
-       # Sample,
-       # Block,
+        # Sample,
+        # Block,
         "Compound",
         "Isotopocule",
         "Ratio",
         "SEM",
-       "SEM (permil)",
+        "SEM (permil)",
         "Shot Noise (permil)",
         "Minutes to 1E6 ions",
         "Scans"
       )
-
-    # data.csia_output.renamed <- data.csia_output %>% as_tibble() %>% dplyr::rename(
-    #   `Filename` = filename,
-    #   #`Sample` = sample_name,
-    #   `BasePeak` = basepeak,
-    #   `Isotopocule` = isotopocule,
-    #   Compound = compound,
-    #   `SEM` = ratio_sem,
-    #   `SEM (permil)` = relSE.permil,
-    #   `Shot Noise (permil)` = Shot.Noise.permil,
-    #   `Minutes to 1E6 ions` = Mins.to.1mio,
-    #   `Scans` = No.of.scans
-    #
-    # ) %>%
-    #   dplyr::select(Filename,  Compound, Isotopocule, Ratio, SEM, `SEM (permil)`,
-    #          `Shot Noise (permil)`,  `Minutes to 1E6 ions`, Scans)
 
 
     # Table output: CSIA Analysis, summary statistics ----------------------------
@@ -844,6 +872,8 @@ module_isoxl_csia_ui <- function(id) {
 
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
+        tags$hr(style = "border-color: grey;"),
+
 
         selectInput(
           inputId = ns("compound.sel1"),
@@ -851,9 +881,10 @@ module_isoxl_csia_ui <- function(id) {
           c(),
           multiple = FALSE
         ),
-
-
         shinyWidgets::numericRangeInput(ns("timerange1"), "Time [min]", value = c(), min=0, step=0.1),
+
+        hr(),
+
 
         selectInput(
           inputId = ns("compound.sel2"),
@@ -861,9 +892,17 @@ module_isoxl_csia_ui <- function(id) {
           c(),
           multiple = FALSE
         ),
-
-
         shinyWidgets::numericRangeInput(ns("timerange2"), "Time [min]", value = c(), min=0, step=0.1),
+
+        hr(),
+
+        selectInput(
+          inputId = ns("compound.sel3"),
+          label = "Compound 3",
+          c(),
+          multiple = FALSE
+        ),
+        shinyWidgets::numericRangeInput(ns("timerange3"), "Time [min]", value = c(), min=0, step=0.1),
 
 
         tags$hr(style = "border-color: grey;"),
