@@ -52,11 +52,11 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 
+  utils::data(isotopes, package = "enviPat") #needed for isopat function
 
 
   #isoXL.version <- utils::packageVersion("isoorbiGUI") #FIXME: get version information directly?
 
-  utils::data(isotopes, package = "enviPat") #needed for isopat function
 
   observeEvent(input$start, {
 
@@ -123,6 +123,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
     shinyjs::show("main-plot")
 
     # Output table: Make IsoX Input  ------------------------------------------
+
 
 
 
