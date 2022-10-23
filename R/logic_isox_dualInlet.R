@@ -90,7 +90,7 @@ merge.di.annotations <- function(df.in, dual.inlet.anno){
   }
   #
 
-  df<- df.data  %>% dplyr::filter(block >0) %>% dplyr::filter(sample_name != "NA")
+  df<- df.data  %>% dplyr::filter(.data$block >0) %>% dplyr::filter(sample_name != "NA")
 
   df$sample_name <- as.factor(df$sample_name)
   df$compound <- as.factor(df$compound)

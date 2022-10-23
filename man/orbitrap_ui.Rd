@@ -6,7 +6,7 @@
 \usage{
 orbitrap_ui(
   app_title = span(tagList(a(href = "https://www.isoverse.org/", tags$img(src =
-    "figures/logo.png", height = 37))), "IsoXL"),
+    "www/isoorbi-logo-round.png", height = 35))), "IsoXL"),
   app_color = "blue",
   sidebar_width = NULL
 )

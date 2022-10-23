@@ -520,25 +520,25 @@ module_isoxl_csia_server <- function(input, output, session) {
 
     data.csia_filtered <-   values$data %>%
 
-      dplyr::filter( (compound %in% input$compound.sel1 &
-                        (time.min>  input$timerange1[1] | time.min <  input$timerange1[2])) |
-                     (compound %in% input$compound.sel2 &
-                        (time.min>  input$timerange2[1] | time.min <  input$timerange2[2])) #CHECK
+      dplyr::filter( (.data$compound %in% input$compound.sel1 &
+                        (.data$time.min>  input$timerange1[1] | .data$time.min <  input$timerange1[2])) |
+                     (.data$compound %in% input$compound.sel2 &
+                        (.data$time.min>  input$timerange2[1] | .data$time.min <  input$timerange2[2])) #CHECK
                       ) %>%
       na.omit() %>%
-      dplyr::filter(time.min>  input$timerange1[1], time.min <  input$timerange1[2]) %>%
+      dplyr::filter(.data$time.min>  input$timerange1[1], .data$time.min <  input$timerange1[2]) %>%
       remove.satellitePeaks() %>%
       remove.rare(input = input) %>%
       remove.ticxit(input = input) %>%
-      group_by(filename) %>%
-      dplyr::mutate(segment = ceiling( (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))) # FIXME: fix this!
+      group_by(.data$filename) %>%
+      dplyr::mutate(segment = ceiling( (.data$scan.no -min(.data$scan.no)+1) / ((max(.data$scan.no) - min(.data$scan.no)+1)/input$segments ))) # FIXME: fix this!
 
 
     #SEGMENTATION
     if (input$segments > 1) {
 
       data.csia_filtered <- data.csia_filtered            %>%
-        dplyr::mutate(filename=as.factor(paste(filename, segment, sep="_")))
+        dplyr::mutate(filename=as.factor(paste(.data$filename, .data$segment, sep="_")))
 
     }
 
@@ -590,32 +590,32 @@ module_isoxl_csia_server <- function(input, output, session) {
     data.output <-isoorbi::orbi_summarize_results(dataset = data.csia_basepeak, ratio_method =  input$ratio.method)
 
     data.output.renamed <- data.output  %>% rename(
-      `Filename` = filename,
+      `Filename` = .data$filename,
      # `Sample` = sample_name,
-      `BasePeak` = basepeak,
-      `Isotopocule` = isotopocule,
-      Compound = compound,
-      `SEM` = ratio_sem,
-      `SEM (permil)` = ratio_relative_sem_permil,
-      `Shot Noise (permil)` = shot_noise_permil,
-      `Minutes to 1E6 ions` = minutes_to_1e6_ions,
-      `Scans` = number_of_scans,
-      `Ratio` = ratio#,
+      `BasePeak` = .data$basepeak,
+      `Isotopocule` = .data$isotopocule,
+      Compound = .data$compound,
+      `SEM` = .data$ratio_sem,
+      `SEM (permil)` = .data$ratio_relative_sem_permil,
+      `Shot Noise (permil)` = .data$shot_noise_permil,
+      `Minutes to 1E6 ions` = .data$minutes_to_1e6_ions,
+      `Scans` = .data$number_of_scans,
+      `Ratio` = .data$ratio#,
       #`Block` = block
 
     ) %>%
       select(
-        Filename,
+        "Filename",
        # Sample,
        # Block,
-        Compound,
-        Isotopocule,
-        Ratio,
-        SEM,
-        `SEM (permil)`,
-        `Shot Noise (permil)`,
-        `Minutes to 1E6 ions`,
-        Scans
+        "Compound",
+        "Isotopocule",
+        "Ratio",
+        "SEM",
+       "SEM (permil)",
+        "Shot Noise (permil)",
+        "Minutes to 1E6 ions",
+        "Scans"
       )
 
     # data.csia_output.renamed <- data.csia_output %>% as_tibble() %>% dplyr::rename(
@@ -675,15 +675,15 @@ module_isoxl_csia_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot(data = data.output, aes(x = filename, y = ratio, color = isotopocule)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+          ggplot(data = data.output, aes(x = .data$filename, y = .data$ratio, color = .data$isotopocule)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
             xlab("Filename") +
             ylab("Ratio") +
 
             theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1)) +
 
 
-            geom_errorbar(aes(ymin=(ratio-ratio_sem),
-                              ymax=(ratio+ratio_sem)),
+            geom_errorbar(aes(ymin=(.data$ratio- .data$ratio_sem),
+                              ymax=(.data$ratio+ .data$ratio_sem)),
                           width=0.4,
                           size=0.3,
                           color="black",

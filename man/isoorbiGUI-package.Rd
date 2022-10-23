@@ -4,9 +4,9 @@
 \name{isoorbiGUI-package}
 \alias{isoorbiGUI}
 \alias{isoorbiGUI-package}
-\title{isoorbiGUI: Graphical Unser Interfaces for Orbitrap Iso}
+\title{isoorbiGUI: Graphical User Interfaces for Orbitrap Iso}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+Interactive processing of data from an Orbitrap Iso mass spectrometer.
 }
 \seealso{
 Useful links:
