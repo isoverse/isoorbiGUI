@@ -427,7 +427,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     # Dual Inlet: Merge data with annotation ----------------------------------
 
     data.annotated <-
-      merge.di.annotations(data.dual_inlet_filtered, dual.inlet.annotation)
+      merge_di_annotations(data.dual_inlet_filtered, dual.inlet.annotation)
 
 
 

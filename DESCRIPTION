@@ -32,14 +32,11 @@ Imports:
     ggrepel,
     magrittr,
     mailtoR,
-    methods,
     openxlsx,
     plotly,
-    plyr,
     RColorBrewer,
     readr,
     rlang,
-    R.utils,
     scales,
     shiny,
     shinyWidgets,
@@ -50,7 +47,11 @@ Imports:
     shinyvalidate,
     tidyr,
     tippy,
-    tidyverse
+    fs,
+    purrr,
+    shinyFiles,
+    stringr,
+    tibble
 Suggests:
     devtools,
     knitr,

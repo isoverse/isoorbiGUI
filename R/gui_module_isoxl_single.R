@@ -6,6 +6,7 @@
 #'@return ...
 #'@export
 test_module_isoxl_single <- function(port = 5000) {
+  app <-
     shinyApp(
       ui = fluidPage(
         shinyjs::useShinyjs(),

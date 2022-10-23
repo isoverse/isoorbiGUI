@@ -24,7 +24,7 @@ test_that("define.dual.inlet test",{
 #   expect_error(calc.output(), "argument \"df\" is missing, with no default")
 # })
 
-# test_that("merge.di.annotations tests",{
+# test_that("merge_di_annotations tests",{
 #   #success
 #   #...
 #   #failure

@@ -67,7 +67,7 @@ define.dual.inlet <-
 #' @param dual.inlet.anno Annotated dual inlet data
 #' @return Returns dataframe that is merged from Filtered and annotated dual inlet data
 #' @export
-merge.di.annotations <- function(df.in, dual.inlet.anno){
+merge_di_annotations <- function(df.in, dual.inlet.anno){
 
   #temp; Add validations later for Dual Inlet input parameters. Are provided values reasonable.
 
@@ -90,7 +90,7 @@ merge.di.annotations <- function(df.in, dual.inlet.anno){
   }
   #
 
-  df<- df.data  %>% dplyr::filter(.data$block >0) %>% dplyr::filter(sample_name != "NA")
+  df<- df.data  %>% dplyr::filter(.data$block >0) %>% dplyr::filter(.data$sample_name != "NA")
 
   df$sample_name <- as.factor(df$sample_name)
   df$compound <- as.factor(df$compound)
