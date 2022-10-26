@@ -235,7 +235,7 @@ return(wb)
 #' @return Return modified excel workbook
 #' @export
 make.xls.onetab <- function(df.stat, params){ wb <- createWorkbook()
-tabs <- levels(df.stat$filename)
+tabs <- stringr::str_trunc(levels(df.stat$filename), 31) #excel worksheet can max have 31 characters
 
 for (i in tabs) {
   addWorksheet(wb, i)
