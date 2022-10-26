@@ -401,7 +401,7 @@ module_isoxl_csia_server <- function(input, output, session) {
                                                                                type="warning",
                                                                                duration=20) #give a bit leeway
 
-    if ((input$timerange1[2] - input$timerange1[1]) < 0.5) showNotification("Input Time [min]: Time range should be > 0.5 minute",
+    if ((input$timerange1[2] - input$timerange1[1]) < 0.2) showNotification("Input Time [min]: Time range should be > 0.2 minute",
                                                                           type="error",
                                                                           duration=20)
 
