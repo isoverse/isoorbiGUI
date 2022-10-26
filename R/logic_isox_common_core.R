@@ -217,8 +217,8 @@ make.xls <- function(df.stat, params){ wb <- createWorkbook()
 tabs <- levels(df.stat$isotopocule)
 
 for (i in tabs) {
-  addWorksheet(wb, i)
-  writeData(wb, i, df.stat[df.stat$isotopocule==i, ])
+  addWorksheet(wb, stringr::str_trunc(i, 31)) #excel worksheet can max have 31 characters
+  writeData(wb, stringr::str_trunc(i, 31), df.stat[df.stat$isotopocule==i, ])
 }
 
 addWorksheet(wb, "IsoXL Parameters")
@@ -235,11 +235,12 @@ return(wb)
 #' @return Return modified excel workbook
 #' @export
 make.xls.onetab <- function(df.stat, params){ wb <- createWorkbook()
-tabs <- stringr::str_trunc(levels(df.stat$filename), 31) #excel worksheet can max have 31 characters
+tabs <- levels(df.stat$filename)
+
 
 for (i in tabs) {
-  addWorksheet(wb, i)
-  writeData(wb, i, df.stat[df.stat$filename==i, ])
+  addWorksheet(wb, stringr::str_trunc(i, 31)) #excel worksheet can max have 31 characters
+  writeData(wb, stringr::str_trunc(i, 31), df.stat[df.stat$filename==i, ])
 }
 
 addWorksheet(wb, "IsoXL Parameters")
