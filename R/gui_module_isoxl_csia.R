@@ -380,6 +380,9 @@ module_isoxl_csia_server <- function(input, output, session) {
 
   observeEvent(input$start, {
 
+    #FIXME
+    module_message(ns, "info", "start has been pressed")
+
     shinyjs::hide("main-plot")
     shinyjs::hide("main-rest")
 
@@ -403,15 +406,19 @@ module_isoxl_csia_server <- function(input, output, session) {
 
     if ((input$timerange1[2] - input$timerange1[1]) < 0.1) showNotification("Input Time [min]: Time range should be > 0.1 minute",
                                                                           type="error",
-                                                                          duration=20)
+                                                                  duration=20)
 
+    #FIXME Improve this req()
+    module_message(ns, "info", "check for required inputs")
 
     req(input$timerange1[2] > input$timerange1[1])
     req(input$timerange1[1] >= 0)
     req(input$timerange1[2] > 0)
-    #req(input$timerange1[2] <= max(values$data$time.min)+0.05) #give a bit leeway
-    req(input$timerange1[1] <= max(values$data$time.min)+0.05) #give a bit leeway; ~ redundant
-    req((input$timerange1[2] - input$timerange1[1]) > 0.5)
+    # #req(input$timerange1[2] <= max(values$data$time.min)+0.05) #give a bit leeway
+     req(input$timerange1[1] <= max(values$data$time.min)+0.05) #give a bit leeway; ~ redundant
+     req((input$timerange1[2] - input$timerange1[1]) > 0.1)
+
+
 
 
 
@@ -464,6 +471,9 @@ module_isoxl_csia_server <- function(input, output, session) {
     }
 
     #req(iv$is_valid())
+
+    #FIXME
+    module_message(ns, "info", "start has been pressed")
 
     req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
 
@@ -706,7 +716,8 @@ module_isoxl_csia_server <- function(input, output, session) {
 
         plotly::ggplotly(
 
-          ggplot(data = data.output, aes(x = .data$filename, y = .data$ratio, color = .data$isotopocule)) + scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
+          ggplot(data = data.output, aes(x = .data$filename, y = .data$ratio, color = .data$isotopocule)) +
+            scale_color_brewer(palette="Dark2") + #temp: could be segments... for x axis
             xlab("Filename") +
             ylab("Ratio") +
 
