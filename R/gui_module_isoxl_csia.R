@@ -408,7 +408,7 @@ module_isoxl_csia_server <- function(input, output, session) {
                                                                           type="error",
                                                                   duration=20)
 
-    #FIXME Improve this req()
+    #FIXME: Improve this req()
     module_message(ns, "info", "check for required inputs")
 
     req(input$timerange1[2] > input$timerange1[1])
