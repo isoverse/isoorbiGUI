@@ -301,7 +301,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
 
     req(iv$is_valid()) #DON'T PROCEED IF INPUTS ARE NOT VALID
 
-    req( max(values$data$time.min) >= ((input$blocks * input$block.time) + input$startup.time) )
+    req( max(values$data$time.min) >= ((input$blocks * input$block.time) + input$startup.time) -0.1) #give a bit of leeway
     req(input$idle.time < input$block.time)
 
 
