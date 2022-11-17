@@ -247,7 +247,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     #FIXME: add more and better validations
     #basic checks that input to define dual inlet matches the data
 
-    if ( max(values$data$time.min) < ((input$blocks * input$block.time) + input$startup.time) ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data",
+    if ( max(values$data$time.min) < ((input$blocks * input$block.time) + input$startup.time) -0.1 ) showNotification("Validate inputs: Dual inlet specified exceeds time range in data",
                                                                                                                  type="error",
                                                                                                                  duration = 20)
 
