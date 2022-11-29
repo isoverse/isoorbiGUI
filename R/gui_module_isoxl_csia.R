@@ -959,7 +959,7 @@ module_isoxl_csia_ui <- function(id) {
           # "Processing option: Truncate data based on TICxIT",
           placement = "right"
         ),
-
+        # FIXME: add mouseover explanations for different ratio methods
         radioButtons(
           inputId = ns("ratio.method"),
           label = "Ratio method",

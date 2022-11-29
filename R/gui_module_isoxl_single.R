@@ -407,7 +407,7 @@ module_isoxl_single_server <- function(input, output, session) {
     #                                           (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))
     #                                           ) # FIXME: fix this!
 
-
+    # FIXME: segments do not work
     #SEGMENTATION
     # if (input$segments > 1) {
     #
@@ -779,7 +779,7 @@ module_isoxl_single_ui <- function(id) {
           tooltip = "<span style='font-size:15px;'>Truncate outlying data based on <br> ions in Orbitrap (ITxTIC)<span>", allowHTML = TRUE,
           # "Processing option: Truncate data based on TICxIT",
           placement = "right"),
-
+ # FIXME: add mouseover explanations for different ratio methods
         radioButtons(
           inputId = ns("ratio.method"),
           label = "Ratio method",
