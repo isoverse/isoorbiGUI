@@ -816,7 +816,7 @@ module_isoxl_dual_inlet_ui <- function(id) {
           # "Truncate data based on ions in Orbitrap (ITxTIC)",
           placement = "right"
         ),
-
+        # FIXME: add mouseover explanations for different ratio methods
         radioButtons(
           inputId = ns("ratio.method"),
           label = "Ratio method",
