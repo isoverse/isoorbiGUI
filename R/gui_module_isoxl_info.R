@@ -79,16 +79,13 @@ module_isoxl_info_ui <- function(id) {
     # UI: Empty Main Panel ----------------------------------------
     sidebarPanel(
 
-
-      "This is a demo version of a larger software package we use at CU Boulder for analyzing Orbitrap isotope data.",
-
       h4("Additional resources"),
 
       hr(),
 
 
       div(style="margin-bottom:10px"),
-      "Information related to ",
+      "This demo GUI is based on the ",
       tags$a(target="_blank", href = "https://cran.r-project.org/web/packages/isoorbi/index.html",
              "isoorbi R package"),
 
