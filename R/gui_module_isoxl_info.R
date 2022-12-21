@@ -79,19 +79,23 @@ module_isoxl_info_ui <- function(id) {
     # UI: Empty Main Panel ----------------------------------------
     sidebarPanel(
 
+
+      "This is a demo version of a larger software package we use at CU Boulder for analyzing Orbitrap isotope data.",
+
       h4("Additional resources"),
 
       hr(),
 
-      "File a bug report or feature request using the ",
-      tags$a(target="_blank", href = "https://github.com/isoverse/isoorbiGUI/issues",
-             "GitHub page"),
+
       div(style="margin-bottom:10px"),
       "Information related to ",
-      tags$a(target="_blank", href = " https://github.com/isoverse/isoorbiGUI/blob/main/inst/extdata/description_testfiles.txt",
+      tags$a(target="_blank", href = "https://cran.r-project.org/web/packages/isoorbi/index.html",
+             "isoorbi R package"),
+
+      div(style="margin-bottom:10px"),
+      "Information related to ",
+      tags$a(target="_blank", href = "https://drive.google.com/file/d/1HdcnKpBbdltulsFUrr-sw-rTgI8VeDw6/view?usp=sharing",
              "test data"),
-
-
 
       h5("Link to ",
       tags$a(target="_blank", href = "https://cajneubauer.weebly.com/uploads/1/0/3/7/103737032/isox_howto.pdf",
