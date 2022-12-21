@@ -4,7 +4,7 @@
 \name{isoorbiGUI-package}
 \alias{isoorbiGUI}
 \alias{isoorbiGUI-package}
-\title{isoorbiGUI: Graphical User Interfaces for Orbitrap Iso}
+\title{isoorbiGUI: Graphical User Interfaces for Orbitrap Iso (Demo)}
 \description{
 Interactive processing of data from an Orbitrap Iso mass spectrometer.
 }
