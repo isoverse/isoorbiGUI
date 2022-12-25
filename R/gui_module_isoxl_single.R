@@ -845,7 +845,7 @@ module_isoxl_single_ui <- function(id) {
         DT::dataTableOutput(ns("mytable.single"))
       )
 
-)
+) %>% shinyjs::hidden()
 
     )
 
