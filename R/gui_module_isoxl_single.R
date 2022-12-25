@@ -30,6 +30,8 @@ test_module_isoxl_single <- function(port = 5000) {
 #' @return ...
 #' @export
 module_isoxl_single_server <- function(input, output, session) {
+
+
   # namespace
   ns <- session$ns
 
@@ -87,8 +89,6 @@ module_isoxl_single_server <- function(input, output, session) {
     if (input$test_data == FALSE) {
 
       shinyjs::hide("test_download_button")
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
       {shinyjs::show("upload_panel")}
 
       # reset the reactive values that hold the file and data
@@ -166,8 +166,7 @@ module_isoxl_single_server <- function(input, output, session) {
     if (is.null(values$data) || nrow(values$data) == 0) {
       # no data (maybe incorrect input file --> hide)
       shinyjs::hide("parameters-panel")
-      shinyjs::hide("main-plot")
-      shinyjs::hide("main-rest")
+
       updateSelectInput(inputId = "filename.sel", choices = c())
       updateSelectInput(inputId = "compound", choices = c())
       updateTextInput(inputId = "sample", value = c())
@@ -845,7 +844,7 @@ module_isoxl_single_ui <- function(id) {
         DT::dataTableOutput(ns("mytable.single"))
       )
 
-)
+) %>% shinyjs::hidden()
 
     )
 
