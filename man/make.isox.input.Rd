@@ -24,7 +24,7 @@ make.isox.input(
 \item{INPUT_massOffset}{Offset of mass to charge readings m/z [mDA]}
 }
 \value{
-Returns a file.tsv containing columns '#Compound','isotopocule','Mass', 'Tolerance[mmu]', 'Charge(z)'
+Returns a file.tsv containing columns '#Compound','isotopolog','Mass', 'Tolerance[mmu]', 'Charge(z)'
 }
 \description{
 This function creates the input file for the IsoX software
