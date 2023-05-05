@@ -37,7 +37,7 @@ run_check <- function(INPUT_formula) {
 #' @param INPUT_compound Given name for compound
 #' @param INPUT_tolerance Tolerance [mDa]
 #' @param INPUT_massOffset Offset of mass to charge readings m/z [mDA]
-#' @return Returns a file.tsv containing columns '#Compound','isotopocule','Mass', 'Tolerance[mmu]', 'Charge(z)'
+#' @return Returns a file.tsv containing columns '#Compound','isotopolog','Mass', 'Tolerance[mmu]', 'Charge(z)'
 #' @export
 make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_tolerance, INPUT_massOffset){
 
@@ -60,7 +60,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
 
     df.temp <- df.sel %>% tidyr::pivot_longer( -c("m/z"), names_to= "isotope", values_to= "count",) %>% dplyr::filter(count>0)
 
-    df.temp$isotopocule <- NA
+    df.temp$isotopolog <- NA
     df.temp$temp.string <- NA
 
     for(j in 1:nrow(df.temp)){
@@ -77,10 +77,10 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
 
     df.temp2[is.na(df.temp2)] <- ""  # replace NA with blanks
 
-    df.temp2$isotopocule <- apply( df.temp2[ , cols ] , 1 , paste , collapse = "" ) # create a new column `x` with the three columns collapsed together
+    df.temp2$isotopolog <- apply( df.temp2[ , cols ] , 1 , paste , collapse = "" ) # create a new column `x` with the three columns collapsed together
 
     # remove the unnecessary columns
-    data <- df.temp2 %>% dplyr::select("m/z", "isotopocule" )
+    data <- df.temp2 %>% dplyr::select("m/z", "isotopolog" )
 
     # add colums charge and tolerance
 
@@ -89,7 +89,7 @@ make.isox.input <- function(pattern.list, INPUT_charge, INPUT_compound, INPUT_to
     data$z <- abs(INPUT_charge[i]) #absolute value of charge #more than 1?
     data$mass <- data$'m/z'
 
-    data <- data %>% dplyr::select("#Compound", "isotopocule", "mass", "Tolerance [mmu]", "z")
+    data <- data %>% dplyr::select("#Compound", "isotopolog", "mass", "Tolerance [mmu]", "z")
 
 
     out.list[[i]] <- data

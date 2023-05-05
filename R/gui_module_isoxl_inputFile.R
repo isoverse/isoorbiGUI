@@ -164,7 +164,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
 
 
 
-# Preview isotopocules.tsv --------------------------------------------------
+# Preview isotopologs.tsv --------------------------------------------------
 
     output$isox = DT::renderDataTable({
 
@@ -190,10 +190,10 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
     })
 
 
-    # Download isotopocules.tsv ------------------------------------------------
+    # Download isotopologs.tsv ------------------------------------------------
 
     output$download_IsoX <- downloadHandler(
-      filename = function(){"isotopocules.tsv"},
+      filename = function(){"isotopologs.tsv"},
       content = function(fname){
         utils::write.table(out.isox, fname, sep="\t", row.names =FALSE, quote = FALSE)
       }
@@ -303,7 +303,7 @@ module_isoxl_make_inputFile_ui <- function(id) {
              hr(),
 
              box(
-               title = "Preview of isotopocules.tsv",
+               title = "Preview of isotopologs.tsv",
                width = "auto" ,
                status = "primary",
                solidHeader = T,
