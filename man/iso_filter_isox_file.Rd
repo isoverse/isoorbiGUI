@@ -2,7 +2,7 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{iso_filter_isox_file}
 \alias{iso_filter_isox_file}
-\title{iso_simplify_isox_file}
+\title{iso_filter_isox_file}
 \usage{
 iso_filter_isox_file(dataset, input)
 }
@@ -10,30 +10,10 @@ iso_filter_isox_file(dataset, input)
 \item{dataset}{The file.tsv to be filtered}
 
 \item{input}{???}
-
-\item{data}{Simplified IsoX file to be processed}
-
-\item{df}{Simplified IsoX file to have 'ticxit' removed}
 }
 \value{
-Returns simplified IsoX file with the columns: 'filename', 'scan.no', 'time.min', 'compound', 'isotopocule', 'ions.incremental', 'tic', 'it.ms'.
-
-Returns dataframe with inconsistent isotopocules removed
-
-IsoX file with satellites removed
-
-Returns filtered IsoXfile based of input value
-
 Returns a filtered IsoX file
 }
 \description{
-Keep only columns that are useful for isotopocule ratio calculation
-
-Remove isotopocules that are not consistently detected across scans
-
-Remove minor signals (e.g., satellite peaks) that were reported by IsoX
-
-Remove extreme scans based on TIC x Injection time
-
 A basic dplyr::filter(should be generalized for most use cases)
 }

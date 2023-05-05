@@ -52,7 +52,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
   # increase upload file size
   options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 
-  utils::data(isotopes, package = "enviPat") #needed for isopat function
+  utils::data(isotopes, package = "enviPat") #needed for isopat function; FIXME: add binding for variable isotopes
 
 
   #isoXL.version <- utils::packageVersion("isoorbiGUI") #FIXME: get version information directly?

@@ -2,7 +2,7 @@
 % Please edit documentation in R/logic_isox_common_core.R
 \name{make.xls}
 \alias{make.xls}
-\title{se}
+\title{make.xls}
 \usage{
 make.xls(df.stat, params)
 }
@@ -10,48 +10,10 @@ make.xls(df.stat, params)
 \item{df.stat}{The IsoX file with statistics of interest}
 
 \item{params}{IsoXL parameters}
-
-\item{x}{???}
-
-\item{y}{???}
-
-\item{peak1}{Peak 1 of interest}
-
-\item{peak2}{Peak 2 of interest}
-
-\item{ratio.method}{The desired method of computing ratio}
 }
 \value{
-Returns value of standard error
-
-The calculated geometric mean
-
-The calculated geometric standard deviation
-
-The calculated geometric standard error
-
-The slope
-
-???
-
-calculated ratio between peak1 and peak2 with selected ratio method
-
 Returns statistics of interest as an excel file
 }
 \description{
-Define 'se' as a new function to calculate standard error
-
-Define 'gmean' to calculate geometic mean
-
-Define 'gsd' to calculate geometic standard deviation
-
-Define 'gse' to calculate geometic standard error
-
-Define 'slope' to calculate geometic mean
-
-???
-
-Ratio calculation between peaks of interest. NOTE: The formula used to average ratios matters! Do not simply use arithmetic mean.
-
 Save the summary statistics table as Excel
 }
