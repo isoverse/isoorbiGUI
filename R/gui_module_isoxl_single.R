@@ -215,7 +215,7 @@ module_isoxl_single_server <- function(input, output, session) {
       # FIXME: add segments,
 
       updateNumericInput(
-        inputId = "segmentse",
+        inputId = "segments",
         min = 0, #how to avoid negative input by keyboard?
         max = 5,
         value = 1
