@@ -397,24 +397,22 @@ module_isoxl_single_server <- function(input, output, session) {
                                           isoorbi::orbi_filter_satellite_peaks() %>%
                                           isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
                                           isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme)  %>%
-                                          group_by(.data$filename) %>% #TEMP: 06-May-2023
+                                          group_by(.data$filename) %>% #Segments: 06-May-2023
                                           mutate(Segments = ggplot2::cut_interval(.data$scan.no,
                                                                                   n = input$segments,
-                                                                                  labels = FALSE)) %>%
-                                          mutate(filename = paste(.data$filename, .data$Segments))
-    # %>%
-    #                                       dplyr::mutate(Segment = ceiling(
-    #                                           (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))
-    #                                           ) # FIXME: fix this!
+                                                                                  labels = FALSE))
 
-    # FIXME: segments do not work
-    #SEGMENTATION
-    # if (input$segments > 1) {
-    #
-    #   data.single_filtered <- data.single_filtered   %>%
-    #     dplyr::mutate(filename=as.factor(paste(filename, segment, sep="_")))
-    #
-    # }
+
+      if(input$segments > 1){
+
+        data.single_filtered <-  data.single_filtered %>%
+          mutate(filename = paste(.data$filename, .data$Segments, sep="_"))
+
+
+      }
+
+
+
 
 # Table output: Single Analysis show rows of isox file------------------------------------------------
 
