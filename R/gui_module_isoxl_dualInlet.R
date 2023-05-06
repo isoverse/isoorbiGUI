@@ -442,7 +442,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     # Dual Inlet: Calculate output table for results file ---------------
 
     data.output <-
-      isoorbi::orbi_summarize_results(dataset = data.basepeak, ratio_method = input$ratio.method)
+      isoorbi::orbi_summarize_results(dataset = data.basepeak, ratio_method = input$ratio.method) %>% dplyr::arrange(compound, isotopocule, block)
 
     data.output.renamed <- data.output  %>% dplyr::rename(
        Filename = "filename",
