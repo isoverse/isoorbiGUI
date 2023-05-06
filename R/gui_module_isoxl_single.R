@@ -758,7 +758,7 @@ module_isoxl_single_ui <- function(id) {
 
         h5("Processing options:"),
 
-        #currently not used in data processing!
+
         tippy(
           numericInput(
             inputId = ns("segments"),
