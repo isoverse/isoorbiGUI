@@ -811,7 +811,8 @@ module_isoxl_flow_ui <- function(id) {
         solidHeader = T,
         DT::dataTableOutput(ns("mytable.flow"))
       )
-    )
+    ) %>% shinyjs::hidden()
+
   )
 
   ))

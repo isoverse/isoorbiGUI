@@ -66,7 +66,6 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     if (input$test_data == TRUE) {
 
 
-
     values$data <- isoorbi::orbi_read_isox(system.file("extdata", "testfile_DualInlet.isox", package="isoorbiGUI"))
 
     # Download test data: .isox file ----------------------------------
@@ -87,6 +86,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
     }
 
     if (input$test_data == FALSE) {
+
 
       shinyjs::hide("test_download_button")
       {shinyjs::show("upload_panel")}
