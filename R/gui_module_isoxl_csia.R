@@ -363,7 +363,7 @@ module_isoxl_csia_server <- function(input, output, session) {
       updateRadioButtons(
         inputId = "ratio.method",
         choiceNames = c("sum",  "mean", "median", "geometric"),
-        choiceValues = c("sum",  "mean", "median", "geometric.mean"),
+        choiceValues = c("sum",  "mean", "median", "geometric_mean"),
         selected = "sum"
       )
 
@@ -964,7 +964,7 @@ module_isoxl_csia_ui <- function(id) {
           inputId = ns("ratio.method"),
           label = "Ratio method",
           choiceNames = c("sum",  "mean", "median", "geometric"),
-          choiceValues = c("sum",  "mean", "median", "geometric.mean"),
+          choiceValues = c("sum",  "mean", "median", "geometric_mean"),
           selected = "sum"
         )
       ) %>% shinyjs::hidden()

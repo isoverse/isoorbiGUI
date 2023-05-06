@@ -120,8 +120,8 @@ context("core")
 #   expect_equal(calc.ratio(a,b,"sum"), 0.25)
 #     #slope
 #   expect_equal(calc.ratio(a,b,"slope"), 0.25)
-#     #geometric.mean
-#   expect_equal(calc.ratio(a,b,"geometric.mean"), 0.25)
+#     #geometric_mean
+#   expect_equal(calc.ratio(a,b,"geometric_mean"), 0.25)
 #     #weighted.vector.sum
 #   expect_equal(calc.ratio(a,b,"weighted.vector.sum"), 0.25)
 #     #median
