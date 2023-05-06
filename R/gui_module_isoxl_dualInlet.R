@@ -471,7 +471,7 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         "Shot Noise (permil)",
         "Minutes to 1E6 ions",
         "Scans"
-      )
+      ) %>% dplyr::arrange(Compound, Isotopocule, Block)
 
 
     # Table output: Show rows of .isox file------------------------------------------------
