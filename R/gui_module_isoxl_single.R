@@ -390,17 +390,18 @@ module_isoxl_single_server <- function(input, output, session) {
       )
 
     data.single_filtered <-   values$data %>%
-                                          dplyr::filter(.data$filename %in% input$filename.sel) %>% #include only selected filenames (new UI feature 05-July-2022)
+                                          dplyr::filter(.data$filename %in% input$filename.sel) %>% #include only selected files
                                           stats::na.omit() %>%
                                           dplyr::mutate(sample_name = input$sample) %>%
                                           dplyr::filter(.data$time.min>  input$timerange[1], .data$time.min <  input$timerange[2]) %>%
                                           isoorbi::orbi_filter_satellite_peaks() %>%
                                           isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare) %>%
                                           isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme)  %>%
-                                          # remove.satellitePeaks() %>%
-                                          # remove.rare(input = input) %>%
-                                          # remove.ticxit(input = input)%>%
-                                          group_by(.data$filename)
+                                          group_by(.data$filename) %>% #TEMP: 06-May-2023
+                                          mutate(Segments = ggplot2::cut_interval(.data$scan.no,
+                                                                                  n = input$segments,
+                                                                                  labels = FALSE)) %>%
+                                          mutate(filename = paste(.data$filename, .data$Segments))
     # %>%
     #                                       dplyr::mutate(Segment = ceiling(
     #                                           (scan.no -min(scan.no)+1) / ((max(scan.no) - min(scan.no)+1)/input$segments ))
@@ -420,7 +421,8 @@ module_isoxl_single_server <- function(input, output, session) {
 
     output$mytable.single = DT::renderDataTable({
 
-      datatable(    data.single_filtered %>% ungroup() %>% mutate_if(is.numeric, round, digits=4), rownames= FALSE ,
+      datatable(    data.single_filtered %>% ungroup() %>% mutate_if(is.numeric, round, digits=4) %>%
+                      group_by(.data$filename, .data$Segments), rownames= FALSE,
                  extensions = c('Buttons','ColReorder'),
 
                  options = list(
