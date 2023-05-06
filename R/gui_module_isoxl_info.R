@@ -94,13 +94,17 @@ module_isoxl_info_ui <- function(id) {
       tags$a(target="_blank", href = "https://drive.google.com/file/d/1HdcnKpBbdltulsFUrr-sw-rTgI8VeDw6/view?usp=sharing",
              "test data"),
 
-      h5("Link to ",
-      tags$a(target="_blank", href = "https://cajneubauer.weebly.com/uploads/1/0/3/7/103737032/isox_howto.pdf",
-                             "IsoX how-to")),
-
       h5("Link to other ",
       tags$a(target="_blank", href = "https://isoorbi.shinyapps.io/gmis/",
              "small isotopocule apps")),
+
+      h5("Link to ",
+         tags$a(target="_blank", href = "https://cajneubauer.weebly.com/uploads/1/0/3/7/103737032/isox_howto.pdf",
+                "IsoX how-to")),
+
+      h5("Information by Thermo Fisher Scientific on ",
+         tags$a(target="_blank", href = "https://www.thermofisher.com/order/catalog/product/IQLAAMGAATFARBMBNP",
+                "Orbitrap Exploris™ Isotope Solutions")),
 
     )
   ),
