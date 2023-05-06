@@ -64,7 +64,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         menuItem("Direct Infusion", tabName = "single", icon = icon("syringe")),
         menuItem("Dual Inlet", tabName = "dual", icon = icon("grip-lines")),
         menuItem("Autosampler", tabName = "flow", icon = icon("vials")), #icon = icon("braille")
-        menuItem("CSIA", tabName = "csia", icon = icon("mound")), #icon("water")
+        #menuItem("CSIA", tabName = "csia", icon = icon("mound")), #icon("water")
         menuItem("Explore Data", tabName = "explore", icon = icon("eye")),
         menuItem("Shot Noise", tabName = "shot", icon = icon("bullseye")),
         tags$hr(style="border-color: grey;"),
@@ -142,14 +142,14 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
         # UI: CSIA LC/MS Analysis ----------------------------------------------
 
-        tabItem(
-          tabName = "csia",
-
-          h4(icon("mound"), "Compound-Specific LC/MS Analysis"),
-
-          module_isoxl_csia_ui(id = "csia")
-
-        ),
+        # tabItem(
+        #   tabName = "csia",
+        #
+        #   h4(icon("mound"), "Compound-Specific LC/MS Analysis"),
+        #
+        #   module_isoxl_csia_ui(id = "csia")
+        #
+        # ),
 
 
         # UI: Single Analysis -----------------------------------------------------
