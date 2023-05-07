@@ -462,7 +462,7 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         tags$hr(style = "border-color: grey;"),
 
-        selectInput(inputId = ns("isotopocule"), label = "isotopocule", c()),
+        selectInput(inputId = ns("isotopocule"), label = "Isotopocule", c()),
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
 
 
