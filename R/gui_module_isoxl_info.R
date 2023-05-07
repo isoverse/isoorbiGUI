@@ -103,7 +103,7 @@ module_isoxl_info_ui <- function(id) {
                 "IsoX how-to")),
 
       h5("Information by Thermo Fisher Scientific on ",
-         tags$a(target="_blank", href = "https://www.thermofisher.com/order/catalog/product/IQLAAMGAATFARBMBNP",
+         tags$a(target="_blank", href = "http://www.thermofisher.com/orbitrap-for-isotopes",
                 "Orbitrap Exploris™ Isotope Solutions")),
 
     )
