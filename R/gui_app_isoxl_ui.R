@@ -58,7 +58,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         id = "menu",
         h5(a(
           paste("Version", as.character(utils::packageVersion("isoorbiGUI"))), #get isoorbiGUI package version
-          href = "https://github.com/isoverse/isoorbiGUI", target = "_blank"),
+          href = "https://github.com/isoverse/isoorbi", target = "_blank"),
           align = "center"),
 
         menuItem("Direct Infusion", tabName = "single", icon = icon("syringe")),
