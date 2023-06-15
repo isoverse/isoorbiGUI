@@ -7,6 +7,8 @@ To generate a stand-alone Windows installer, follow these steps (all on a Window
 1. Download the latest `R-portable_VERSION.paf.exe` from <https://sourceforge.net/projects/rportable/> and install it also in the `dist` folder. This will create the `dist/R-Portable` folder containing a stand-alone installation of R.
 1. Open a Windows command prompt (`cmd`) and navigate to the `dist` folder (`cd .../dist`).
 1. Execute `install_app.bat` in the command prompt to get the dependencies for the app installed as defined in the `install_app.R` script.
+  - If the installation fails because Rtools is missing (this happens if any packages need to be installed from source because they are not available on CRAN), download it from <https://cran.r-project.org/bin/windows/Rtools> and install it on the Windows computer (general programs folder, NOT into `dist`).
+  - If the installation fails because of missing dependencies, you can start the normal R command line by running `dist/R-Portable/R-portable.exe` and installing packages manually.
 1. Execute `run_app.bat` to see if the app runs properly. If so, also test this by double-clicking on `app.vbs` in the `dist` directory.
 1. Install Inno Setup from <http://www.jrsoftware.org/isdl.php> (regular install location in Programs).
 1. Start the Inno Setup program and load the `setup.iss` installer configuration file.

@@ -11,6 +11,6 @@ sprintf("
   message()
 
 # install the required packages (and their dependencies)
-install.packages("devtools")
-devtools::install_github("isoverse/isoorbi")
-devtools::install_github("isoverse/isoorbiGUI", ref = "win-installer")
+install.packages("devtools", repos="http://cran.us.r-project.org")
+devtools::install_github("isoverse/isoorbi", force = TRUE)
+devtools::install_github("isoverse/isoorbiGUI", force = TRUE, ref = "win-installer")
