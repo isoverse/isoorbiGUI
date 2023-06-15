@@ -21,11 +21,29 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
       settings_file = reactive("orbitrap_gui_settings.rds")
     )
 
+    # safely exit
+    session$onSessionEnded(function() {
+      # important to allow for automatic termination on session end if running locally
+      if (local) {
+        gui_message("info", "stopping app because session was terminated and we're running in local mode")
+        stopApp()
+      }
+    })
+
+    observeEvent(input$menu, {
+      if (input$menu == "close") {
+        gui_message("info", "closing window")
+        shinyjs::js$closeWindow()
+        if (local) {
+          gui_message("info", "stopping app because close was pushed and we're running in local mode")
+          stopApp()
+        }
+      }
+    })
 
     # FIXME: create data folder module that also coordinates what happens with the settings
     if (reset) settings$reset()
     else if (local) settings$load()
-
 
 
     # Maximum File Size for Upload --------------------------------------------

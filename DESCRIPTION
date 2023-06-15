@@ -1,7 +1,7 @@
 Package: isoorbiGUI
 Type: Package
 Title: Graphical User Interfaces for Orbitrap Iso (Demo)
-Version: 0.53
+Version: 0.5.4
 Authors@R: 
     c(person(
         given = "Sebastian", family = "Kopf", 
