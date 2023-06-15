@@ -4,14 +4,15 @@
 #'
 #' @param log whether to show log info messages or not. By default, shows logs when running in server mode (\code{iso_start_viewer_server}) and does not show them otherwise.
 #' @param reset whether to reset GUI settings for the data folder to their defaults. This option is only available when running a personal GUI as servers do not save any settings. Resetting settings is usually only necessary if your GUI crashed unexpectedly and gets stuck during restart. Please consider reporting the details of the crash at https://github.com/isoverse/isoorbi/issues, especially if you can easily reproduce it.
-#' @param port the localhost port where the app will be accessible, e.g. https://127.0.0.1:5000 (note that if it is a port that is open in your firewall such as 3838, the GUI will be accessible on your local network at your IP address https://xxx.xxx.xxx.xxx:3838)
+#' @param launch whether to launch the app right away
+#' @param port the localhost port where the app will be accessible (if launch = TRUE), e.g. https://127.0.0.1:5000 (note that if it is a port that is open in your firewall such as 3838, the GUI will be accessible on your local network at your IP address https://xxx.xxx.xxx.xxx:3838)
 #' @export
 #' @family isoxl functions
-iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, port = 5000) {
+iso_start_isoxl_app <- function(log = TRUE, reset = FALSE, launch = TRUE, port = 5000) {
   # launch viewer
   start_orbitrap_gui(
     local = TRUE,
-    launch = TRUE,
+    launch = launch,
     log = log,
     reset = reset,
     port = port
