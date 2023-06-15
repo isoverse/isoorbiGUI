@@ -10,6 +10,7 @@ To generate a stand-alone Windows installer, follow these steps (all on a Window
 1. Execute `run_app.bat` to see if the app runs properly. If so, also test this by double-clicking on `app.vbs` in the `dist` directory.
 1. Install Inno Setup from <http://www.jrsoftware.org/isdl.php> (regular install location in Programs).
 1. Start the Inno Setup program and load the `setup.iss` installer configuration file.
+1. If this is a completely new app, run `Tools | Generate GUID inside the IDE` to make sure the app gets a unique ID
 1. Start the setup creation process (will take a few minutes).
 1. Once complete, test the installer (it will automatically start, otherwise just run the `setup.exe` that's now in the `dist` folder).
 1. Once the app is installed, confirm that it opens and runs as expected from the desktop link and start menu item.

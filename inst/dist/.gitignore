@@ -2,3 +2,4 @@ GoogleChromePortable
 R-Portable
 *.log
 *.exe
+!app/
