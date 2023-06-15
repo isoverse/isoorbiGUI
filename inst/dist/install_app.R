@@ -11,4 +11,6 @@ sprintf("
   message()
 
 # install the required packages (and their dependencies)
-install.packages(c("shiny", "shinyjs"))
+install.packages("devtools")
+devtools::install_github("isoverse/isoorbi")
+devtools::install_github("isoverse/isoorbiGUI", ref = "win-installer")
