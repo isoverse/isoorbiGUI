@@ -41,7 +41,7 @@ Source: "*"; DestDir: "{app}"; Excludes: "setup.exe, setup.iss, .git*"; Flags: i
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: {app}\app\www\icon.ico
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: {app}\app\www\icon.ico
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: {app}\app\www\icon.png
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Flags: shellexec postinstall nowait skipifsilent
