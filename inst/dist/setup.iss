@@ -40,7 +40,7 @@ Source: "*"; DestDir: "{app}"; Excludes: "setup.exe, setup.iss, .git*"; Flags: i
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: {app}\app\www\icon.ico
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: {app}\app\www\icon.png
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: {app}\app\www\icon.png
 
 [Run]
