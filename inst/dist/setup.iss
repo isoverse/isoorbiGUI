@@ -40,9 +40,9 @@ Source: "*"; DestDir: "{app}"; Excludes: "setup.exe, setup.iss, .git*"; Flags: i
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: {app}\app\www\icon.png
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: {app}\app\www\icon.png
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: {app}\app\www\icon.ico
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: {app}\app\www\icon.ico
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Flags: shellexec postinstall nowait skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "Launch application"; Flags: shellexec postinstall nowait skipifsilent
 ; NOTE: remove the [Run] section to disable the option to start the app right away on install completion
