@@ -96,7 +96,7 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
       # Seb: yes, unless you import all functions from the package (not advised)
       shinyjs::useShinyjs(),
       include_shinyjs_extensions(),
-      shinyWidgets::useShinydashboard(),
+      #shinyWidgets::useShinydashboard(),
       #shinyBS::addTooltip(),
       #shinycssloaders::withSpinner(),
       #tippy::with_tippy(),
