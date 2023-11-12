@@ -24,7 +24,7 @@ define.dual.inlet <-
       need(input$blocks < 100, 'Looks like too many blocks!'),
       need(input$blocks > 0, 'Need at lewast one block'),
       need(input$block.time < 100, 'Block Time appears too long'),
-      need(input$segments < 10 , 'Looks like too many segments')
+      need(input$segments <= 10 , 'Looks like too many segments')
     )
 
 

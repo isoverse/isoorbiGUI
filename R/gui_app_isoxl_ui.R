@@ -18,6 +18,19 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
   # set spinner color
   options(spinner.color = app_color)
 
+  # generate code for shinyjs extensions
+  include_shinyjs_extensions <- function() {
+    js_code <- c(
+      # close window
+      closeWindow =
+        "shinyjs.closeWindow = function() { window.close(); }"
+    )
+    tagList(
+      shinyjs::extendShinyjs(text = paste(js_code, collapse = "\n"), functions = names(js_code))
+    )
+  }
+
+  # dashboard page
   dashboardPage(title="IsoXL", #Shown as title of browser window/ tab
 
 
@@ -71,6 +84,8 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
         menuItem("IsoX Input File", tabName = "make_inputFile", icon = icon("wand-magic-sparkles")),
         #menuItem("Info", tabName = "info", icon = icon("fa-solid fa-circle-info fa-beat-fade")),
         menuItem("Info", tabName = "info", icon = icon("circle-info")),
+        tags$hr(style="border-color: grey;"),
+        menuItem("Close App", tabName = "close", icon = icon("circle-xmark")),
         tags$li(a(uiOutput("help", inline = TRUE)))
       ),
 
@@ -78,7 +93,9 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
 
       # shinjs and shinydashboard extensions
       # Caj: Do we need to add dependencies here again, in addition to DESCRIPTION?
+      # Seb: yes, unless you import all functions from the package (not advised)
       shinyjs::useShinyjs(),
+      include_shinyjs_extensions(),
       shinyWidgets::useShinydashboard(),
       #shinyBS::addTooltip(),
       #shinycssloaders::withSpinner(),
