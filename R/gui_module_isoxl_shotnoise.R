@@ -58,6 +58,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
 
       values$data <- isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_FlowInjection_DataExploration_small.isox", package="isoorbiGUI")) # FIXME: use files from isoorbi?
+      #FIXME: allow one file only or drop down menu?
 
       # Download test data: .isox file ----------------------------------
 
@@ -331,13 +332,24 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
     values$plot <- values$data  %>%
                         isoorbi::orbi_simplify_isox() %>%
-                        iso_filter_isox_file(input=input) %>%
-                        isoorbi::orbi_filter_satellite_peaks() %>%
-                        isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare)  %>%
-                        isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme) %>%
-                        assign_basepeak_shotnoise(input=input)  %>% #FIXME: using isoorbi:: has some issues
-                        calc_shotnoise() %>%
-                        plot_shot_noise(input=input)
+                        #iso_filter_isox_file(input=input) %>% #FIXME: orbi_filter_isox()?
+                        #isoorbi::orbi_filter_isox(input=input) %>% #FIXME: Use this?
+                        # check data for satellite peaks
+                        isoorbi::orbi_flag_satellite_peaks() |>
+                        # make sure isotopocules are present in (almost) all scans, otherwise
+                        # shot noise analyses can be inaccurate
+                        isoorbi::orbi_flag_weak_isotopocules(min_percent = 90) |>
+                        # see if there are any AGC outliers
+                        isoorbi::orbi_flag_outliers(agc_fold_cutoff = 2) %>%
+                        isoorbi::orbi_define_basepeak("M0") %>%
+                        isoorbi::orbi_analyze_shot_noise() %>%
+                        isoorbi::orbi_plot_shot_noise()
+                        #isoorbi::orbi_filter_satellite_peaks() %>%
+                        #isoorbi::orbi_filter_weak_isotopocules(min_percent = input$rare)  %>%
+                        #isoorbi::orbi_filter_scan_intensity(outlier_percent = input$extreme) %>%
+                        #assign_basepeak_shotnoise(input=input)  %>% #FIXME: using isoorbi:: has some issues
+                        #calc_shotnoise() %>%
+                        #plot_shot_noise(input=input)
 
   })
 
