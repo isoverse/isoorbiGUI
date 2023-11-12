@@ -338,10 +338,11 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
                         isoorbi::orbi_flag_satellite_peaks() |>
                         # make sure isotopocules are present in (almost) all scans, otherwise
                         # shot noise analyses can be inaccurate
-                        isoorbi::orbi_flag_weak_isotopocules(min_percent = 90) |>
+                        isoorbi::orbi_flag_weak_isotopocules(min_percent = input$rare) |>
                         # see if there are any AGC outliers
-                        isoorbi::orbi_flag_outliers(agc_fold_cutoff = 2) %>%
-                        isoorbi::orbi_define_basepeak("M0") %>%
+                        isoorbi::orbi_flag_outliers(agc_window =
+                                                      c(input$extreme, 100-input$extreme)) %>%
+                        isoorbi::orbi_define_basepeak(input$base_peak) %>%
                         isoorbi::orbi_analyze_shot_noise() %>%
                         isoorbi::orbi_plot_shot_noise()
                         #isoorbi::orbi_filter_satellite_peaks() %>%
@@ -463,7 +464,7 @@ module_isoxl_shotnoise_ui <- function(id) {
           inputId = ns("filename"),
           label = "File",
           c(),
-          multiple = FALSE
+          multiple = TRUE
         ),
 
         selectInput(
@@ -476,6 +477,7 @@ module_isoxl_shotnoise_ui <- function(id) {
 
         selectInput(inputId = ns("isotopocule"), label = "Isotopocule", c()),
         selectInput(inputId = ns("base_peak"), label = "Base peak", c()),
+
 
 
         #FIXME: negative values can still be typed into the input
