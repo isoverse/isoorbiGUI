@@ -485,6 +485,9 @@ module_isoxl_dual_inlet_server <- function(input, output, session) {
         options = list(
           orientation ='landscape',
           scrollX = TRUE,
+          columnDefs = list(list(
+            targets = c(0L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+          )),
           dom = 'Bfrtip',
          # buttons = c('colvis', 'copy',  'excel', 'pdf'),
           buttons =

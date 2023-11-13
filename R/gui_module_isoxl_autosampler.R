@@ -428,6 +428,9 @@ module_isoxl_flow_server <- function(input, output, session) {
           scrollX = TRUE,
           #scroll bar to see entire table
           dom = 'Bfrtip',
+          columnDefs = list(list(
+            targets = c(0L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+          )),
           #buttons = c('colvis', 'copy',  'excel', 'pdf'),
           buttons =
             list('colvis', 'copy',   list(

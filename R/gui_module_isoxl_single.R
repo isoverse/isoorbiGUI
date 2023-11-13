@@ -432,6 +432,12 @@ module_isoxl_single_server <- function(input, output, session) {
 
                  options = list(
                    scrollX = TRUE, #scroll bar to see enture table
+
+
+                   columnDefs = list(list(
+                     targets = c(0L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                   )),
+
                    dom = 'Bfrtip',
                    #buttons = c('colvis','copy',  'excel', 'pdf' ),
 
@@ -511,7 +517,7 @@ module_isoxl_single_server <- function(input, output, session) {
                      # autoWidth = TRUE, #scroll bar to see enture table
                      scrollX = TRUE, #scrollbar when table is not visible
                      columnDefs = list(list(
-                       targets = c(6L, 9L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
+                       targets = c(5L,  8L), visible = FALSE #hide some columns so the table is not as wide, can be activated using column button; remain in output
                      )),
                      dom = 'Bfrtip',
                      #buttons = c('colvis','copy',  'excel', 'pdf' ),
