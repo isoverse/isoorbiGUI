@@ -53,7 +53,9 @@ orbitrap_ui <- function(app_title = span(tagList(a(href='https://www.isoverse.or
       # ),
 
 
-      title = app_title, titleWidth = sidebar_width),
+      title = app_title,
+      titleWidth = sidebar_width),
+
 
     # SIDEBAR ----
     dashboardSidebar(
