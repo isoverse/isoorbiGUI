@@ -129,7 +129,6 @@ context("core")
 #
 #   #failure
 #   expect_error(calc.ratio(), "the condition has length > 1")
-#
 # })
 
   # make.xls
