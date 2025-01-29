@@ -20,7 +20,7 @@ test_that("test that isox files can be read", {
 
   # test reading a file
  expect_true(is.tbl(df <- isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbiGUI"))))
-  expect_equal(names(df), c("filename", "scan.no", "time.min", "compound", "isotopocule", "ions.incremental", "tic", "it.ms"))
+  expect_equal(names(df), c("filepath", "filename", "scan.no", "time.min", "compound", "isotopocule", "ions.incremental", "tic", "it.ms"))
   expect_equal(nrow(df), 5184)
 
 })

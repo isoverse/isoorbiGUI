@@ -14,7 +14,7 @@ Install the orbitrap IsoXL GUI
 }
 \seealso{
 Other isoxl functions: 
-\code{\link{iso_start_isoxl_app_server}()},
-\code{\link{iso_start_isoxl_app}()}
+\code{\link{iso_start_isoxl_app}()},
+\code{\link{iso_start_isoxl_app_server}()}
 }
 \concept{isoxl functions}
