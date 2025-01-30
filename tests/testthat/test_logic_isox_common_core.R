@@ -139,6 +139,7 @@ test_that("make.xls() tests", {
   expect_error(make.xls(), "")
 })
 
+
   # make.xls.onetab
 test_that("make.xls.onetab() tests", {
   #success
