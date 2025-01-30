@@ -54,6 +54,7 @@ orbitrap_server <- function(local = FALSE, reset = FALSE) {
     # Server: Dual Inlet Analysis -----------------------------------------------------
     dual_inlet <- callModule(module_isoxl_dual_inlet_server, id = "dual_inlet")
 
+
     # Server: Single Analysis -----------------------------------------------------
     single <- callModule(module_isoxl_single_server, id = "single")
 
