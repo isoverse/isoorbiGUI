@@ -332,7 +332,7 @@ module_isoxl_shot_noise_server <- function(input, output, session) {
 
     values$plot <- values$data  %>%
                         isoorbi::orbi_simplify_isox() %>%
-                        #iso_filter_isox_file(input=input) %>% #FIXME: orbi_filter_isox()?
+                        #orbi_filter_isox_file(input=input) %>% #FIXME: orbi_filter_isox()?
                         #isoorbi::orbi_filter_isox(input=input) %>% #FIXME: Use this?
                         # check data for satellite peaks
                         isoorbi::orbi_flag_satellite_peaks() |>

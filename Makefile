@@ -14,7 +14,7 @@ gui_dev:
 gui_test:
 	@echo "Starting GUI..."
 	@sleep 1
-	@until $(R) -e 'library(devtools);load_all();turn_debug_on();iso_start_isoxl_app(log=TRUE,reset=FALSE)'; do \
+	@until $(R) -e 'library(devtools);load_all();turn_debug_on();orbi_start_isoxl_app(log=TRUE,reset=FALSE)'; do \
 		echo "Restarting GUI..."; \
 		sleep 1; \
 	done

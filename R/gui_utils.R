@@ -21,7 +21,7 @@ install_app <- function(name, missing_deps, create_desktop_shortcut) {
     # FIXME
     message("NOTE: desktop shortcuts functinoality not yet implmeneted")
   }
-  sprintf("INFO: all dependencies are installed. Run isoorbiGUI::iso_start_%s_app() to start the user interface.", name) %>%
+  sprintf("INFO: all dependencies are installed. Run isoorbiGUI::orbi_start_%s_app() to start the user interface.", name) %>%
     message()
 }
 
@@ -31,7 +31,7 @@ create_missing_dependencies_info_gui <- function(name, missing_deps) {
     ui = fluidPage(
       h1("Missing dependencies", style = "color: red;"),
       p("The following dependencies for the ", name, " GUI are not yet installed: ", strong(paste(missing_deps, collapse = ", "))),
-      p("Please close the app and run ", code(paste0("isoorbiGUI::iso_install_", stringr::str_to_lower(name), "_app()")), " from an R console before restarting the GUI."),
+      p("Please close the app and run ", code(paste0("isoorbiGUI::orbi_install_", stringr::str_to_lower(name), "_app()")), " from an R console before restarting the GUI."),
       actionButton("close", "Close"),
     ),
     server = function(input, output) {

@@ -137,7 +137,7 @@ module_isoxl_make_inputFile_server <- function(input, output, session) {
         algo = 1,
         rel_to = 4,
         verbose = TRUE,
-        return_iso_calc_amount = FALSE
+        return_orbi_calc_amount = FALSE
       )
 
     #FIX: add back in some validation for sum formula, error messages

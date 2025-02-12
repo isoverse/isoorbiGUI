@@ -3,7 +3,7 @@
 #FIXME-LEIF: complete and cofirm
 #' @title Calculate output of flow module
 #' @description This function takes a dataframe and returns processed information for the flow module
-#' @param df a dataframe output from `iso_simplify_isox_file()`
+#' @param df a dataframe output from `orbi_simplify_isox_file()`
 #' @param INPUT_RatioMethod The method for computing ratio, method is signifigant
 #' @return A dataframe with statisitics of interest
 #' @export

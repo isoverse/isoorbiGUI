@@ -8,15 +8,15 @@ context("file loading")
 test_that("test that isox files can be read", {
 
   # test safety checks
-  # expect_error(iso_read_isox_file(c("one", "two")), "can only read.*1")
-  # expect_error(iso_read_isox_file("DNE"), "does not exist")
+  # expect_error(orbi_read_isox_file(c("one", "two")), "can only read.*1")
+  # expect_error(orbi_read_isox_file("DNE"), "does not exist")
   # temp_file <- tempfile(fileext = ".wrong")
   # cat("empty", file = temp_file) # create the temp file
-  # expect_error(iso_read_isox_file(temp_file), "unrecognized")
+  # expect_error(orbi_read_isox_file(temp_file), "unrecognized")
   # unlink(temp_file) # destroy the temp file
 
   # corrupt files
-  # expect_error(iso_read_isox_file(file.path(base_dir, "test_files", "missing_column.isox")), "file format error")
+  # expect_error(orbi_read_isox_file(file.path(base_dir, "test_files", "missing_column.isox")), "file format error")
 
   # test reading a file
  expect_true(is.tbl(df <- isoorbi::orbi_read_isox(file = system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbiGUI"))))

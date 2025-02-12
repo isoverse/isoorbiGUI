@@ -7,7 +7,7 @@
 calc.output.flow(df, INPUT_RatioMethod)
 }
 \arguments{
-\item{df}{a dataframe output from `iso_simplify_isox_file()`}
+\item{df}{a dataframe output from `orbi_simplify_isox_file()`}
 
 \item{INPUT_RatioMethod}{The method for computing ratio, method is signifigant}
 }

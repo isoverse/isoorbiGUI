@@ -17,7 +17,7 @@ start chrome http://127.0.0.1:3838/
 in the app.R file, the `launch` option has to be set to `TRUE`:
 
 ```
-isoorbi::iso_start_orbitrap_gui_server(
+isoorbi::orbi_start_orbitrap_gui_server(
     data_folder = "data",
     launch = TRUE,
     log = TRUE

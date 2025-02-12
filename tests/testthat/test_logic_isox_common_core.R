@@ -5,14 +5,14 @@ base_dir <- if (interactive()) file.path("tests", "testthat") else "."
 
 context("core")
 
-  # iso_simplify_isox_file
-# test_that("iso_simplify_isox_file() tests", {
+  # orbi_simplify_isox_file
+# test_that("orbi_simplify_isox_file() tests", {
 #   #success
-#   df <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbi"))
-#   expect_true(is.tbl(iso_simplify_isox_file(df)))
+#   df <- orbi_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbi"))
+#   expect_true(is.tbl(orbi_simplify_isox_file(df)))
 #
 #   # test safety checks
-#   expect_error(iso_simplify_isox_file(), "argument \"dataset\" is missing, with no default")
+#   expect_error(orbi_simplify_isox_file(), "argument \"dataset\" is missing, with no default")
 #   #add 10 more tests
 # })
 #
@@ -27,8 +27,8 @@ context("core")
 #   # remove.satellitePeaks
 # test_that("remove.satellitePeaks() tests", {
 #   #succcess
-#   df <- iso_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbi"))
-#   expect_true(is.tbl(remove.satellitePeaks(iso_simplify_isox_file(df))))
+#   df <- orbi_read_isox_file(system.file("extdata", "testfile_DualInlet_small.isox", package = "isoorbi"))
+#   expect_true(is.tbl(remove.satellitePeaks(orbi_simplify_isox_file(df))))
 #   #failure
 #   expect_error(remove.satellitePeaks(), "argument \"df\" is missing, with no default")
 # })
@@ -40,11 +40,11 @@ context("core")
 #   expect_error(remove.ticxit(), "argument \"df\" is missing, with no default")
 # })
 #
-#   # iso_filter_isox_file
-# test_that("iso_filter_isox_file() tests",{
+#   # orbi_filter_isox_file
+# test_that("orbi_filter_isox_file() tests",{
 #   #success
 #   #failure
-#   expect_error(iso_filter_isox_file(), "argument \"dataset\" is missing, with no default")
+#   expect_error(orbi_filter_isox_file(), "argument \"dataset\" is missing, with no default")
 # })
 #
 #   # se
