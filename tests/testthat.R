@@ -3,5 +3,3 @@ library(dplyr)
 
 # run the test
 test_check("isoorbiGUI")
-
-
