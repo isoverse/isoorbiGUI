@@ -24,12 +24,12 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
   # Annotation: Identify 'base peak' for each scan
 
   df.sel <- df  %>%
-    dplyr::select(filename,
+    dplyr::select(.data$filename,
                   #Injection, #not present in single run analysis
-                  compound,
-                  scan.no,
-                  isotopolog,
-                  ions.incremental) %>%
+                  .data$compound,
+                  .data$scan.no,
+                  .data$isotopolog,
+                  .data$ions.incremental) %>%
     #dplyr::group_by(filename, Injection, scan.no) %>% dplyr::filter(isotopolog == INPUT_Basepeak) %>%
     dplyr::group_by(.data$filename, .data$scan.no) %>%
     dplyr::filter(isotopolog == INPUT_Basepeak) %>%
@@ -46,7 +46,7 @@ assign.basepeak.single <- function(df, INPUT_Basepeak) {
   df.out <- merge(df.sel, df, all = TRUE)
 
   df.out <-
-    df.out %>% dplyr::filter(isotopolog != INPUT_Basepeak) %>% droplevels()
+    df.out %>% dplyr::filter(.data$isotopolog != INPUT_Basepeak) %>% droplevels()
 
   return(df.out)
 }

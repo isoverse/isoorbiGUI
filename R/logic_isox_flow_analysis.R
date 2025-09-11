@@ -11,12 +11,12 @@
 #FIXME: change calc.output.flow to calc.ratio.flow?
 calc.output.flow <- function(df, INPUT_RatioMethod){
 
-  df.stat <- df  %>%  dplyr::group_by(filename,
-                               segment,
+  df.stat <- df  %>%  dplyr::group_by(.data$filename,
+                                      .data$segment,
                                #Sample.Name,
-                               compound,
-                               Basepeak,
-                               isotopolog) %>%
+                               .data$compound,
+                               .data$Basepeak,
+                               .data$isotopolog) %>%
 
     dplyr::mutate(Ratio = calc.ratio(ions.incremental, Basepeak.Ions, ratio.method = INPUT_RatioMethod)) %>% #RATIO CALCULATION!
 
